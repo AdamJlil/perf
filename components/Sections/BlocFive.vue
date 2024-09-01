@@ -17,8 +17,8 @@
         <div class="w-full lg:w-[45%] flex max-lg:flex-col-reverse gap-[40px] justify-center items-center flex-wrap lg:flex-nowrap">
             <div class="flex lg:flex-col gap-[20px] justify-center items-center w-full lg:w-auto">
                 <nuxt-img src="/images/right_01_05.jpg" alt="Image" class="min-w-[200px] w-full max-w-[300px] h-auto object-cover rounded-[10px]"  />
-                <nuxt-img src="/images/right_02_05.jpg"" alt="Image" class="min-w-[200px] w-full max-w-[300px] h-auto object-cover rounded-[10px]" />
-                <nuxt-img src="/images/left_image_05.jpg"" alt="Image" class="min-w-[200px] w-full max-w-[300px] h-auto object-cover rounded-[10px]" />
+                <nuxt-img src="/images/right_02_05.jpg" alt="Image" class="min-w-[200px] w-full max-w-[300px] h-auto object-cover rounded-[10px]" />
+                <nuxt-img src="/images/left_image_05.jpg" alt="Image" class="min-w-[200px] w-full max-w-[300px] h-auto object-cover rounded-[10px]" />
             </div>
             <div class="flex flex-col gap-[40px] justify-center items-center w-full lg:w-auto">
                 <p class="z-2 max-w-[700px] text-center px-4 text-sm" style="letter-spacing: 4px;">
