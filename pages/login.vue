@@ -15,7 +15,7 @@
       </p>
 
       <!-- Input Fields -->
-      <div class="flex flex-col items-center w-full max-w-xs mt-12"> <!-- Added margin-top here -->
+      <div class="flex flex-col items-center w-full max-w-xs mt-12">
         <div class="w-full flex items-center mb-4">
           <label class="text-sm md:text-base lg:text-lg font-light text-white w-40 flex-shrink-0">E-MAIL/PHONE:</label>
           <input
@@ -30,6 +30,11 @@
             class="flex-1 p-1 border-b-2 border-white bg-transparent text-white placeholder-gray-300 focus:outline-none focus:ring-0 focus:border-white"
           />
         </div>
+
+        <!-- Smaller, Square Login Button -->
+        <button class="w-full max-w-[200px] border border-white bg-transparent text-white py-2 hover:bg-white hover:text-black transition-colors mt-4">
+          Login
+        </button>
       </div>
 
       <!-- Footer Text -->
