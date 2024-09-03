@@ -32,9 +32,15 @@
         </div>
 
         <!-- Smaller, Square Login Button -->
-        <button class="w-full max-w-[200px] border border-white bg-transparent text-white py-2 hover:bg-white hover:text-black transition-colors mt-4">
+        <button class="w-full max-w-[200px] border border-white bg-transparent text-white py-2 hover:bg-white hover:text-black transition-colors mt-6">
           Login
         </button>
+
+        <!-- Forgot Password Link -->
+        <a href="#" class="text-sm text-white hover:underline mt-4">Forgot Password?</a>
+
+        <!-- Sign Up Link -->
+        <a href="signUp" class="text-sm text-white hover:underline mt-2">Sign Up</a>
       </div>
 
       <!-- Footer Text -->
