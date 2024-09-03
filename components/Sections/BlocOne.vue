@@ -18,7 +18,7 @@
   
       <!-- Buttons -->
       <div class="flex flex-col md:flex-row gap-4 md:gap-8 w-full max-w-xs md:max-w-none justify-center items-center z-9">
-        <nuxt-link to="/" class="text-white border border-white py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg max-md:w-[140px] md:w-[200px] lg:w-[300px] z-9" style="font-weight: 300;">
+        <nuxt-link to="/login" class="text-white border border-white py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg max-md:w-[140px] md:w-[200px] lg:w-[300px] z-9" style="font-weight: 300;">
           LOG IN
         </nuxt-link>
         <nuxt-link to="/" class="text-white border border-white py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg max-md:w-[140px] md:w-[200px] lg:w-[300px] z-9" style="font-weight: 300;">
