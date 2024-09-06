@@ -6,6 +6,8 @@ import BlocThree from '~/components/sections/BlocThree.vue';
 import BlocFour from '~/components/sections/BlocFour.vue';
 import BlocFive from '~/components/sections/BlocFive.vue';
 import VideoSlider from '~/components/sections/VideoSlider.vue';
+import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
+
 
 </script>
 
@@ -16,5 +18,5 @@ import VideoSlider from '~/components/sections/VideoSlider.vue';
     <BlocThree />
     <BlocFour/>
     <BlocFive/>
-    <VideoSlider/>
+    <VideoSliderReviews/>
 </template>
