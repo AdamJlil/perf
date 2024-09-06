@@ -1,38 +1,107 @@
 <template>
-    <div
-      class="w-full h-[100vh] max-md:h-fit bg-blue text-white flex flex-col justify-center items-center gap-[60px] relative p-[50px]"
-      style="font-family: Montserrat; background-image: url('/images/image_05.jpg'); background-repeat: no-repeat; background-size: cover;"
-    >
-      <!-- Overlay Layer -->
-      <div class="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-1"></div>
-  
-      <div class="flex w-full justify-center items-center gap-[20px] z-2 h-full flex-wrap lg:flex-nowrap">
-        <div class="w-full lg:w-[55%] lg:h-full max-lg:h-[50%] min-w-[250px] flex max-lg:justify-center">
-          <nuxt-img
-            src="/images/right_03_05.jpg"
-            alt="Image"
-            class="max-lg:h-full lg:h-[90%] lg:w-[90%] object-cover rounded-[40px] max-lg:mx-auto max-sm:w-[85vw]" 
-          />
+  <footer class="bg-black flex flex-col items-center w-full font-montserrat">
+
+    <!-- Main Links Section -->
+    <div class="flex flex-col md:flex-row justify-center items-center w-full">
+
+      <!-- Column 1 -->
+      <div class="w-full md:w-1/3 flex justify-center p-4 md:p-8">
+        <div class="flex flex-col w-auto text-center md:text-left">
+          <a href="#" class="text-white text-base sm:text-lg tracking-wide mb-2 hover:underline">ABOUT</a>
+          <a href="#" class="text-white text-base sm:text-lg tracking-wide mb-2 hover:underline">CONTACT</a>
+          <a href="#" class="text-white text-base sm:text-lg tracking-wide mb-2 hover:underline">SHOP</a>
+        </div>       
+      </div>
+
+      <!-- Column 2 -->
+      <div class="w-full md:w-1/3 flex justify-center p-4 md:p-8">
+        <div class="flex flex-col w-auto text-center md:text-left">
+          <a href="#" class="text-white text-base sm:text-lg tracking-wide mb-2 hover:underline">PRIVACY POLICY</a>
+          <a href="#" class="text-white text-base sm:text-lg tracking-wide mb-2 hover:underline">FAQ</a>
+        </div>       
+      </div>
+
+      <!-- Column 3 (Logo and Socials) -->
+      <div class="w-full md:w-1/3 flex flex-col justify-center items-center p-4 md:p-8">
+        <div class="w-auto mb-4">
+          <img src="/public/logo2.jpeg" alt="logo" class="invert w-12 lg:w-14 mx-auto">
+        </div>  
+        <div class="flex justify-center items-center gap-6">
+          <img src="/public/facebook-svgrepo-com.svg" alt="Facebook" class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200">
+          <img src="/public/twitter-2-svgrepo-com.svg" alt="Twitter" class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200">
+          <img src="/public/instagram-round-svgrepo-com.svg" alt="Instagram" class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200">
+        </div>     
+      </div>
+
+    </div>
+
+    <!-- Copyright and Sponsor Section -->
+    <div class="flex flex-col justify-center p-4 w-full text-center text-gray-100 text-sm">
+      <p class="mb-4">&copy; 2024 Perf. All rights reserved.</p>
+
+      <div class="w-full h-[1px] bg-gray-500 mb-4"></div>
+
+      <p class="mb-4">POWERED BY</p>
+
+      <div class="flex flex-col md:flex-row justify-center items-center p-4 gap-6">
+        <div class="flex flex-col justify-center items-center">
+          <img src="/public/airbnb-179-svgrepo-com.svg" alt="Airbnb" class="object-cover w-14 lg:w-20 mb-2">
+          <p class="text-base lg:text-xl font-semibold">AIRBNB</p>
         </div>
-        <div class="w-full lg:w-[45%] flex max-lg:flex-col-reverse gap-[40px] justify-center items-center flex-wrap lg:flex-nowrap">
-            <div class="flex lg:flex-col gap-[20px] justify-center items-center w-full lg:w-auto">
-                <nuxt-img src="/images/right_01_05.jpg" alt="Image" class="min-w-[200px] max-md:min-w-[25vw] w-full max-w-[300px] h-auto object-cover rounded-[10px]"  />
-                <nuxt-img src="/images/right_02_05.jpg" alt="Image" class="min-w-[200px] max-md:min-w-[25vw] w-full max-w-[300px] h-auto object-cover rounded-[10px]" />
-                <nuxt-img src="/images/left_image_05.jpg" alt="Image" class="min-w-[200px] max-md:min-w-[25vw] w-full max-w-[300px] h-auto object-cover rounded-[10px]" />
-            </div>
-            <div class="flex flex-col gap-[40px] justify-center items-center w-full lg:w-auto">
-                <p class="z-2 max-w-[700px] text-center px-4 text-sm" style="letter-spacing: 4px;">
-                    100% HANDCRAFTED LEATHER DUMBBELL TO ELEVATE YOUR FITNESS ROUTINE WITH STYLE AND SOPHISTICATION
-                </p>
-                <div class="max-lg:hidden text-white flex justify-center items-center border-[1px] border-white py-[10px] px-[20px] text-center z-2 w-[150px]" style="font-weight: 300;">
-                    MORE
-                </div>
-            </div>
-        </div>
-        <div class="lg:hidden text-white flex justify-center items-center border-[1px] border-white py-[10px] px-[20px] text-center z-2 mt-[15px] max-md:min-w-[25vw]" style="font-weight: 300;">
-            MORE
+
+        <div class="h-[1px] w-full md:w-[1px] md:h-20 lg:h-40 bg-gray-500 my-4 md:my-0"></div>
+
+        <div class="flex flex-col justify-center items-center">
+          <img src="/public/booking-svgrepo-com.svg" alt="Booking" class="object-cover w-14 lg:w-20 mb-2">
+          <p class="text-base lg:text-xl font-semibold">BOOKING</p>
         </div>
       </div>
+
     </div>
-  </template>
-  
+
+  </footer>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Responsiveness adjustments */
+.footer {
+  padding: 1rem 0;
+}
+
+a {
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #ffd700; /* Gold color on hover */
+}
+
+/* Ensure images stay proportional */
+img {
+  object-fit: contain;
+}
+
+/* Media Queries for better responsiveness */
+@media (min-width: 768px) {
+  footer {
+    padding: 2rem 0;
+  }
+}
+
+@media (max-width: 640px) {
+  footer {
+    padding: 1rem;
+  }
+
+  .text-base {
+    font-size: 0.875rem;
+  }
+}
+
+</style>
