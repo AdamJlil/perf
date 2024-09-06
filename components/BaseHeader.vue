@@ -21,10 +21,10 @@
           </button>
         </template>
         <template v-else>
-          <NuxtLink to="/" class="px-3 font-bold" @click="closeMenu">HOME</NuxtLink>
-          <NuxtLink to="/" class="px-3" @click="closeMenu">WORKOUT PROGRAMS</NuxtLink>
-          <NuxtLink to="/" class="px-3" @click="closeMenu">NUTRITION PLANS</NuxtLink>
-          <NuxtLink to="/" class="px-3" @click="closeMenu">OUR PRODUCTS</NuxtLink>
+          <NuxtLink to="/" class="px-3 font-light" :class="{ 'font-bold': isActive('/') }" @click="closeMenu">HOME</NuxtLink>
+          <NuxtLink to="/workoutPrograms" class="px-3 font-light" :class="{ 'font-bold': isActive('/workoutPrograms') }" @click="closeMenu">WORKOUT PROGRAMS</NuxtLink>
+          <NuxtLink to="/nutritionPlan" class="px-3 font-light" :class="{ 'font-bold': isActive('/nutritionPlan') }" @click="closeMenu">NUTRITION PLANS</NuxtLink>
+          <NuxtLink to="/products" class="px-3 font-light" :class="{ 'font-bold': isActive('/products') }" @click="closeMenu">OUR PRODUCTS</NuxtLink>
         </template>
       </nav>
 
@@ -55,10 +55,10 @@
             </button>
           </template>
           <template v-else>
-            <NuxtLink to="/" class="py-2 px-3 font-bold mt-[30px]" @click="closeMenu">HOME</NuxtLink>
-            <NuxtLink to="/" class="py-2 px-3" @click="closeMenu">WORKOUT PROGRAMS</NuxtLink>
-            <NuxtLink to="/" class="py-2 px-3" @click="closeMenu">NUTRITION PLANS</NuxtLink>
-            <NuxtLink to="/" class="py-2 px-3" @click="closeMenu">OUR PRODUCTS</NuxtLink>
+            <NuxtLink to="/" class="py-2 px-3 font-bold mt-[30px]" :class="{ 'font-bold': isActive('/') }" @click="closeMenu">HOME</NuxtLink>
+            <NuxtLink to="/workoutPrograms" class="py-2 px-3 font-light" :class="{ 'font-bold': isActive('/workoutPrograms') }" @click="closeMenu">WORKOUT PROGRAMS</NuxtLink>
+            <NuxtLink to="/nutritionPlan" class="py-2 px-3 font-light" :class="{ 'font-bold': isActive('/nutritionPlan') }" @click="closeMenu">NUTRITION PLANS</NuxtLink>
+            <NuxtLink to="/products" class="py-2 px-3 font-light" :class="{ 'font-bold': isActive('/products') }" @click="closeMenu">OUR PRODUCTS</NuxtLink>
           </template>
         </nav>
       </div>
@@ -97,6 +97,13 @@ async function onLogoutClick() {
     form.pending = false;
   }
 }
+
+const isActive = (route: string): boolean => {
+  const currentPath = useRoute().path;
+  return route === '/' ? currentPath === '/' : currentPath.includes(route);
+}
+
+
 </script>
 
 <style scoped>
