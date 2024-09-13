@@ -1,17 +1,20 @@
 <script lang="ts" setup>
+definePageMeta({
+  middleware: ["user-only"],
+});
+
 import { ref, onMounted } from 'vue';
-import Start from '~/components/sections/quiz/start.vue'; // Le composant start
-import Quiz from '~/components/sections/quiz/Quiz.vue';   // Le composant Quiz
+import Start from '~/components/sections/quiz/start.vue';
+import Quiz from '~/components/sections/quiz/Quiz.vue';   
 
 
-// Clé pour sauvegarder l'étape actuelle et les réponses dans le localStorage
 const STORAGE_KEY_STEP = 'quiz_current_step';
 const STORAGE_KEY_RESULTS = 'quiz_results';
 
-// Référence pour gérer l'étape actuelle du quiz
+
 const currentStep = ref<number>(0);
 
-// Options des différents quiz
+
 const quizOptions = ref([
   [
     { text: 'I\'M NEW TO THIS', choosed: true },
