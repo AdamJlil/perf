@@ -32,7 +32,7 @@
           YOUR COMPLETE FITNESS ECOSYSTEM
         </p>
       </div>
-    </div>
+    </div>x
   </template>
   
 
