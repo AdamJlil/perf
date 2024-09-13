@@ -3,7 +3,7 @@ const { login } = useAuth();
 
 const form = reactive({
   data: {
-    email: "admin1@gmail.com",
+    email: "user1@gmail.com",
     password: "password",
     rememberMe: false,
   },
@@ -18,10 +18,20 @@ async function onLoginClick() {
     form.error = "";
     form.pending = true;
 
+    const isNewUser = ref(false); 
+
     await login(form.data.email, form.data.password, form.data.rememberMe);
 
-    const redirect = isAdmin.value ? "/admin" : "/private";
-    await navigateTo(redirect);
+    if (isAdmin.value) {
+      await navigateTo("/admin");
+    } else {
+      if (isNewUser.value){
+        await navigateTo("/particulierQuiz");
+      }else{
+        await navigateTo("/private");
+      }
+    }
+
   } catch (error: any) {
     console.error(error);
 
