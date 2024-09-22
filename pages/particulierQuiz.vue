@@ -63,19 +63,17 @@ onMounted(() => {
   if (savedResults) quizOptions.value = JSON.parse(savedResults);
 });
 
-// Fonction pour sauvegarder dans le localStorage
 const saveProgress = () => {
   localStorage.setItem(STORAGE_KEY_STEP, currentStep.value.toString());
   localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(quizOptions.value));
 };
 
-// Gestion du clic sur le bouton "START"
 const handleStartClick = () => {
   currentStep.value = 1;
   saveProgress();
 };
 
-// Fonction pour gérer le clic sur "NEXT" à chaque étape du quiz
+
 const handleNextClick = (updatedOptions, quizIndex) => {
   // Mettre à jour les résultats du quiz actuel
   quizOptions.value[quizIndex] = updatedOptions;
