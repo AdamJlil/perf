@@ -4,11 +4,6 @@ definePageMeta({
 });
 
 const currentUser = useAuthUser();
-
-const isParticlier_workoutProgram = ref(false);
-const isParticlier_nutritionProgram = ref(false);
-const isEtablissement_workoutProgram = ref(false);
-const isEtablissement_nutritionProgram = ref(false);
 </script>
 
 <template>

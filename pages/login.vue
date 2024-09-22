@@ -18,17 +18,31 @@ async function onLoginClick() {
     form.error = "";
     form.pending = true;
 
-    const isNewUser = ref(false); 
+
+    const isEtablissement_newUser = ref(false); 
+    const isParticulier_newUser = ref(false); 
+
+    const isWorkoutProgram = ref(true);
+    const isNutritionProgram = ref(true);
+
 
     await login(form.data.email, form.data.password, form.data.rememberMe);
 
     if (isAdmin.value) {
       await navigateTo("/admin");
     } else {
-      if (isNewUser.value){
+      if (isParticulier_newUser.value){
         await navigateTo("/particulierQuiz");
+      }else if (isEtablissement_newUser.value){
+        await navigateTo("/etablissementrQuiz");
       }else{
-        await navigateTo("/private");
+        if (isWorkoutProgram.value && isNutritionProgram.value){
+          await navigateTo("/privateWorkoutProgram");
+        }else if (isWorkoutProgram.value) {
+          await navigateTo("/privateWorkoutProgram");
+        }else if (isNutritionProgram.value) {
+          await navigateTo("/privateNutritionProgram");
+        }
       }
     }
 
