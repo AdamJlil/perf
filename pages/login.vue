@@ -78,7 +78,7 @@ const togglePassword = () => {
 
 <template>
   <div
-    class="w-full h-[100vh] bg-cover bg-center text-white flex flex-col justify-center items-center gap-8 relative p-4"
+    class="w-full h-[100vh] max-md:h-[60vh] bg-cover bg-center text-white flex flex-col justify-center items-center gap-8 relative p-4"
     style="font-family: Montserrat; background-image: url('/images/blocThree.jpg');"
   >
     <!-- Dark Overlay -->
@@ -122,19 +122,19 @@ const togglePassword = () => {
           <span class="absolute right-0 bottom-1">
             <NuxtImg 
               id="eye" 
-              src="/eye.png" 
+              src="/images/new_eye.png" 
               alt="eye" 
               width="30" 
               height="30" 
-              class="cursor-pointer hidden" 
+              class="cursor-pointer hidden pb-1" 
               @click="togglePassword" 
             />
             <NuxtImg 
               id="noeye" 
-              src="/noeye.png" 
+              src="/images/new_noeye.png" 
               alt="noeye" 
-              width="30" 
-              height="30" 
+              width="27" 
+              height="27" 
               class="cursor-pointer" 
               @click="togglePassword" 
             />

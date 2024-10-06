@@ -5,62 +5,24 @@
 
     <!-- Scrolling video section -->
     <div class="flex h-full gap-[8px] bg-black animate-scroll">
-        <!-- Premier ensemble de vidéos -->
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_01.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_02.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_03.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_04.mp4" type="video/mp4" />
-          </video>
-        </div>
-  
-        <!-- Deuxième ensemble de vidéos (duplication) -->
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_01.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_02.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_03.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="flex-shrink-0 h-full w-[250px] bg-black">
-          <video autoplay muted loop class="h-full w-full object-cover">
-            <source src="/videos/slider_videos/slider-video_04.mp4" type="video/mp4" />
-          </video>
-        </div>
+      <div
+        v-for="(video, i) in duplicatedVideos"
+        :key="i"
+        class="flex-shrink-0 h-full w-[250px] bg-black"
+      >
+        <video autoplay muted loop class="h-full w-full object-cover">
+          <source :src="video" type="video/mp4" />
+        </video>
       </div>
+    </div>
 
     <!-- Content over the video section -->
     <div class="absolute inset-0 z-20 flex flex-col lg:flex-row items-center justify-center px-4 space-y-6 lg:space-y-0 lg:space-x-6 text-center lg:text-left">
       <!-- Rounded Image -->
-      
-
       <div
-          class=" max-lg:w-[8rem] max-lg:h-[8rem] lg:w-52 lg:h-52 max-sm:w-[5rem] max-sm:h-[5rem] xs:hidden rounded-full overflow-hidden bg-center bg-cover"
-          style="background-image: url('/images/review1.jpg'); background-position-x: -14px; background-position-y: -28px;"
-        ></div>
-  
-
+        class="max-lg:w-[8rem] max-lg:h-[8rem] lg:w-52 lg:h-52 max-sm:w-[5rem] max-sm:h-[5rem] xs:hidden rounded-full overflow-hidden bg-center bg-cover"
+        style="background-image: url('/images/review1.jpg'); background-position-x: -14px; background-position-y: -28px;"
+      ></div>
 
       <!-- Text and stars images displayed in flex-col -->
       <div class="flex flex-col space-y-4 justify-center items-center">
@@ -81,6 +43,18 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+const originalVideos: string[] = [
+  '/videos/slider_videos/slider-video_01.mp4',
+  '/videos/slider_videos/slider-video_02.mp4',
+  '/videos/slider_videos/slider-video_03.mp4',
+  '/videos/slider_videos/slider-video_04.mp4',
+]
+
+// Répétition dynamique des vidéos pour créer l'effet de duplication
+const duplicatedVideos: string[] = Array(6).fill(originalVideos).flat()
+</script>
 
 <style scoped>
 @keyframes scroll {
