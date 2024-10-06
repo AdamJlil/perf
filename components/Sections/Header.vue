@@ -1,6 +1,6 @@
 <template>
     <div
-      class="w-full h-[100vh] bg-blue text-white flex flex-col justify-center items-center gap-8 relative p-4"
+      class="w-full h-[100vh] max-md:h-[50vh] bg-blue text-white flex flex-col justify-center items-center gap-8 relative p-4"
       style="font-family: Montserrat;"
     >
       <!-- Video Background -->

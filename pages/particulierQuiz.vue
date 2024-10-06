@@ -74,6 +74,9 @@ const handleStartClick = () => {
 };
 
 
+const isWorkoutProgram = ref(true);
+const isNutritionProgram = ref(true);
+
 const handleNextClick = (updatedOptions, quizIndex) => {
   // Mettre à jour les résultats du quiz actuel
   quizOptions.value[quizIndex] = updatedOptions;
@@ -89,7 +92,14 @@ const handleNextClick = (updatedOptions, quizIndex) => {
   if (currentStep.value > quizOptions.value.length) {
     console.log('Quiz complet! Résultats finaux:', quizOptions.value);
     const router = useRouter();
-    router.push('/private');
+
+    if (isWorkoutProgram.value && isNutritionProgram.value){
+      router.push("/privateWorkoutProgram");
+    }else if (isWorkoutProgram.value) {
+      router.push("/privateWorkoutProgram");
+    }else if (isNutritionProgram.value) {
+      router.push("/privateNutritionProgram");
+    }
   }
 };
 </script>

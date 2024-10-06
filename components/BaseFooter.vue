@@ -2,7 +2,7 @@
   <footer class="bg-black flex flex-col items-center w-full font-montserrat">
 
     <!-- Main Links Section -->
-    <div class="flex flex-col md:flex-row justify-center items-center w-full">
+    <div class="flex flex-col md:flex-row justify-start items-start w-full">
 
       <!-- Column 1 -->
       <div class="w-full md:w-1/3 flex justify-center p-4 md:p-8">
@@ -22,9 +22,9 @@
       </div>
 
       <!-- Column 3 (Logo and Socials) -->
-      <div class="w-full md:w-1/3 flex flex-col justify-center items-center p-4 md:p-8">
+      <div class="w-full md:w-1/3 flex flex-col justify-center items-center px-4 md:px-8 pt-0">
         <div class="w-auto mb-4">
-          <img src="/public/logo2.jpeg" alt="logo" class="invert w-12 lg:w-14 mx-auto">
+          <img src="/public/logo2.jpeg" alt="logo" class="invert w-12 lg:w-14 mx-auto max-md:h-[80px] rotate-[-90deg]">
         </div>  
         <div class="flex justify-center items-center gap-6">
           <img src="/public/facebook-svgrepo-com.svg" alt="Facebook" class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200">
@@ -45,15 +45,15 @@
 
       <div class="flex flex-col md:flex-row justify-center items-center p-4 gap-6">
         <div class="flex flex-col justify-center items-center">
-          <img src="/public/airbnb-179-svgrepo-com.svg" alt="Airbnb" class="object-cover w-14 lg:w-20 mb-2">
-          <p class="text-base lg:text-xl font-semibold">AIRBNB</p>
+          <img src="/public/airbnb-179-svgrepo-com.svg" alt="Airbnb" class="object-cover w-14 lg:w-20 mb-2 max-md:h-[40px]">
+          <p class="text-sm lg:text-xl font-semibold">AIRBNB</p>
         </div>
 
         <div class="h-[1px] w-full md:w-[1px] md:h-20 lg:h-40 bg-gray-500 my-4 md:my-0"></div>
 
         <div class="flex flex-col justify-center items-center">
-          <img src="/public/booking-svgrepo-com.svg" alt="Booking" class="object-cover w-14 lg:w-20 mb-2">
-          <p class="text-base lg:text-xl font-semibold">BOOKING</p>
+          <img src="/public/booking-svgrepo-com.svg" alt="Booking" class="object-cover w-14 lg:w-20 mb-2 max-md:h-[40px]">
+          <p class="text-sm lg:text-xl font-semibold">BOOKING</p>
         </div>
       </div>
 
@@ -103,5 +103,4 @@ img {
     font-size: 0.875rem;
   }
 }
-
 </style>
