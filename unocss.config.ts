@@ -1,3 +1,4 @@
+// unocss.config.ts
 import {
   defineConfig,
   presetIcons,

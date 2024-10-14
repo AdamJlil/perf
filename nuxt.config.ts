@@ -12,6 +12,10 @@ export default defineNuxtConfig({
     cookieRememberMeExpires: ONE_WEEK.toString(),
   },
   modules: ["@unocss/nuxt", "@nuxt/image"],
+  plugins: ['~/plugins/swiper.client.js'],
+  build: {
+    transpile: ['swiper'],
+  },
   app: {
     head: {
       link: [
