@@ -43,8 +43,12 @@ const isNutritionProgram = ref(true);
 
 <template>
   <header
-    class="text-black dark:text-slate-500 absolute top-0 left-0 right-0 z-50 mt-[30px]"
+    class="dark:text-slate-500 absolute top-0 left-0 right-0 z-50 mt-[30px]"
     style="font-family: Montserrat"
+    :class="{
+      'text-black': isActive('/nutritionPlans'),
+      'text-white': !isActive('/nutritionPlans'),
+    }"
   >
     <div class="p-3 w-full flex items-center justify-between pr-[30px]">
       <!-- Mobile Menu Button -->
@@ -55,14 +59,14 @@ const isNutritionProgram = ref(true);
       </button>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex gap-3 items-center w-full">
+      <nav class="hidden md:flex md:gap-5 lg:gap-15 items-right justify-end w-full">
         <template v-if="currentUser">
           <div class="flex items-center justify-between w-full">
             <div>
               <NuxtLink
                 v-if="!isAdmin && isWorkoutProgram"
                 to="/privateWorkoutProgram"
-                class="px-3 text-shadow-white text-black dark:text-white"
+                class="px-3 text-shadow-white text-white dark:text-white"
                 :class="{
                   'font-bold': isActive('/privateWorkoutProgram'),
                   'font-light': !isActive('/privateWorkoutProgram'),
@@ -74,7 +78,7 @@ const isNutritionProgram = ref(true);
               <NuxtLink
                 v-if="!isAdmin && isNutritionProgram"
                 to="/privateNutritionProgram"
-                class="px-3 text-shadow-white text-black dark:text-white"
+                class="px-3 text-shadow-white text-white dark:text-white"
                 :class="{
                   'font-bold': isActive('/privateNutritionProgram'),
                   'font-light': !isActive('/privateNutritionProgram'),
@@ -86,7 +90,7 @@ const isNutritionProgram = ref(true);
               <NuxtLink
                 v-if="isAdmin"
                 to="/admin"
-                class="px-3 font-semibold text-shadow-white text-black dark:text-white"
+                class="px-3 font-semibold text-shadow-white text-white dark:text-white"
                 @click="closeMenu"
               >
                 Admin
@@ -94,7 +98,7 @@ const isNutritionProgram = ref(true);
             </div>
             <div class="flex items-center gap-[30px]">
               <!-- Theme Toggle Button -->
-              <ThemeToggle />
+              <!-- <ThemeToggle /> -->
 
               <!-- Logout Button -->
               <button
@@ -118,10 +122,16 @@ const isNutritionProgram = ref(true);
           </div>
         </template>
         <template v-else>
+          
           <NuxtLink
-            to="/"
-            class="px-3 text-shadow-white text-black dark:text-white"
-            :class="{ 'font-bold': isActive('/'), 'font-light': !isActive('/') }"
+            to="/home"
+            class="px-3 text-shadow-white"
+            :class="{
+              'text-black': isActive('/nutritionPlans'),
+              'text-white ': !isActive('/nutritionPlans'),
+              'font-bold': isActive('/home'),
+              'font-light': !isActive('/home')
+            }"
             @click="closeMenu"
           >
             HOME
@@ -129,29 +139,44 @@ const isNutritionProgram = ref(true);
 
           <NuxtLink
             to="/workoutPrograms"
-            class="px-3 text-shadow-white text-black dark:text-white"
-            :class="{ 'font-bold': isActive('/workoutPrograms'), 'font-light': !isActive('/workoutPrograms') }"
+            class="px-3 text-shadow-white"
+            :class="{ 
+              'text-black': isActive('/nutritionPlans'),
+              'text-white ': !isActive('/nutritionPlans'),
+              'font-bold': isActive('/workoutPrograms'), 
+              'font-light': !isActive('/workoutPrograms') 
+            }"
             @click="closeMenu"
           >
             WORKOUT PROGRAMS
           </NuxtLink>
           <NuxtLink
             to="/nutritionPlans"
-            class="px-3 text-shadow-white text-black dark:text-white"
-            :class="{ 'font-bold': isActive('/nutritionPlans'), 'font-light': !isActive('/nutritionPlans') }"
+            class="px-3 text-shadow-white"
+            :class="{ 
+                  'text-black': isActive('/nutritionPlans'),
+                  'text-white ': !isActive('/nutritionPlans'),
+                  'font-bold': isActive('/nutritionPlans'), 
+                  'font-light': !isActive('/nutritionPlans') 
+              }"
             @click="closeMenu"
           >
             NUTRITION PLANS
           </NuxtLink>
           <NuxtLink
             to="/products"
-            class="px-3 text-shadow-white text-black dark:text-white"
-            :class="{ 'font-bold': isActive('/products'), 'font-light': !isActive('/products') }"
+            class="px-3 text-shadow-white"
+            :class="{ 
+                'text-black': isActive('/nutritionPlans'),
+                'text-white ': !isActive('/nutritionPlans'),
+                'font-bold': isActive('/products'), 
+                'font-light': !isActive('/products') 
+              }"
             @click="closeMenu"
           >
             OUR PRODUCTS
           </NuxtLink>
-          <ThemeToggle />
+          <!-- <ThemeToggle /> -->
         </template>
       </nav>
 
@@ -216,7 +241,7 @@ const isNutritionProgram = ref(true);
               Admin
             </NuxtLink>
             <!-- Theme Toggle in Mobile Menu -->
-            <ThemeToggle class="mb-4" />
+            <!-- <ThemeToggle class="mb-4" /> -->
 
             <button
               class="py-1.5 px-3 mt-2 rounded bg-light-100 dark:bg-gray-700 font-semibold text-sm text-slate-950 dark:text-white hover:bg-light-700 dark:hover:bg-gray-600 transition-colors"
@@ -230,16 +255,16 @@ const isNutritionProgram = ref(true);
 
           <template v-else>
             <NuxtLink
-              to="/"
-              class="py-2 mt-[30px] mb-[10px] text-shadow-white text-slate-400 dark:text-white"
-              :class="{ 'font-bold': isActive('/'), 'font-light': !isActive('/') }"
+              to="/home"
+              class="py-2 mt-[30px] mb-[10px] text-shadow-white text-black"
+              :class="{ 'font-bold': isActive('/home'), 'font-light': !isActive('/home') }"
               @click="closeMenu"
             >
               HOME
             </NuxtLink>
             <NuxtLink
               to="/workoutPrograms"
-              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+              class="py-2 mb-[10px] text-shadow-white text-black"
               :class="{ 'font-bold': isActive('/workoutPrograms'), 'font-light': !isActive('/workoutPrograms') }"
               @click="closeMenu"
             >
@@ -262,7 +287,7 @@ const isNutritionProgram = ref(true);
               OUR PRODUCTS
             </NuxtLink>
             <!-- Theme Toggle in Mobile Menu -->
-            <ThemeToggle />
+            <!-- <ThemeToggle /> -->
           </template>
         </nav>
       </div>

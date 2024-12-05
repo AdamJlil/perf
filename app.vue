@@ -7,7 +7,7 @@
       <Meta name="description" content="Trying to implement a simple authentication system in Nuxt3" />
     </Head>
 
-    <Body class="min-w-[300px] bg-slate-950 antialiased text-white">
+    <Body class="min-w-[430px] bg-slate-950 antialiased text-white">
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>

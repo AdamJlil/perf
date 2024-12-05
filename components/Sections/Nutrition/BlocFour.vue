@@ -20,7 +20,7 @@
       >
         <NuxtLink
           to="/login"
-          class="text-black dark:text-white border border-black dark:border-white py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg sm:text-sm max-md:w-[140px] md:w-[200px] lg:w-[300px]"
+          class="text-black dark:text-white border border-black dark:border-white py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg sm:text-sm max-md:w-[140px] md:w-[200px] lg:w-[300px] text-nowrap"
           style="font-weight: 300"
           aria-label="Log In"
         >
@@ -28,7 +28,7 @@
         </NuxtLink>
         <NuxtLink
           to="/join"
-          class="text-black dark:text-white border border-black dark:border-white py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg max-md:w-[140px] md:w-[200px] lg:w-[300px]"
+          class="text-black dark:text-white border border-black dark:border-white py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg max-md:w-[140px] md:w-[200px] lg:w-[300px] text-nowrap"
           style="font-weight: 300"
           aria-label="Join In"
         >
