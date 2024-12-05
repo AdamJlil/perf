@@ -5,7 +5,7 @@
     <img 
       src="/images/homeone.jpg" 
       alt="Background Image" 
-      class="bg-img absolute top-0 left-0 w-full h-full object-cover z-[1]" 
+      class="absolute top-0 left-0 w-full h-full object-cover z-[1]" 
     />
 
     <!-- Overlay Layer -->
@@ -18,10 +18,10 @@
         </p>
     
         <div class="flex flex-col md:flex-row gap-4 md:gap-8 justify-start items-start z-9">
-          <nuxt-link to="/login" class="texts text-white tracking-normal border border-[#ffffff38] py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
+          <nuxt-link to="/login" class="texts text-white tracking-normal border border-[#ffffff38] py-2 px-6 md:px-10 text-center  max-md:text-[10px] w-[112px] md:w-[200px] lg:w-[250px] z-9 text-nowrap" style="font-weight: 300;">
             LOG IN
           </nuxt-link>
-          <nuxt-link to="/" class="texts text-white border border-[#ffffff38] py-2 px-6 md:px-10 text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
+          <nuxt-link to="/" class="texts text-white border border-[#ffffff38] py-2 px-6 md:px-10 text-center max-md:text-[10px] w-[112px] md:w-[200px] lg:w-[250px] z-9 text-nowrap" style="font-weight: 300;">
             JOIN
           </nuxt-link>
         </div>
@@ -41,7 +41,7 @@
 /* Pour les tablettes */
 @media (max-width: 1024px) {
   .texts{
-  letter-spacing: 8px;
+  letter-spacing: 4px;
 }
 }
 

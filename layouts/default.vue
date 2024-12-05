@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto min-w-[300px] min-h-screen flex flex-col bg-white relative">
+  <div class="mx-auto min-w-[430px] min-h-screen flex flex-col relative bg-[#d4d4d4]">
     <BaseHeader />
     <main class="w-full flex-1  text-[black]">
       <slot />
