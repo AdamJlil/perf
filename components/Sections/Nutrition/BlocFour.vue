@@ -1,7 +1,7 @@
 <!-- components/Sections/Nutrition/Header.vue -->
 <template>
   <header
-    class="bg-white dark:bg-black flex flex-col md:flex-row items-center w-full py-20"
+    class="bg-white dark:bg-black flex flex-col md:flex-row items-center w-full py-10"
     style="font-family: Montserrat"
   >
     <!-- Center Section: Content -->
