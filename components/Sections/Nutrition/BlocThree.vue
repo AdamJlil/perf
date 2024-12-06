@@ -3,12 +3,12 @@
   <div class="bg-white dark:bg-black w-full">
 
     <div
-    class="carousel-container relative w-full  p-10"
+    class="carousel-container relative w-full p-2"
     @mouseenter="pauseAutoplay"
     @mouseleave="startAutoplay"
   >
     <!-- Carousel Wrapper -->
-    <div class="overflow-hidden w-full py-10">
+    <div class="overflow-hidden w-full py-5">
       <div
         class="flex transition-transform duration-500 ease-in-out"
         :style="`transform: translateX(-${currentIndex * 100}%);`"
