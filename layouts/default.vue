@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto min-w-[430px] min-h-screen flex flex-col relative bg-white">
-    <BaseHeader v-if="!isActive('/')" />
-    <main class="w-full flex-1  text-[black]">
+    <BaseHeader />
+    <main class="w-full flex-1 text-[black] bg-[#d4d4d4]">
       <slot />
     </main>
     <BaseFooter />

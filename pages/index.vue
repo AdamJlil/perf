@@ -1,41 +1,47 @@
-<template>
- <div class="pt-[100px] pb-[100px] pl-[50px] pr-[50px] bg-black text-black bg-white">
-    <div class="bg-white dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-[50px] lg:mb-[50px] gap-[5%] max-md:gap-[50px] max-md:py-[80px]">
-      
-      <!-- First Card -->
-      <div class="relative w-[25%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[350px] aspect-[7/8] max-h-[400px]">
-        <div>
-          <!-- Front Side -->
-          <div class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl"
-               style="background-image: url('/images/index1.png'); background-size: cover; background-position: center;">
-            <!-- Overlay -->
-            <!-- <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div> -->
-            <!-- Bottom Text -->
-            <!-- <div class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
-                 style="font-weight: 600; letter-spacing: 0px;">
-              +100 MEALS
-            </div> -->
-          </div>
+<script lang="ts" setup>
+const currentUser = useAuthUser();
+import HomeOne from '~/components/home/HomeOne.vue';
+import HomeTwwo from '~/components/home/HomeTwwo.vue';
+import HomeThree from '~/components/home/HomeThree.vue';
+import HomeFour from '~/components/home/HomeFour.vue';
 
-        </div>
-      </div>
-      
-      <!-- Second Card -->
-      <div class="relative w-[25%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[350px] aspect-[7/8] max-h-[400px]">
-        <div >
-          <!-- Front Side -->
-          <div class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl"
-               style="background-image: url('/images/index2.png'); background-size: cover; background-position: center;">
-            <!-- Overlay -->
-            <!-- <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div> -->
-            <!-- Bottom Text -->
-            <!-- <div class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
-                 style="font-weight: 600; letter-spacing: 0px;">
-              +365 WORKOUTS
-            </div> -->
-          </div>
-        </div>
-      </div>
+
+import Header from '~/components/sections/Header.vue';
+import BlocTwo from '~/components/sections/BlocTwo.vue';
+import BlocThree from '~/components/sections/BlocThree.vue';
+import BlocFour from '~/components/sections/BlocFour.vue';
+import BlocFive from '~/components/sections/BlocFive.vue';
+import VideoSlider from '~/components/sections/VideoSlider.vue';
+import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
+
+</script>
+
+<template>
+    <HomeOne />
+    <div class="w-full lg:h-[220px] md:h-[160px] max-md:h-[120px] max-sm:h-[70px] bg-[#d4d4d4] flex justify-center items-center text-center">
+        <p class="anytime text-black z-9 text-left text-sm sm:text-3xl lg:text-4xl text-center font-medium tracking-wide" style="font-weight: 300;" >
+            ANYWHERE, ANYTIME
+        </p>
     </div>
- </div>
+    <!-- <VideoSlider/> -->
+    <HomeTwwo />
+    <HomeThree />
+    <HomeFour />
+    <!-- <BlocTwo /> -->
+    <!-- <BlocThree /> -->
+    <!-- <BlocFour/> -->
+    <!-- <BlocFive/> -->
+    <!-- <VideoSliderReviews/> -->
 </template>
+
+<style scoped>
+.anytime{
+    letter-spacing: 15px;
+}
+
+@media (max-width: 450px) {
+    .anytime{
+    letter-spacing: 5px;
+}
+}
+</style>
