@@ -1,7 +1,7 @@
 <template>
-  <div class="mx-auto min-w-[430px] min-h-screen flex flex-col relative bg-white">
+  <div class="mx-auto min-w-[430px] min-h-screen flex flex-col relative bg-[#EFEFEC]">
     <BaseHeader />
-    <main class="w-full flex-1 text-[black] bg-[#d4d4d4]">
+    <main class="w-full flex-1 text-[black] bg-[#EFEFEC]">
       <slot />
     </main>
     <BaseFooter />

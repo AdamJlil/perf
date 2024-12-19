@@ -70,7 +70,7 @@
         </div>
 
         <!-- Sign Up Button -->
-        <button class="w-full max-w-[200px] border border-white bg-transparent text-white py-2 hover:bg-white hover:text-black transition-colors mt-6">
+        <button class="w-full max-w-[200px] border border-white bg-transparent text-white py-2 hover:bg-[#EFEFEC] hover:text-black transition-colors mt-6">
           Sign Up
         </button>
       </div>

@@ -1,6 +1,6 @@
 <!-- components/Sections/Nutrition/ReviewCard.vue -->
 <template>
-  <div class="relative rounded-[70px] border border-black dark:border-white w-full p-10 bg-white dark:bg-black shadow-md">
+  <div class="relative rounded-[70px] border border-black dark:border-white w-full p-10 bg-[#EFEFEC] dark:bg-black shadow-md">
     
     <!-- Reviewer Image Badge -->
     <div

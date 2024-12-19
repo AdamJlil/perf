@@ -188,7 +188,7 @@ const isNutritionProgram = ref(true);
       <!-- Mobile Menu -->
       <div
         :class="[
-          'fixed h-full top-0 left-0 bottom-0 max-md:w-full w-[350px] bg-white dark:bg-gray-800 z-40 transform transition-transform duration-300 ease-in-out h-[90vh]',
+          'fixed h-full top-0 left-0 bottom-0 max-md:w-full w-[350px] bg-[#EFEFEC] dark:bg-gray-800 z-40 transform transition-transform duration-300 ease-in-out h-[90vh]',
           isMenuOpen ? 'translate-x-0' : '-translate-x-full',
         ]"
         aria-label="Mobile Navigation"

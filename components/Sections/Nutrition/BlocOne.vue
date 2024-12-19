@@ -1,40 +1,47 @@
 <!-- components/Sections/Nutrition/BlocOne.vue -->
 <template>
-  <div class="bg-white dark:bg-black flex flex-col justify-center items-center w-full py-10">
-    <div
-      class="w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-full overflow-hidden bg-center bg-cover"
-      style="
-        background-image: url(&quot;/images/amjad.png&quot;);
-        background-size: 120%;
-        background-position-x: -40px;
-        background-position-y: -70px;
-      "
-    ></div>
+  <div class="bg-[#EFEFEC] dark:bg-black flex flex-col justify-center items-center w-full py-10 gap-8 md:gap-12" :class="reversed ? ' md:flex-row': ' md:flex-row-reverse'">
+  <div
+    class="w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-full overflow-hidden bg-center bg-cover flex-shrink-0"
+    :style="{
+      backgroundImage: `url('${image}')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }"
+  ></div>
 
+  <div class="flex flex-col justidy-center items-center gap-[30px]">
     <p
-      class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center w-full p-10 pt-[90px]"
-      style="letter-spacing: 0.2em; line-height: 1.5"
+      class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center p-2 "
+      style="letter-spacing: 0.1em; line-height: 1.3"
     >
-      “I understand that planning healthy meals can be a challenge. <br />
-      I design easy, nutritious plans to make eating well simple and effective”<br />
+      <span v-html="headingText" />
     </p>
 
-    <div class="flex flex-col justify-center items-center">
-      <p
-      class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-xl text-center w-full p-3"
-      style="letter-spacing: 0.2em; line-height: 1.5"
-        >
-          DR. AMJAD
-        </p>
-
-        <div
-      class="w-60 h-20   overflow-hidden bg-center bg-cover -translate-x-30 invert-0 dark:invert-100 mr-[-211px]"
-      style="
-        background-image: url(&quot;/images/amjad-signature.png&quot;);
-     
-      "
-    ></div>
-
-    </div>
+    <nuxt-link to="/login" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9" style="font-weight: 300;">
+           TRANSFORM NOW
+    </nuxt-link>
   </div>
+</div>
+
 </template>
+
+
+<script lang="ts" setup>
+const props = defineProps({
+  image: {
+    type: String,
+    default: '' 
+  },
+  headingText: {
+    type: String,
+    default: '' 
+  },
+  reversed: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const { image,headingText } = toRefs(props)
+</script>

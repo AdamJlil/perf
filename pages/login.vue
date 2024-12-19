@@ -86,14 +86,14 @@ const selectOption = (option: string) => {
 
 <template>
   <div
-    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-white"
+    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-[#EFEFEC]"
     style="font-family: Montserrat;"
   >
     <!-- Dark Overlay -->
     <!-- <div class="absolute top-0 left-0 w-full h-full bg-black opacity-10 z-1"></div> -->
 
     <!-- Main Content -->
-    <div class="z-10 flex flex-col items-center w-full px-4">
+    <div class="z-10 flex flex-col items-center w-full px-4 py-[90px]">
       <!-- Main Heading -->
       <!-- <p class="text-black text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium tracking-wide mt-8" style="font-weight: 200;">
         Easy nutrition plans.<br />
@@ -106,7 +106,7 @@ const selectOption = (option: string) => {
 
         <div class="w-[75%] flex justify-center items-center gap-[10px] mb-[30px] border-b border-[#0000002b] pb-[10px]">
           <div
-            :class="`cursor-pointer rounded-xl px-[10px] py-[5px] flex items-center justify-center transition-all duration-300 ${
+            :class="`cursor-pointer px-[10px] py-[5px] flex items-center justify-center transition-all duration-300 ${
               selectedOption === 'Particulier' ? 'bg-black text-white' : 'bg-transparent text-black'
             }`"
             @click="selectOption('Particulier')"
@@ -115,7 +115,7 @@ const selectOption = (option: string) => {
           </div>
           <div class="h-[20px] w-[1px] bg-[#0000002b] flex-shrink-0"></div>
           <div
-            :class="`cursor-pointer rounded-xl px-[10px] py-[5px] flex items-center justify-center transition-all duration-300 ${
+            :class="`cursor-pointer px-[10px] py-[5px] flex items-center justify-center transition-all duration-300 ${
               selectedOption === 'Etablissement' ? 'bg-black text-white' : 'bg-transparent text-black'
             }`"
             @click="selectOption('Etablissement')"
@@ -210,7 +210,7 @@ const selectOption = (option: string) => {
           <button 
             type="submit" 
             :disabled="form.pending"
-            class="bg-black text-white py-2 px-4 w-full text-center rounded-full hover:bg-[#3b3b3b] transition-colors duration-300 max-w-[200px]"
+            class="border-[1px] border-black text-black py-2 px-4 w-full text-center hover:bg-[#00000008] transition-colors duration-300 max-w-[200px]"
             @click="onLoginClick"
           >
             LOGIN

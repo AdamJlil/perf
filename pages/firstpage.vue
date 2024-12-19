@@ -1,6 +1,6 @@
 <template>
- <div class="pt-[100px] pb-[100px] pl-[50px] pr-[50px] bg-black text-black bg-white">
-    <div class="bg-white dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-[50px] lg:mb-[50px] gap-[10%] max-md:gap-[50px] max-md:py-[80px]">
+ <div class="pt-[100px] pb-[100px] pl-[50px] pr-[50px] bg-black text-black bg-[#EFEFEC]">
+    <div class="bg-[#EFEFEC] dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-[50px] lg:mb-[50px] gap-[10%] max-md:gap-[50px] max-md:py-[80px]">
       
     <!-- First Card -->
     <div class="cursor-pointer relative w-[25%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[350px] aspect-[7/8] max-h-[400px] group overflow-hidden rounded-[80px] max-lg:rounded-[50px]">

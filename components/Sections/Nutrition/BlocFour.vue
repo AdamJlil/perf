@@ -1,21 +1,21 @@
 <!-- components/Sections/Nutrition/Header.vue -->
 <template>
   <header
-    class="bg-white dark:bg-black flex flex-col md:flex-row items-center w-full py-10"
+    class="bg-[#EFEFEC] dark:bg-black flex flex-col md:flex-row items-center w-full"
     style="font-family: Montserrat"
   >
     <!-- Center Section: Content -->
-    <div class="w-full flex flex-col content-around p-8 bg-white dark:bg-black">
+    <div class="w-full flex flex-col content-around bg-[#EFEFEC] dark:bg-black">
       <!-- Title -->
       <h1
         class="text-2xl lg:text-4xl md:text-2xl leading-loose font-normal text-center mb-6 py-10 uppercase text-black dark:text-white"
       >
-        What are you <br />
-        waiting for?
+        <span v-html="headingText" />
       </h1>
 
       <!-- Buttons -->
       <div
+        v-if="isbuttons"
         class="flex flex-col md:flex-row gap-4 md:gap-8 w-full md:max-w-none justify-center items-center z-10 py-10 md:py-5"
       >
         <NuxtLink
@@ -38,3 +38,19 @@
     </div>
   </header>
 </template>
+
+
+<script lang="ts" setup>
+const props = defineProps({
+  headingText: {
+    type: String,
+    default: '' 
+  },
+  isbuttons:{
+    type: Boolean,
+    default: true
+  }
+})
+
+const { headingText } = toRefs(props)
+</script>

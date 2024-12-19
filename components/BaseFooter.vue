@@ -1,6 +1,6 @@
 <!-- components/BaseFooter.vue -->
 <template>
-  <footer class="bg-white dark:bg-black flex flex-col items-center w-full font-montserrat">
+  <footer class="bg-[#EFEFEC] dark:bg-black flex flex-col items-center w-full font-montserrat">
     <!-- Main Links Section -->
     <div class="flex flex-col md:flex-row justify-start items-start w-full">
       <!-- Column 1 -->
@@ -32,9 +32,9 @@
       <div class="w-full md:w-1/3 flex flex-col justify-center items-center px-4 md:px-8 pt-0">
         <div class="w-auto mb-4">
           <img
-            src="/logo2.jpeg"
+            src="/logon.png"
             alt="Company Logo"
-            class="invert-0 dark:invert-100 w-12 lg:w-14 mx-auto max-md:h-[80px] rotate-[-90deg]"
+            class="invert-0 dark:invert-100 w-[100px] mx-auto"
           />
         </div>
         <div class="flex justify-center items-center gap-6">
