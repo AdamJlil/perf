@@ -86,7 +86,7 @@ const selectOption = (option: string) => {
 
 <template>
   <div
-    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-white"
+    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-[#EFEFEC]"
     style="font-family: Montserrat;"
   >
     <!-- Dark Overlay -->

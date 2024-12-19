@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full max-md:h-fit bg-white flex justify-center items-center text-center p-[40px] md:mt-[60px] ">
+    <div class="w-full max-md:h-fit bg-[#EFEFEC] flex justify-center items-center text-center p-[40px] md:mt-[60px] ">
       <div class="flex flex-col-reverse md:flex-row w-full gap-[100px] max-md:gap-[50px] justify-between items-center px-6 lg:px-16 max-w-[1500px]">
         <!-- Left Text Content -->
         <div class="flex-col flex justify-center items-center gap-[20px] text-left md:w-1/2">

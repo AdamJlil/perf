@@ -1,35 +1,27 @@
 <template>
-  <div class="bg-white dark:bg-black w-full">
+  <div class="bg-[#EFEFEC] dark:bg-black w-full overflow-hidden pt-[100px]">
     <div class="carousel-container relative w-full p-2">
-      <!-- Carousel Wrapper -->
-      <div class="overflow-x-hidden scroll-smooth w-full pb-2 pt-25 max-md:mt-[-90px] flex justify-center">
+      <div class="marquee flex w-fit gap-[70px]">
         <div
-          class="flex gap-4 justify-center items-center w-fit transition-transform duration-500 ease-in-out"
+          v-for="(review, index) in repeatedReviews"
+          :key="index"
+          class="flex-shrink-0 w-[300px] px-2"
         >
-          <div
-            v-for="(review, index) in displayedReviews"
-            :key="index"
-            class="flex-shrink-0 w-[300px] px-2 transition-opacity duration-500 transform-gpu"
-            :class="{
-              'opacity-50 scale-90': index !== 1,
-              'opacity-100 scale-100': index === 1,
-            }"
-          >
-            <ReviewCard
-              :reviewText="review.reviewText"
-              :reviewerImage="review.reviewerImage"
-              :filledStars="review.filledStars"
-              class="review-card-smaller"
-            />
-          </div>
+          <ReviewCard
+            :reviewText="review.reviewText"
+            :reviewerImage="review.reviewerImage"
+            :filledStars="review.filledStars"
+            class="review-card-smaller"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 
+
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { computed } from "vue";
 import ReviewCard from "~/components/Sections/Nutrition/ReviewCard.vue";
 
 const reviews = [
@@ -50,34 +42,26 @@ const reviews = [
   },
 ];
 
-// L'index courant, pointant toujours sur la review du centre
-const currentIndex = ref(0);
-
-// Calcul des reviews affichées à partir de currentIndex
-// On prend: review gauche, review centre (currentIndex), review droite.
-const displayedReviews = computed(() => {
-  const leftIndex = (currentIndex.value - 1 + reviews.length) % reviews.length;
-  const centerIndex = currentIndex.value % reviews.length;
-  const rightIndex = (currentIndex.value + 1) % reviews.length;
-
-  return [reviews[leftIndex], reviews[centerIndex], reviews[rightIndex]];
-});
-
-let interval: number | undefined;
-
-onMounted(() => {
-  // Toutes les 2 secondes, on incrémente currentIndex pour faire tourner les reviews
-  interval = window.setInterval(() => {
-    currentIndex.value = (currentIndex.value + 1) % reviews.length;
-  }, 2000);
-});
-
-onBeforeUnmount(() => {
-  if (interval) clearInterval(interval);
-});
+// Dupliquez les reviews pour le défilement infini
+const repeatedReviews = computed(() => [...reviews, ...reviews]);
 </script>
 
+
 <style scoped>
+
+.marquee {
+  animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .carousel-container {
   position: relative;
 }

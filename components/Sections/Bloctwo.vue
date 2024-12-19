@@ -33,7 +33,7 @@
       </p>
   
       <div
-        class="text-white border border-white py-2 px-8 text-center z-30 mt-6 cursor-pointer hover:bg-white hover:text-blue transition-all duration-300"
+        class="text-white border border-white py-2 px-8 text-center z-30 mt-6 cursor-pointer hover:bg-[#EFEFEC] hover:text-blue transition-all duration-300"
         style="font-weight: 300;"
       >
         MORE

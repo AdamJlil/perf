@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full md:h-[30vh] lg:h-[35vh] max-md:h-[20vh] bg-white overflow-hidden relative" style="font-family: Montserrat;">
-    <div class="flex h-full gap-[8px] bg-white animate-scroll">
+  <div class="w-full md:h-[30vh] lg:h-[35vh] max-md:h-[20vh] bg-[#EFEFEC] overflow-hidden relative" style="font-family: Montserrat;">
+    <div class="flex h-full gap-[8px] bg-[#EFEFEC] animate-scroll">
       <div
         v-for="(video, i) in duplicatedVideos"
         :key="i"
-        class="flex-shrink-0 h-full w-[250px] bg-white"
+        class="flex-shrink-0 h-full w-[250px] bg-[#EFEFEC]"
       >
         <video autoplay muted loop class="h-full w-full object-cover">
           <source :src="video" type="video/mp4" />
