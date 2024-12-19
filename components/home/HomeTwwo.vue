@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-[#d4d4d4] max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] flex max-md:flex-col justify-center items-center text-center p-[30px] gap-[5%] max-md:gap-[50px] max-md:py-[10px]">
+    <div class="bg-white max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] flex max-md:flex-col justify-center items-center text-center p-[30px] gap-[5%] max-md:gap-[50px] max-md:py-[10px]">
       
       <!-- First Card -->
       <div class="flip-container relative w-[25%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[350px] aspect-[7/8] max-h-[400px]">

@@ -1,56 +1,38 @@
-<!-- components/Sections/Nutrition/BlocThree.vue -->
 <template>
   <div class="bg-white dark:bg-black w-full">
-
-    <div
-    class="carousel-container relative w-full p-2"
-    @mouseenter="pauseAutoplay"
-    @mouseleave="startAutoplay"
-  >
-    <!-- Carousel Wrapper -->
-    <div class="overflow-hidden w-full py-5">
-      <div
-        class="flex transition-transform duration-500 ease-in-out"
-        :style="`transform: translateX(-${currentIndex * 100}%);`"
-      >
-        <!-- Render each review as a slide -->
-        <div v-for="(review, index) in reviews" :key="index" class="flex-shrink-0 w-full px-2">
-          <ReviewCard
-            :reviewText="review.reviewText"
-            :reviewerImage="review.reviewerImage"
-            :filledStars="review.filledStars"
-            class="review-card-smaller"
-          />
+    <div class="carousel-container relative w-full p-2">
+      <!-- Carousel Wrapper -->
+      <div class="overflow-x-hidden scroll-smooth w-full pb-2 pt-25 max-md:mt-[-90px] flex justify-center">
+        <div
+          class="flex gap-4 justify-center items-center w-fit transition-transform duration-500 ease-in-out"
+        >
+          <div
+            v-for="(review, index) in displayedReviews"
+            :key="index"
+            class="flex-shrink-0 w-[300px] px-2 transition-opacity duration-500 transform-gpu"
+            :class="{
+              'opacity-50 scale-90': index !== 1,
+              'opacity-100 scale-100': index === 1,
+            }"
+          >
+            <ReviewCard
+              :reviewText="review.reviewText"
+              :reviewerImage="review.reviewerImage"
+              :filledStars="review.filledStars"
+              class="review-card-smaller"
+            />
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Pagination Dots -->
-    <div class="flex justify-center mt-4 space-x-2">
-      <button
-        v-for="(review, index) in reviews"
-        :key="index"
-        @click="goTo(index)"
-        :class="[
-          'w-3 h-3 rounded-full focus:outline-none transition-colors',
-          currentIndex === index ? 'bg-gray-800' : 'bg-gray-400'
-        ]"
-        :aria-label="`Go to review ${index + 1}`"
-      ></button>
-    </div>
   </div>
-  </div>
-  
-  
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import ReviewCard from "~/components/Sections/Nutrition/ReviewCard.vue";
 
-// Define the review data
 const reviews = [
-  
   {
     reviewText: "“Before PERF, i hated working out. now i move my body 4 to 5 times a week. i’m more productive, energetic and happier !”",
     reviewerImage: "images/review1.jpg",
@@ -66,61 +48,32 @@ const reviews = [
     reviewerImage: "images/review1.jpg",
     filledStars: 5,
   },
-  // {
-  //   reviewText: "Not satisfied with the product. It didn't work as advertised.",
-  //   reviewerImage: "/images/reviewer4.jpg",
-  //   filledStars: 5,
-  // },
-  // {
-  //   reviewText: "Terrible experience. The product broke after one use.",
-  //   reviewerImage: "/images/reviewer5.jpg",
-  //   filledStars: 5,
-  // },
 ];
 
-// Reactive state for current index
+// L'index courant, pointant toujours sur la review du centre
 const currentIndex = ref(0);
 
-// Auto-play configuration
-const autoplayInterval = 30000; // 30 seconds
-let autoplayTimer: number | undefined;
+// Calcul des reviews affichées à partir de currentIndex
+// On prend: review gauche, review centre (currentIndex), review droite.
+const displayedReviews = computed(() => {
+  const leftIndex = (currentIndex.value - 1 + reviews.length) % reviews.length;
+  const centerIndex = currentIndex.value % reviews.length;
+  const rightIndex = (currentIndex.value + 1) % reviews.length;
 
-// Function to go to the next review
-function next() {
-  if (currentIndex.value < reviews.length - 1) {
-    currentIndex.value++;
-  } else {
-    currentIndex.value = 0; // Loop back to the first review
-  }
-}
+  return [reviews[leftIndex], reviews[centerIndex], reviews[rightIndex]];
+});
 
-// Function to go to a specific review
-function goTo(index: number) {
-  currentIndex.value = index;
-}
+let interval: number | undefined;
 
-// Start auto-play
-function startAutoplay() {
-  autoplayTimer = window.setInterval(() => {
-    next();
-  }, autoplayInterval);
-}
-
-// Pause auto-play
-function pauseAutoplay() {
-  if (autoplayTimer) {
-    clearInterval(autoplayTimer);
-    autoplayTimer = undefined;
-  }
-}
-
-// Lifecycle hooks to manage auto-play
 onMounted(() => {
-  startAutoplay();
+  // Toutes les 2 secondes, on incrémente currentIndex pour faire tourner les reviews
+  interval = window.setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % reviews.length;
+  }, 2000);
 });
 
 onBeforeUnmount(() => {
-  pauseAutoplay();
+  if (interval) clearInterval(interval);
 });
 </script>
 
@@ -129,33 +82,24 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
-.carousel-container .overflow-hidden {
-  width: 100%;
-}
-
-.carousel-container .flex {
+.carousel-container .overflow-x-auto {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin; /* Pour Firefox */
+  -ms-overflow-style: none; /* Pour Internet Explorer */
 }
 
-.carousel-container .transition-transform {
-  transition: transform 0.5s ease-in-out;
+.carousel-container .overflow-x-auto::-webkit-scrollbar {
+  display: none; /* Pour Chrome, Safari, et Opera */
 }
 
-.carousel-container .flex-shrink-0 {
-  flex-shrink: 0;
-}
-
-.carousel-container button:focus {
-  outline: none;
-}
-
-/* Make the ReviewCard smaller */
 .review-card-smaller {
-  /* Adjust padding and width as needed */
-  max-width: 350px; /* Example: Limit the maximum width */
-  margin: 0 auto; /* Center the card */
-  padding: 6px 12px; /* Reduce padding */
+  max-width: 300px; 
+  margin: 0 auto; 
+  padding: 6px 12px; 
 }
-
-/* Optional: Adjust the ReviewCard's internal styles if necessary */
 </style>

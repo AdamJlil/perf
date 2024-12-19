@@ -18,7 +18,7 @@
           </div>
           <!-- Back Side -->
           <div class="back absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl bg-white flex justify-center items-center">
-            <div class="text-black text-[15px] bg-[#dedcd4] h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
+            <div class="text-black text-[15px] lg:text-[20px] bg-[#dedcd4] h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
                  style="font-weight: 400; letter-spacing: 0px;">
               Personalized meal plans that are easy, balanced, and designed to help you reach your fitness goals.
             </div>
@@ -42,7 +42,7 @@
           </div>
           <!-- Back Side -->
           <div class="back absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl bg-white flex justify-center items-center">
-            <div class="text-black text-[15px] bg-[#dedcd4] h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
+            <div class="text-black text-[15px] lg:text-[20px] bg-[#dedcd4] h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
                  style="font-weight: 400; letter-spacing: 0px;">
               Discover expert-led fitness programs, from bodywheight to hight-intensity, for all levels and lifestyles.
             </div>
@@ -66,7 +66,7 @@
           </div>
           <!-- Back Side -->
           <div class="back absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl bg-white flex justify-center items-center bg-[#dedcd4] ">
-            <div class="text-black text-[15px] bg-[#dedcd4] h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
+            <div class="text-black text-[15px] lg:text-[20px] bg-[#dedcd4] h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
                  style="font-weight: 400; letter-spacing: 0px;">
               Experience our eco-friendly, handcrafted equipements, blending style and performance for any workout. 
             </div>
