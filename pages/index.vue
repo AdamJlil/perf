@@ -28,8 +28,8 @@ import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
     </div>
     <!-- <VideoSlider/> -->
     <HomeTwwo />
-    <HomeThree />
-    <HomeFour image1="/images/blockfour1.jpg" link="/login" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
+    <HomeThree class="my-[150px]" />
+    <HomeFour image1="/images/blockfour1.jpg" link="/products" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
     <Bloc3 />
     <Bloc4 headingText=" What are you <br /> waiting for?" />
     <!-- <BlocTwo /> -->

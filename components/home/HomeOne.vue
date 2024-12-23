@@ -12,7 +12,7 @@
     <!-- <div class="absolute top-0 left-0 w-full h-full bg-black opacity-10 z-1"></div> -->
 
     <!-- Content -->
-    <div class="flex flex-col justify-center items-center gap-[20px] lg:gap-[100px] md:gap-[50px] ">
+    <div class="flex flex-col justify-center max-md:items-center items-start gap-[20px] lg:gap-[100px] md:gap-[50px] ">
         <p class="texts text-white z-9 text-left text-base sm:text-2xl md:text-3xl lg:text-4xl text-center font-medium tracking-wide" style="font-weight: 200;" >
           READY TO GET FIT ?
         </p>
@@ -20,9 +20,6 @@
         <div class="flex flex-col md:flex-row gap-4 md:gap-8 justify-start items-start z-9">
           <nuxt-link to="/login" class="texts text-white tracking-normal border border-[#ffffff38] py-2 px-6 md:px-10 text-center  max-md:text-[10px] w-[112px] md:w-[200px] lg:w-[250px] z-9 text-nowrap" style="font-weight: 300;">
             LOG IN
-          </nuxt-link>
-          <nuxt-link to="/" class="texts text-white border border-[#ffffff38] py-2 px-6 md:px-10 text-center max-md:text-[10px] w-[112px] md:w-[200px] lg:w-[250px] z-9 text-nowrap" style="font-weight: 300;">
-            JOIN
           </nuxt-link>
         </div>
     </div>

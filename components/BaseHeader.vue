@@ -39,90 +39,57 @@ const isActive = (route: string): boolean => {
 
 const isWorkoutProgram = ref(true);
 const isNutritionProgram = ref(true);
+
+
+const languages = ['FR', 'EN']
+const currentLanguage = ref('EN')
+
+const isOpen = ref(false)
+
+const toggleDropdown = () => {
+  isOpen.value = !isOpen.value
+}
+
+const selectLanguage = (lang: string) => {
+  currentLanguage.value = lang
+  isOpen.value = false 
+}
+
+onMounted(() => {
+  window.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    if (!target.closest('.relative')) {
+      isOpen.value = false
+    }
+  })
+})
+
 </script>
+
 
 <template>
   <header
-    class="dark:text-slate-500 absolute top-0 left-0 right-0 z-50 mt-[30px]"
+    class="dark:text-slate-500 absolute top-0 left-0 right-0 z-50 md:mt-[30px]"
     style="font-family: Montserrat"
     :class="{
       'text-black': isActive('/nutritionPlans') || isActive('/login'),
       'text-white': !isActive('/nutritionPlans') && !isActive('/login'),
     }"
   >
-    <div class="p-3 w-full flex items-center justify-between pr-[30px]">
-      <!-- Mobile Menu Button -->
-      <button @click="toggleMenu" class="md:hidden z-20 ml-[20px]" aria-label="Toggle Menu">
-        <span class="block w-6 h-0.5 bg-current mb-1"></span>
-        <span class="block w-6 h-0.5 bg-current mb-1"></span>
-        <span class="block w-6 h-0.5 bg-current"></span>
-      </button>
-
+    <div class="p-3 w-full flex items-center justify-between pr-[30px] max-md:pt-[30px]">
+      
+      <!-- v-if="currentUser" -->
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex md:gap-5 lg:gap-15 items-right justify-end w-full">
-        <template v-if="currentUser">
-          <div class="flex items-center justify-between w-full">
-            <div>
-              <NuxtLink
-                v-if="!isAdmin && isWorkoutProgram"
-                to="/privateWorkoutProgram"
-                class="px-3 text-shadow-white text-white dark:text-white"
-                :class="{
-                  'font-bold': isActive('/privateWorkoutProgram'),
-                  'font-light': !isActive('/privateWorkoutProgram'),
-                }"
-                @click="closeMenu"
-              >
-                Your Workout Programme
-              </NuxtLink>
-              <NuxtLink
-                v-if="!isAdmin && isNutritionProgram"
-                to="/privateNutritionProgram"
-                class="px-3 text-shadow-white text-white dark:text-white"
-                :class="{
-                  'font-bold': isActive('/privateNutritionProgram'),
-                  'font-light': !isActive('/privateNutritionProgram'),
-                }"
-                @click="closeMenu"
-              >
-                Your Nutrition Programme
-              </NuxtLink>
-              <NuxtLink
-                v-if="isAdmin"
-                to="/admin"
-                class="px-3 font-semibold text-shadow-white text-white dark:text-white"
-                @click="closeMenu"
-              >
-                Admin
-              </NuxtLink>
-            </div>
-            <div class="flex items-center gap-[30px]">
-              <!-- Theme Toggle Button -->
-              <!-- <ThemeToggle /> -->
-
-              <!-- Logout Button -->
-              <button
-                class="py-1.5 px-3 rounded bg-light-100 dark:bg-gray-700 font-semibold text-sm text-slate-950 dark:text-white hover:bg-light-700 dark:hover:bg-gray-600 transition-colors"
-                :disabled="form.pending"
-                @click="onLogoutClick"
-                aria-label="Logout"
-              >
-                Logout
-              </button>
-
-              <!-- User Profile Image -->
-              <div class="flex justify-center items-center gap-[15px]">
-                <div
-                  class="h-[60px] w-[60px] rounded-full overflow-hidden bg-center bg-cover"
-                  style="background-image: url(&quot;/images/user.png&quot;)"
-                  aria-label="User Profile"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          
+      <nav class="hidden md:flex items-center justify-between w-full px-8 md:mr-[
+      10px]">
+        <NuxtLink to="/">
+          <NuxtImg
+            :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+            alt="Company Logo"
+            class="w-[80px]"
+          />
+        </NuxtLink>        
+        <div class="flex gap-5 lg:gap-15 items-center">
           <NuxtLink
             to="/"
             class="px-3 text-shadow-white"
@@ -135,31 +102,17 @@ const isNutritionProgram = ref(true);
           >
             HOME
           </NuxtLink>
-
-          {{ console.log(isActive('/login')) }}
-          <NuxtLink
-            to="/workoutPrograms"
-            class="px-3 text-shadow-white"
-            :class="{ 
-              'text-black': isActive('/nutritionPlans') || isActive('/login'),
-              'font-bold': isActive('/workoutPrograms'), 
-              'font-light': !isActive('/workoutPrograms') 
-            }"
-            @click="closeMenu"
-          >
-            WORKOUT PROGRAMS
-          </NuxtLink>
           <NuxtLink
             to="/nutritionPlans"
             class="px-3 text-shadow-white"
             :class="{ 
-                  'text-black': isActive('/nutritionPlans') || isActive('/login'),
-                  'font-bold': isActive('/nutritionPlans'), 
-                  'font-light': !isActive('/nutritionPlans') 
-              }"
+                'text-black': isActive('/nutritionPlans') || isActive('/login'),
+                'font-bold': isActive('/nutritionPlans'), 
+                'font-light': !isActive('/nutritionPlans') 
+            }"
             @click="closeMenu"
           >
-            NUTRITION PLANS
+            PERF PROGRAM
           </NuxtLink>
           <NuxtLink
             to="/products"
@@ -168,14 +121,112 @@ const isNutritionProgram = ref(true);
                 'text-black': isActive('/nutritionPlans') || isActive('/login'),
                 'font-bold': isActive('/products'), 
                 'font-light': !isActive('/products') 
-              }"
+            }"
             @click="closeMenu"
           >
             OUR PRODUCTS
           </NuxtLink>
-          <!-- <ThemeToggle /> -->
-        </template>
+        </div>
+        <div class="relative flex items-center gap-[15px]">
+        <NuxtLink
+          to="/login"
+          class="px-3 text-shadow-white"
+          :class="{
+            'text-black': isActive('/nutritionPlans') || isActive('/login'),
+            'font-bold': isActive('/login')
+          }"
+          @click="closeMenu"
+        >
+          LOGIN
+        </NuxtLink>
+        <div
+          class="flex items-center gap-2 cursor-pointer"
+          @click="toggleDropdown"
+        >
+          <img
+            :src="currentLanguage === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
+            alt="Current Language"
+            class="w-6 h-6"
+          />
+          <img
+            :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+            alt="arrow"
+            class="w-4 h-4 transform transition-transform"
+            :class="{ 'rotate-180': isOpen }"
+          />
+        </div>
+        <div
+          v-if="isOpen"
+          class="absolute top-full left-[64px] mt-2 text-black dark:text-white w-20 shadow-lg rounded-sm backdrop-blur-md"
+        >
+          <div
+            v-for="lang in languages"
+            :key="lang"
+            @click="selectLanguage(lang)"
+            class="px-3 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 flex justify-center"
+          >
+            <img
+              :src="lang === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
+              :alt="lang"
+              class="w-6 h-6"
+            />
+          </div>
+        </div>
+      </div>
+
       </nav>
+
+      <!-- Mobile Menu Button -->
+      <button @click="toggleMenu" class="md:hidden z-20 order-1" aria-label="Toggle Menu">
+        <span class="block w-6 h-0.5 bg-current mb-1"></span>
+        <span class="block w-6 h-0.5 bg-current mb-1"></span>
+        <span class="block w-6 h-0.5 bg-current"></span>
+      </button>
+
+      <!-- Logo -->
+      <NuxtLink to="/" class="order-2 mx-auto  md:hidden">
+        <NuxtImg
+          :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+          alt="Company Logo"
+          class="w-[50px]"
+        />
+      </NuxtLink>
+
+     <!-- Language Selector en Mobile -->
+      <div 
+        class="relative hidden max-md:flex items-center gap-2 cursor-pointer order-3" 
+        @click.stop="toggleDropdown" 
+      >
+        <img
+          :src="currentLanguage === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
+          alt="Current Language"
+          class="w-6 h-6"
+        />
+        <img
+          :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+          alt="arrow"
+          class="w-4 h-4 transform transition-transform"
+          :class="{ 'rotate-180': isOpen }"
+        />
+        <div
+          v-if="isOpen"
+          class="absolute top-full left-[-28px] mt-2 text-black dark:text-white w-20 shadow-lg rounded-sm backdrop-blur-md"
+        >
+          <div
+            v-for="lang in languages"
+            :key="lang"
+            @click.stop="selectLanguage(lang)"
+            class="px-3 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 flex justify-center"
+          >
+            <img
+              :src="lang === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
+              :alt="lang"
+              class="w-6 h-6"
+            />
+          </div>
+        </div>
+      </div>
+
 
       <!-- Mobile Overlay -->
       <div
@@ -183,8 +234,8 @@ const isNutritionProgram = ref(true);
         class="fixed inset-0 bg-black bg-opacity-50 z-30"
         @click="closeMenu"
         aria-hidden="true"
-      ></div>
-
+      >
+      </div>
       <!-- Mobile Menu -->
       <div
         :class="[
@@ -203,7 +254,6 @@ const isNutritionProgram = ref(true);
               />
             </svg>
           </div>
-
           <template v-if="currentUser">
             <NuxtLink
               v-if="!isAdmin && isWorkoutProgram"
@@ -249,7 +299,6 @@ const isNutritionProgram = ref(true);
               Logout
             </button>
           </template>
-
           <template v-else>
             <NuxtLink
               to="/"
@@ -260,20 +309,12 @@ const isNutritionProgram = ref(true);
               HOME
             </NuxtLink>
             <NuxtLink
-              to="/workoutPrograms"
-              class="py-2 mb-[10px] text-shadow-white text-black"
-              :class="{ 'font-bold': isActive('/workoutPrograms'), 'font-light': !isActive('/workoutPrograms') }"
-              @click="closeMenu"
-            >
-              WORKOUT PROGRAMS
-            </NuxtLink>
-            <NuxtLink
               to="/nutritionPlans"
               class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
               :class="{ 'font-bold': isActive('/nutritionPlans'), 'font-light': !isActive('/nutritionPlans') }"
               @click="closeMenu"
             >
-              NUTRITION PLANS
+              PERF PROGRAM
             </NuxtLink>
             <NuxtLink
               to="/products"
@@ -283,12 +324,20 @@ const isNutritionProgram = ref(true);
             >
               OUR PRODUCTS
             </NuxtLink>
-            <!-- Theme Toggle in Mobile Menu -->
-            <!-- <ThemeToggle /> -->
+            <NuxtLink
+              to="/login"
+              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+              :class="{ 'font-bold': isActive('/login'), 'font-light': !isActive('/login') }"
+              @click="closeMenu"
+            >
+              LOGIN
+            </NuxtLink>
           </template>
         </nav>
       </div>
     </div>
+
+
   </header>
 </template>
 
@@ -306,5 +355,13 @@ const isNutritionProgram = ref(true);
   .md\:flex {
     display: none;
   }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-transform {
+  transition: transform 0.2s ease-in-out;
 }
 </style>
