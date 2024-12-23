@@ -14,8 +14,6 @@ import BlocFive from '~/components/sections/BlocFive.vue';
 import VideoSlider from '~/components/sections/VideoSlider.vue';
 import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
 
-import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
-
 </script>
 
 <template>
@@ -29,7 +27,6 @@ import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
     <HomeTwwo />
     <HomeThree />
     <HomeFour />
-    <!-- <PricingBloc/> -->
     <!-- <BlocTwo /> -->
     <!-- <BlocThree /> -->
     <!-- <BlocFour/> -->
