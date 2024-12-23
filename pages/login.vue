@@ -77,11 +77,6 @@ const togglePassword = () => {
   }
 }
 
-const selectedOption = ref('Particulier')
-
-const selectOption = (option: string) => {
-  selectedOption.value = option
-}
 </script>
 
 <template>
@@ -93,7 +88,7 @@ const selectOption = (option: string) => {
     <!-- <div class="absolute top-0 left-0 w-full h-full bg-black opacity-10 z-1"></div> -->
 
     <!-- Main Content -->
-    <div class="z-10 flex flex-col items-center w-full px-4 py-[90px]">
+    <div class="z-10 flex flex-col items-center w-full px-4">
       <!-- Main Heading -->
       <!-- <p class="text-black text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium tracking-wide mt-8" style="font-weight: 200;">
         Easy nutrition plans.<br />
@@ -104,41 +99,9 @@ const selectOption = (option: string) => {
       <!-- Input Fields -->
       <div class="flex flex-col items-center w-full max-w-md mt-12">
 
-        <div class="w-[75%] flex justify-center items-center gap-[10px] mb-[30px] border-b border-[#0000002b] pb-[10px]">
-          <div
-            :class="`cursor-pointer px-[10px] py-[5px] flex items-center justify-center transition-all duration-300 ${
-              selectedOption === 'Particulier' ? 'bg-black text-white' : 'bg-transparent text-black'
-            }`"
-            @click="selectOption('Particulier')"
-          >
-            Particulier
-          </div>
-          <div class="h-[20px] w-[1px] bg-[#0000002b] flex-shrink-0"></div>
-          <div
-            :class="`cursor-pointer px-[10px] py-[5px] flex items-center justify-center transition-all duration-300 ${
-              selectedOption === 'Etablissement' ? 'bg-black text-white' : 'bg-transparent text-black'
-            }`"
-            @click="selectOption('Etablissement')"
-          >
-            Etablissement
-          </div>
-        </div>
-
-        <!-- Dropdown Select -->
-        <div v-if="selectedOption === 'Etablissement'" class="w-full flex flex-col sm:flex-row items-center mb-4">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">ETABLISSEMENT:</label>
-          <select
-            v-model="form.data.etablissement"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0"
-          >
-            <option value="" disabled selected>SELECT AN OPTION</option>
-            <option value="etablissement1">Etablissement 1</option>
-            <option value="etablissement2">Etablissement 2</option>
-            <option value="etablissement3">Etablissement 3</option>
-          </select>
-        </div>
-
-
+        <h1 class="text-[20px] leading-loose font-normal text-center mb-0 py-15 uppercase text-black dark:text-white">
+          <span>READY FOR SOME PROGRESS?</span>
+        </h1>
 
         <!-- E-mail/Phone -->
         <div class="w-full flex flex-col sm:flex-row items-center mb-4">
@@ -168,16 +131,16 @@ const selectOption = (option: string) => {
           <span class="absolute right-0 bottom-1">
             <NuxtImg 
               id="eye" 
-              src="/images/new_eye.png" 
+              src="/images/eye-p.png" 
               alt="eye" 
               width="30" 
               height="30" 
-              class="cursor-pointer hidden pb-1" 
+              class="cursor-pointer hidden pb-1 mb-[-6px]" 
               @click="togglePassword" 
             />
             <NuxtImg 
               id="noeye" 
-              src="/images/new_noeye.png" 
+              src="/images/eye_hide.png" 
               alt="noeye" 
               width="27" 
               height="27" 

@@ -1,6 +1,6 @@
 <!-- components/BaseFooter.vue -->
 <template>
-  <footer class="bg-[#EFEFEC] dark:bg-black flex flex-col items-center w-full font-montserrat">
+  <footer class="bg-[#EFEFEC] dark:bg-black flex flex-col items-center w-full font-montserrat mt-[50px]">
     <!-- Main Links Section -->
     <div class="flex flex-col md:flex-row justify-start items-start w-full">
       <!-- Column 1 -->

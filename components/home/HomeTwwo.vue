@@ -6,9 +6,9 @@
         <div class="flipper">
           <!-- Front Side -->
           <div class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl"
-               style="background-image: url('/images/meals.png'); background-size: cover; background-position: center;">
+               style="background-image: url('/images/arrow.png'); background-size: cover; background-position: center;">
             <!-- Overlay -->
-            <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div>
+            <!-- <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div> -->
             <!-- Bottom Text -->
             <div class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
                  style="font-weight: 600; letter-spacing: 0px;">
@@ -30,9 +30,9 @@
         <div class="flipper">
           <!-- Front Side -->
           <div class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl"
-               style="background-image: url('/images/workouts.png'); background-size: cover; background-position: center;">
+               style="background-image: url('/images/arrow2.png'); background-size: cover; background-position: center;">
             <!-- Overlay -->
-            <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div>
+            <!-- <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div> -->
             <!-- Bottom Text -->
             <div class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
                  style="font-weight: 600; letter-spacing: 0px;">
@@ -55,9 +55,9 @@
         <div class="flipper">
           <!-- Front Side -->
           <div class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl"
-               style="background-image: url('/images/equipements.png'); background-size: cover; background-position: center;">
+               style="background-image: url('/images/arrow1.png'); background-size: cover; background-position: center;">
             <!-- Overlay -->
-            <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div>
+            <!-- <div class="absolute inset-0 bg-[#00000033] opacity-50 rounded-[80px] max-lg:rounded-[50px]"></div> -->
             <!-- Bottom Text -->
             <div class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
                  style="font-weight: 600; letter-spacing: 0px;">
