@@ -72,8 +72,8 @@ onMounted(() => {
     class="dark:text-slate-500 absolute top-0 left-0 right-0 z-50 md:mt-[30px]"
     style="font-family: Montserrat"
     :class="{
-      'text-black': isActive('/nutritionPlans') || isActive('/login'),
-      'text-white': !isActive('/nutritionPlans') && !isActive('/login'),
+      'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
+      'text-white': !isActive('/nutritionPlans') && !isActive('/login') && !isActive('/signUp') && !isActive('establishementProgram'),
     }"
   >
     <div class="p-3 w-full flex items-center justify-between pr-[30px] max-md:pt-[30px]">
@@ -84,7 +84,7 @@ onMounted(() => {
       10px]">
         <NuxtLink to="/">
           <NuxtImg
-            :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+            :src="isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram') ? '/images/pepe.png' : '/images/logoNN-white.png'"
             alt="Company Logo"
             class="w-[80px]"
           />
@@ -94,7 +94,7 @@ onMounted(() => {
             to="/"
             class="px-3 text-shadow-white"
             :class="{
-              'text-black': isActive('/nutritionPlans') || isActive('/login'),
+              'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
               'font-bold': isActive('/'),
               'font-light': !isActive('/')
             }"
@@ -106,7 +106,7 @@ onMounted(() => {
             to="/nutritionPlans"
             class="px-3 text-shadow-white"
             :class="{ 
-                'text-black': isActive('/nutritionPlans') || isActive('/login'),
+                'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
                 'font-bold': isActive('/nutritionPlans'), 
                 'font-light': !isActive('/nutritionPlans') 
             }"
@@ -114,25 +114,25 @@ onMounted(() => {
           >
             PERF PROGRAM
           </NuxtLink>
-          <NuxtLink
+          <!-- <NuxtLink
             to="/products"
             class="px-3 text-shadow-white"
             :class="{ 
-                'text-black': isActive('/nutritionPlans') || isActive('/login'),
+                'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp'),
                 'font-bold': isActive('/products'), 
                 'font-light': !isActive('/products') 
             }"
             @click="closeMenu"
           >
             OUR PRODUCTS
-          </NuxtLink>
+          </NuxtLink> -->
         </div>
         <div class="relative flex items-center gap-[15px]">
         <NuxtLink
           to="/login"
           class="px-3 text-shadow-white"
           :class="{
-            'text-black': isActive('/nutritionPlans') || isActive('/login'),
+            'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
             'font-bold': isActive('/login')
           }"
           @click="closeMenu"
@@ -149,7 +149,7 @@ onMounted(() => {
             class="w-6 h-6"
           />
           <img
-            :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+            :src="isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
             alt="arrow"
             class="w-4 h-4 transform transition-transform"
             :class="{ 'rotate-180': isOpen }"
@@ -254,55 +254,11 @@ onMounted(() => {
               />
             </svg>
           </div>
-          <template v-if="currentUser">
-            <NuxtLink
-              v-if="!isAdmin && isWorkoutProgram"
-              to="/privateWorkoutProgram"
-              class="mb-[10px] text-shadow-white text-black dark:text-white"
-              :class="{
-                'font-bold': isActive('/privateWorkoutProgram'),
-                'font-light': !isActive('/privateWorkoutProgram'),
-              }"
-              @click="closeMenu"
-            >
-              Your Workout Programme
-            </NuxtLink>
-            <NuxtLink
-              v-if="!isAdmin && isNutritionProgram"
-              to="/privateNutritionProgram"
-              class="mb-[10px] text-shadow-white text-black dark:text-white"
-              :class="{
-                'font-bold': isActive('/privateNutritionProgram'),
-                'font-light': !isActive('/privateNutritionProgram'),
-              }"
-              @click="closeMenu"
-            >
-              Your Nutrition Programme
-            </NuxtLink>
-            <NuxtLink
-              v-if="isAdmin"
-              to="/admin"
-              class="py-2 mb-[10px] font-semibold text-shadow-white text-black dark:text-white"
-              @click="closeMenu"
-            >
-              Admin
-            </NuxtLink>
-            <!-- Theme Toggle in Mobile Menu -->
-            <!-- <ThemeToggle class="mb-4" /> -->
-
-            <button
-              class="py-1.5 px-3 mt-2 rounded bg-light-100 dark:bg-gray-700 font-semibold text-sm text-slate-950 dark:text-white hover:bg-light-700 dark:hover:bg-gray-600 transition-colors"
-              :disabled="form.pending"
-              @click="onLogoutClick"
-              aria-label="Logout"
-            >
-              Logout
-            </button>
-          </template>
-          <template v-else>
+      
+          <div class="flex flex-col">
             <NuxtLink
               to="/"
-              class="py-2 mt-[30px] mb-[10px] text-shadow-white text-black"
+              class="py-2 mb-[10px] text-shadow-white text-black"
               :class="{ 'font-bold': isActive('/'), 'font-light': !isActive('/') }"
               @click="closeMenu"
             >
@@ -316,14 +272,14 @@ onMounted(() => {
             >
               PERF PROGRAM
             </NuxtLink>
-            <NuxtLink
+            <!-- <NuxtLink
               to="/products"
               class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
               :class="{ 'font-bold': isActive('/products'), 'font-light': !isActive('/products') }"
               @click="closeMenu"
             >
               OUR PRODUCTS
-            </NuxtLink>
+            </NuxtLink> -->
             <NuxtLink
               to="/login"
               class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
@@ -332,7 +288,7 @@ onMounted(() => {
             >
               LOGIN
             </NuxtLink>
-          </template>
+          </div>
         </nav>
       </div>
     </div>

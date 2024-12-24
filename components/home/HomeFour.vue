@@ -15,9 +15,13 @@
           <p class="text-lg md:text-2xl lg:text-3xl mb-[50px]" style="font-weight: 500;">
             <span v-html="headingText" />
           </p>
-          <nuxt-link :to="link" class="tracking-normal border border-[#ffffff38] max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
+          
+          <nuxt-link v-if="link.length > 0" :to="link" class="tracking-normal text-nowrap text-center flex justify-center border border-[#ffffff38] max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
             {{ buttonText }}
           </nuxt-link>
+          <div v-else @click.prevent="scrollToPricing"  class="cursor-pointer text-nowrap text-center flex justify-center tracking-normal border border-[#ffffff38] max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
+            {{ buttonText }}
+          </div>
       </div>
     </div>
   </template>
@@ -47,5 +51,12 @@ const props = defineProps({
 })
 
 const { headingText } = toRefs(props)
+const scrollToPricing = () => {
+  const pricingSection = document.querySelector('#choice-pricing')
+  if (pricingSection) {
+    pricingSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
 </script>
   

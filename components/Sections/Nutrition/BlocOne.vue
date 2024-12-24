@@ -18,9 +18,9 @@
       <span v-html="headingText" />
     </p>
 
-    <nuxt-link to="/login" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9" style="font-weight: 300;">
+    <div @click.prevent="scrollToPricing" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9 cursor-pointer" style="font-weight: 300;">
            TRANSFORM NOW
-    </nuxt-link>
+    </div>
   </div>
 </div>
 
@@ -44,4 +44,12 @@ const props = defineProps({
 })
 
 const { image,headingText } = toRefs(props)
+
+
+const scrollToPricing = () => {
+  const pricingSection = document.querySelector('#choice-pricing')
+  if (pricingSection) {
+    pricingSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
 </script>
