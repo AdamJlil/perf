@@ -21,11 +21,10 @@ async function onLoginClick() {
     form.pending = true;
 
 
-    const isEtablissement_newUser = ref(false); 
-    const isParticulier_newUser = ref(false); 
+    const isEtablissement = ref(true)
 
-    const isWorkoutProgram = ref(true);
-    const isNutritionProgram = ref(true);
+    const isParticulier = ref(false)
+    const isParticulier_newUser = ref(false); 
 
 
     await login(form.data.email, form.data.password, form.data.rememberMe);
@@ -33,19 +32,30 @@ async function onLoginClick() {
     if (isAdmin.value) {
       await navigateTo("/admin");
     } else {
-      if (isParticulier_newUser.value){
-        await navigateTo("/particulierQuiz");
-      }else if (isEtablissement_newUser.value){
-        await navigateTo("/etablissementrQuiz");
-      }else{
-        if (isWorkoutProgram.value && isNutritionProgram.value){
-          await navigateTo("/privateWorkoutProgram");
-        }else if (isWorkoutProgram.value) {
-          await navigateTo("/privateWorkoutProgram");
-        }else if (isNutritionProgram.value) {
-          await navigateTo("/privateNutritionProgram");
+
+      if(isEtablissement) {
+        await navigateTo("/establishementNewCostumer");
+      } else {
+        if (isParticulier_newUser.value) {
+          await navigateTo("/quizNewUser");
+        }else{
+          await navigateTo("/particulierProgram");
         }
       }
+      
+      // if (isParticulier_newUser.value){
+      //   await navigateTo("/particulierQuiz");
+      // }else if (isEtablissement_newUser.value){
+      //   await navigateTo("/etablissementrQuiz");
+      // }else{
+      //   if (isWorkoutProgram.value && isNutritionProgram.value){
+      //     await navigateTo("/privateWorkoutProgram");
+      //   }else if (isWorkoutProgram.value) {
+      //     await navigateTo("/privateWorkoutProgram");
+      //   }else if (isNutritionProgram.value) {
+      //     await navigateTo("/privateNutritionProgram");
+      //   }
+      // }
     }
 
   } catch (error: any) {
@@ -97,7 +107,7 @@ const togglePassword = () => {
 
 
       <!-- Input Fields -->
-      <div class="flex flex-col items-center w-full max-w-md mt-12">
+      <div class="flex flex-col items-center w-full max-w-md my-[100px] max-md:my-[20px]">
 
         <h1 class="text-[20px] leading-loose font-normal text-center mb-0 py-15 uppercase text-black dark:text-white">
           <span>READY FOR SOME PROGRESS?</span>
@@ -181,8 +191,7 @@ const togglePassword = () => {
         </div>
 
         <div class="flex justify-center items-center gap-[20px] max-md:flex-col mt-4">
-            <a href="signUp" class="text-sm text-black hover:underline">Sign Up</a>
-            <a href="#" class="text-sm text-black hover:underline">Forgot Password?</a>
+          <nuxt-link to="/signUp" class="text-sm text-black underline">DONT HAVE AN ACCOUNT YET ?</nuxt-link>
         </div>
       </div>
     </div>

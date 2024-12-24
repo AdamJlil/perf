@@ -32,6 +32,8 @@ import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
     <HomeFour image1="/images/blockfour1.jpg" link="/products" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
     <Bloc3 />
     <Bloc4 headingText=" What are you <br /> waiting for?" />
+
+    
     <!-- <BlocTwo /> -->
     <!-- <BlocThree /> -->
     <!-- <BlocFour/> -->
