@@ -1,5 +1,5 @@
 <template>
-  <div class="flip-container relative w-[20%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[350px] aspect-[7/8] max-h-[400px]">
+  <div class="flip-container relative w-[20%] md:w-[30%] lg:w-[20%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[400px] aspect-[7/8] max-h-[400px]">
         <div class="flipper">
 
           <!-- Front Side -->

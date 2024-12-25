@@ -18,7 +18,7 @@
       <span v-html="headingText" />
     </p>
 
-    <div @click.prevent="scrollToPricing" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9 cursor-pointer" style="font-weight: 300;">
+    <div v-if="showButton" @click.prevent="scrollToPricing" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9 cursor-pointer" style="font-weight: 300;">
            TRANSFORM NOW
     </div>
   </div>
@@ -40,6 +40,10 @@ const props = defineProps({
   reversed: {
     type: Boolean,
     default: false
+  },
+  showButton: {
+    type: Boolean,
+    default: true
   }
 })
 
