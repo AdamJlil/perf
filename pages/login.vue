@@ -6,7 +6,7 @@ const form = reactive({
     email: "user1@gmail.com",
     password: "password",
     rememberMe: false,
-    etablissement: "", // Ajout de la propriété etablissement
+    etablissement: "", 
   },
   error: "",
   pending: false,
@@ -19,7 +19,6 @@ async function onLoginClick() {
   try {
     form.error = "";
     form.pending = true;
-
 
     const isEtablissement = ref(true)
 
