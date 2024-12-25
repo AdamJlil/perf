@@ -3,7 +3,7 @@ const { login } = useAuth();
 
 const form = reactive({
   data: {
-    email: "user1@gmail.com",
+    email: "etablissement1@gmail.com",
     password: "password",
     rememberMe: false,
     etablissement: "", 
@@ -33,7 +33,7 @@ async function onLoginClick() {
     } else {
 
       if(isEtablissement) {
-        await navigateTo("/establishementNewCostumer");
+        await navigateTo("/establishementCRUDCostumer");
       } else {
         if (isParticulier_newUser.value) {
           await navigateTo("/quizNewUser");
@@ -41,20 +41,6 @@ async function onLoginClick() {
           await navigateTo("/particulierProgram");
         }
       }
-      
-      // if (isParticulier_newUser.value){
-      //   await navigateTo("/particulierQuiz");
-      // }else if (isEtablissement_newUser.value){
-      //   await navigateTo("/etablissementrQuiz");
-      // }else{
-      //   if (isWorkoutProgram.value && isNutritionProgram.value){
-      //     await navigateTo("/privateWorkoutProgram");
-      //   }else if (isWorkoutProgram.value) {
-      //     await navigateTo("/privateWorkoutProgram");
-      //   }else if (isNutritionProgram.value) {
-      //     await navigateTo("/privateNutritionProgram");
-      //   }
-      // }
     }
 
   } catch (error: any) {
