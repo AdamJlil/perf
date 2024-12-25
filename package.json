@@ -14,8 +14,10 @@
     "*.{json,css,scss,md}": "prettier --write"
   },
   "dependencies": {
+    "chart.js": "^3.9.1",
     "oslo": "^1.2.0",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.14",
+    "vue-chartjs": "^4.1.1"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.3.1",
