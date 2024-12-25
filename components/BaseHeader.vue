@@ -4,7 +4,11 @@ import ThemeToggle from "~/components/ThemeToggle.vue";
 
 const currentUser = useAuthUser();
 const isAdmin = useAdmin();
+
 const { logout } = useAuth();
+
+const isLoggedIn = computed(() => !!currentUser.value);
+
 const form = reactive({
   pending: false,
 });
@@ -72,8 +76,7 @@ onMounted(() => {
     class="dark:text-slate-500 absolute top-0 left-0 right-0 z-50 md:mt-[30px]"
     style="font-family: Montserrat"
     :class="{
-      'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
-      'text-white': !isActive('/nutritionPlans') && !isActive('/login') && !isActive('/signUp') && !isActive('establishementProgram'),
+      'text-black': !isActive('/'),
     }"
   >
     <div class="p-3 w-full flex items-center justify-between pr-[30px] max-md:pt-[30px]">
@@ -84,7 +87,7 @@ onMounted(() => {
       10px]">
         <NuxtLink to="/">
           <NuxtImg
-            :src="isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+            :src="!isActive('/') ? '/images/pepe.png' : '/images/logoNN-white.png'"
             alt="Company Logo"
             class="w-[80px]"
           />
@@ -94,9 +97,8 @@ onMounted(() => {
             to="/"
             class="px-3 text-shadow-white"
             :class="{
-              'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
+              'text-black': !isActive('/'),
               'font-bold': isActive('/'),
-              'font-light': !isActive('/')
             }"
             @click="closeMenu"
           >
@@ -106,9 +108,8 @@ onMounted(() => {
             to="/nutritionPlans"
             class="px-3 text-shadow-white"
             :class="{ 
-                'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
+                'text-black': !isActive('/'),
                 'font-bold': isActive('/nutritionPlans'), 
-                'font-light': !isActive('/nutritionPlans') 
             }"
             @click="closeMenu"
           >
@@ -128,17 +129,27 @@ onMounted(() => {
           </NuxtLink> -->
         </div>
         <div class="relative flex items-center gap-[15px]">
-        <NuxtLink
-          to="/login"
-          class="px-3 text-shadow-white"
-          :class="{
-            'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram'),
-            'font-bold': isActive('/login')
-          }"
-          @click="closeMenu"
-        >
-          LOGIN
-        </NuxtLink>
+          <template v-if="!isLoggedIn">
+            <NuxtLink
+              to="/login"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/'),
+                'font-bold': isActive('/login'),
+              }"
+              @click="closeMenu"
+            >
+              LOGIN
+            </NuxtLink>
+          </template>
+          <template v-else>
+            <button
+              @click="onLogoutClick"
+              class="px-3 text-shadow-white text-black dark:text-white"
+            >
+              LOGOUT
+            </button>
+          </template>
         <div
           class="flex items-center gap-2 cursor-pointer"
           @click="toggleDropdown"
@@ -149,7 +160,7 @@ onMounted(() => {
             class="w-6 h-6"
           />
           <img
-            :src="isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp') || isActive('establishementProgram') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+            :src="!isActive('/') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
             alt="arrow"
             class="w-4 h-4 transform transition-transform"
             :class="{ 'rotate-180': isOpen }"
@@ -158,7 +169,7 @@ onMounted(() => {
         <div
           v-if="isOpen"
           class="absolute top-full left-[64px] mt-2 text-black dark:text-white w-20 shadow-lg rounded-sm backdrop-blur-md"
-        >
+      >
           <div
             v-for="lang in languages"
             :key="lang"
@@ -186,7 +197,7 @@ onMounted(() => {
       <!-- Logo -->
       <NuxtLink to="/" class="order-2 mx-auto  md:hidden">
         <NuxtImg
-          :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+          :src="!isActive('/') ? '/images/pepe.png' : '/images/logoNN-white.png'"
           alt="Company Logo"
           class="w-[50px]"
         />
@@ -203,7 +214,7 @@ onMounted(() => {
           class="w-6 h-6"
         />
         <img
-          :src="isActive('/nutritionPlans') || isActive('/login') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+          :src="!isActive('/') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
           alt="arrow"
           class="w-4 h-4 transform transition-transform"
           :class="{ 'rotate-180': isOpen }"
@@ -280,14 +291,22 @@ onMounted(() => {
             >
               OUR PRODUCTS
             </NuxtLink> -->
-            <NuxtLink
-              to="/login"
-              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
-              :class="{ 'font-bold': isActive('/login'), 'font-light': !isActive('/login') }"
-              @click="closeMenu"
-            >
-              LOGIN
-            </NuxtLink>
+              <NuxtLink
+              v-if="!isLoggedIn"
+                to="/login"
+                class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+                :class="{ 'font-bold': isActive('/login'), 'font-light': !isActive('/login') }"
+                @click="closeMenu"
+              >
+                LOGIN
+              </NuxtLink>
+              <div
+              v-else
+                @click="onLogoutClick"
+                class="py-2 mb-[10px] text-shadow-white text-black dark:text-white cursor-pointer"
+              >
+                LOGOUT
+            </div>
           </div>
         </nav>
       </div>

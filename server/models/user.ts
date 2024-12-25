@@ -3,43 +3,27 @@ import type { User } from "~~/types";
 // Fake users data
 const users: User[] = [
   {
-    id: "41dbc5f7-9a4e-42e6-832b-1d3dd8c7c4b6",
+    id: "AD-41dbc5f7-9a4e-42e6-832b-1d3dd8c7c4b6",
     email: "admin1@gmail.com",
     password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
     roles: ["ADMIN"],
   },
   {
-    id: "41dbc5f7-9a4e-42e6-832b-1d3dd8c7c4b6",
-    email: "admin2@gmail.com",
-    password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
-    roles: ["ADMIN"],
-  },
-  {
-    id: "41dbc5f7-9a4e-42e6-832b-1d3dd8c7c4b6",
-    email: "admin3@gmail.com",
-    password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
-    roles: ["ADMIN"],
-  },
-  {
-    id: "d0065700-1707-4ad9-811b-8bbed0364318",
-    email: "user1@gmail.com",
+    id: "ET-d0065700-1707-4ad9-811b-8bbed0364318",
+    email: "etablissement1@gmail.com",
     password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
     roles: ["USER"],
+    type: "ETABLISSEMENT",
   },
   {
-    id: "d0065700-1707-4ad9-811b-8bbed0364318",
-    email: "user2@gmail.com",
+    id: "PA-d0065700-1707-4ad9-811b-8bbed0364318",
+    email: "particuier1@gmail.com",
     password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
     roles: ["USER"],
-  },
-  {
-    id: "d0065700-1707-4ad9-811b-8bbed0364318",
-    email: "user3@gmail.com",
-    password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
-    roles: ["USER"],
+    type: "PARTICULIER",
   },
 ];
-
+//frfr
 export async function getUsers() {
   return users;
 }
