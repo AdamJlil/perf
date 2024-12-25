@@ -20,19 +20,23 @@ async function onLoginClick() {
     form.error = "";
     form.pending = true;
 
-    const isEtablissement = ref(true)
+    const isEtablissement = ref(false);
+    const isParticulier = ref(false);
+    const isParticulier_newUser = ref(false);
 
-    const isParticulier = ref(false)
-    const isParticulier_newUser = ref(false); 
-
-
-    await login(form.data.email, form.data.password, form.data.rememberMe);
+    const user = await login(form.data.email, form.data.password, form.data.rememberMe);
+    
+    // Set user type based on the returned user data
+    if (user.value?.type === "ETABLISSEMENT") {
+      isEtablissement.value = true;
+    } else if (user.value?.type === "PARTICULIER") {
+      isParticulier.value = true;
+    }
 
     if (isAdmin.value) {
       await navigateTo("/admin");
     } else {
-
-      if(isEtablissement) {
+      if (isEtablissement.value) {
         await navigateTo("/establishementCRUDCostumer");
       } else {
         if (isParticulier_newUser.value) {
