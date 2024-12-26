@@ -4,10 +4,13 @@ import ThemeToggle from "~/components/ThemeToggle.vue";
 
 const currentUser = useAuthUser();
 const isAdmin = useAdmin();
+const route = useRoute();
 
 const { logout } = useAuth();
 
 const isLoggedIn = computed(() => !!currentUser.value);
+const isEtablissement = computed(() => currentUser.value?.type === "ETABLISSEMENT");
+const userId = computed(() => currentUser.value?.id || route.query.userId);
 
 const form = reactive({
   pending: false,
@@ -83,9 +86,16 @@ onMounted(() => {
       
       <!-- v-if="currentUser" -->
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center justify-between w-full px-8 md:mr-[
-      10px]">
-        <NuxtLink to="/">
+      <nav class="hidden md:flex items-center justify-between w-full px-8 md:mr-[10px]">
+        <!-- Logo - Not clickable when logged in as establishment -->
+        <div v-if="isLoggedIn && isEtablissement">
+          <NuxtImg
+            src="/images/pepe.png"
+            alt="Company Logo"
+            class="w-[80px]"
+          />
+        </div>
+        <NuxtLink v-else to="/">
           <NuxtImg
             :src="!isActive('/') ? '/images/pepe.png' : '/images/logoNN-white.png'"
             alt="Company Logo"
@@ -93,27 +103,90 @@ onMounted(() => {
           />
         </NuxtLink>        
         <div class="flex gap-5 lg:gap-15 items-center">
+          <template v-if="!(isLoggedIn && isEtablissement)">
+            <NuxtLink
+              v-if="isLoggedIn"
+              :to="{ 
+                path: '/',
+                query: { userId: userId }
+              }"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/'),
+                'font-bold': isActive('/'),
+              }"
+              @click="closeMenu"
+            >
+              HOME
+            </NuxtLink>
+            <NuxtLink
+              v-else
+              to="/"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/'),
+                'font-bold': isActive('/'),
+              }"
+              @click="closeMenu"
+            >
+              HOME
+            </NuxtLink>
+            <NuxtLink
+              v-if="isLoggedIn"
+              :to="{ 
+                path: '/nutritionPlans',
+                query: { userId: userId }
+              }"
+              class="px-3 text-shadow-white"
+              :class="{ 
+                  'text-black': !isActive('/'),
+                  'font-bold': isActive('/nutritionPlans'), 
+              }"
+              @click="closeMenu"
+            >
+              PERF PROGRAM
+            </NuxtLink>
+            <NuxtLink
+              v-else
+              to="/nutritionPlans"
+              class="px-3 text-shadow-white"
+              :class="{ 
+                  'text-black': !isActive('/'),
+                  'font-bold': isActive('/nutritionPlans'), 
+              }"
+              @click="closeMenu"
+            >
+              PERF PROGRAM
+            </NuxtLink>
+          </template>
           <NuxtLink
-            to="/"
-            class="px-3 text-shadow-white"
-            :class="{
-              'text-black': !isActive('/'),
-              'font-bold': isActive('/'),
+            v-if="isLoggedIn && isEtablissement"
+            :to="{ 
+              path: '/establishementCRUDCostumer',
+              query: { userId: userId }
             }"
-            @click="closeMenu"
-          >
-            HOME
-          </NuxtLink>
-          <NuxtLink
-            to="/nutritionPlans"
             class="px-3 text-shadow-white"
             :class="{ 
                 'text-black': !isActive('/'),
-                'font-bold': isActive('/nutritionPlans'), 
+                'font-bold': isActive('/establishementCRUDCostumer'), 
             }"
             @click="closeMenu"
           >
-            PERF PROGRAM
+            MANAGE USERS
+          </NuxtLink>
+          <NuxtLink
+            v-if="isLoggedIn && isEtablissement"
+            :to="{ 
+              path: '/myPlan',
+              query: { userId: userId }
+            }"
+            class="px-3 text-shadow-white"
+            :class="{ 
+                'text-black': !isActive('/'),
+            }"
+            @click="closeMenu"
+          >
+            MY PLAN
           </NuxtLink>
           <!-- <NuxtLink
             to="/products"
@@ -145,7 +218,10 @@ onMounted(() => {
           <template v-else>
             <button
               @click="onLogoutClick"
-              class="px-3 text-shadow-white text-black dark:text-white"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/'),
+              }"
             >
               LOGOUT
             </button>
@@ -267,45 +343,89 @@ onMounted(() => {
           </div>
       
           <div class="flex flex-col">
-            <NuxtLink
-              to="/"
-              class="py-2 mb-[10px] text-shadow-white text-black"
-              :class="{ 'font-bold': isActive('/'), 'font-light': !isActive('/') }"
-              @click="closeMenu"
-            >
-              HOME
-            </NuxtLink>
-            <NuxtLink
-              to="/nutritionPlans"
-              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
-              :class="{ 'font-bold': isActive('/nutritionPlans'), 'font-light': !isActive('/nutritionPlans') }"
-              @click="closeMenu"
-            >
-              PERF PROGRAM
-            </NuxtLink>
-            <!-- <NuxtLink
-              to="/products"
-              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
-              :class="{ 'font-bold': isActive('/products'), 'font-light': !isActive('/products') }"
-              @click="closeMenu"
-            >
-              OUR PRODUCTS
-            </NuxtLink> -->
+            <template v-if="!(isLoggedIn && isEtablissement)">
               <NuxtLink
-              v-if="!isLoggedIn"
-                to="/login"
-                class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
-                :class="{ 'font-bold': isActive('/login'), 'font-light': !isActive('/login') }"
+                v-if="isLoggedIn"
+                :to="{ 
+                  path: '/',
+                  query: { userId: userId }
+                }"
+                class="py-2 mb-[10px] text-shadow-white text-black"
+                :class="{ 'font-bold': isActive('/'), 'font-light': !isActive('/') }"
                 @click="closeMenu"
               >
-                LOGIN
+                HOME
               </NuxtLink>
-              <div
-              v-else
-                @click="onLogoutClick"
-                class="py-2 mb-[10px] text-shadow-white text-black dark:text-white cursor-pointer"
+              <NuxtLink
+                v-else
+                to="/"
+                class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+                :class="{ 'font-bold': isActive('/'), 'font-light': !isActive('/') }"
+                @click="closeMenu"
               >
-                LOGOUT
+                HOME
+              </NuxtLink>
+              <NuxtLink
+                v-if="isLoggedIn"
+                :to="{ 
+                  path: '/nutritionPlans',
+                  query: { userId: userId }
+                }"
+                class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+                :class="{ 'font-bold': isActive('/nutritionPlans'), 'font-light': !isActive('/nutritionPlans') }"
+                @click="closeMenu"
+              >
+                PERF PROGRAM
+              </NuxtLink>
+              <NuxtLink
+                v-else
+                to="/nutritionPlans"
+                class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+                :class="{ 'font-bold': isActive('/nutritionPlans'), 'font-light': !isActive('/nutritionPlans') }"
+                @click="closeMenu"
+              >
+                PERF PROGRAM
+              </NuxtLink>
+            </template>
+            <NuxtLink
+              v-if="isLoggedIn && isEtablissement"
+              :to="{ 
+                path: '/establishementCRUDCostumer',
+                query: { userId: userId }
+              }"
+              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+              :class="{ 'font-bold': isActive('/establishementCRUDCostumer'), 'font-light': !isActive('/establishementCRUDCostumer') }"
+              @click="closeMenu"
+            >
+              MANAGE USERS
+            </NuxtLink>
+            <NuxtLink
+              v-if="isLoggedIn && isEtablissement"
+              :to="{ 
+                path: '/establishementProgram',
+                query: { userId: userId }
+              }"
+              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+              :class="{ 'font-bold': isActive('/establishementProgram'), 'font-light': !isActive('/establishementProgram') }"
+              @click="closeMenu"
+            >
+              MY PLAN
+            </NuxtLink>
+            <NuxtLink
+              v-if="!isLoggedIn"
+              to="/login"
+              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
+              :class="{ 'font-bold': isActive('/login'), 'font-light': !isActive('/login') }"
+              @click="closeMenu"
+            >
+              LOGIN
+            </NuxtLink>
+            <div
+              v-else
+              @click="onLogoutClick"
+              class="py-2 mb-[10px] text-shadow-white text-black dark:text-white cursor-pointer"
+            >
+              LOGOUT
             </div>
           </div>
         </nav>

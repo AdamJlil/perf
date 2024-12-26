@@ -47,8 +47,7 @@ const props = defineProps({
   }
 })
 
-const { image,headingText } = toRefs(props)
-
+const { image, headingText, showButton } = toRefs(props)
 
 const scrollToPricing = () => {
   const pricingSection = document.querySelector('#choice-pricing')

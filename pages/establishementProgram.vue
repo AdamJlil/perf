@@ -7,6 +7,7 @@
     <Bloc1
       class="mt-60 md:mt-40 "
       :reversed="true"
+      :showButton="false"
       image="/images/coach.png"
       headingText="“HEY THERE👋,<br/>READY TO BURN CALORIES TODAY ?<br/>SCROLLDOWN THEN !”"
       :showButton="false"/>
