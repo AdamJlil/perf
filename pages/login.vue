@@ -34,15 +34,27 @@ async function onLoginClick() {
     }
 
     if (isAdmin.value) {
-      await navigateTo("/admin");
+      await navigateTo({
+        path: '/admin',
+        query: { userId: user.value?.id }
+      });
     } else {
       if (isEtablissement.value) {
-        await navigateTo("/establishementCRUDCostumer");
+        await navigateTo({
+          path: '/establishementCRUDCostumer',
+          query: { userId: user.value?.id }
+        });
       } else {
         if (isParticulier_newUser.value) {
-          await navigateTo("/quizNewUser");
+          await navigateTo({
+            path: '/quizNewUser',
+            query: { userId: user.value?.id }
+          });
         }else{
-          await navigateTo("/particulierProgram");
+          await navigateTo({
+            path: '/particulierProgram',
+            query: { userId: user.value?.id }
+          });
         }
       }
     }

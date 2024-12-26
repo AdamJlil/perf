@@ -1,13 +1,25 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useRouter } from '#app';
 const currentUser = useAuthUser();
+const router = useRouter();
+
+// Redirect establishment users to their customer management page
+onMounted(() => {
+  if (currentUser.value?.type === 'ETABLISSEMENT') {
+    router.push({
+      path: '/establishementCRUDCostumer',
+      query: { userId: currentUser.value.id }
+    });
+  }
+});
+
 import HomeOne from '~/components/home/HomeOne.vue';
 import HomeTwwo from '~/components/home/HomeTwwo.vue';
 import HomeThree from '~/components/home/HomeThree.vue';
 import HomeFour from '~/components/home/HomeFour.vue';
 import Bloc3 from "~/components/Sections/Nutrition/BlocThree.vue";
 import Bloc4 from "~/components/Sections/Nutrition/BlocFour.vue";
-
-
 
 import Header from '~/components/sections/Header.vue';
 import BlocTwo from '~/components/sections/BlocTwo.vue';

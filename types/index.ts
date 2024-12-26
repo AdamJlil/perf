@@ -2,17 +2,15 @@ export interface Customer {
   firstName: string;
   lastName: string;
   email: string;
-  et_customer_id: string;
+  id: string;
 }
 
 export interface User {
   id: string;
   email: string;
+  name: string;
   password: string;
   roles: string[];
-  name: string;
   type?: string;
   customers?: Customer[];
 }
-
-export type UserWithoutPassword = Omit<User, "password">;

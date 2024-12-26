@@ -7,6 +7,7 @@
     <Bloc1
       class="mt-60"
       :reversed="true"
+      :showButton="false"
       image="/images/coach.png"
       headingText="“HEY THERE👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF”"
     />
