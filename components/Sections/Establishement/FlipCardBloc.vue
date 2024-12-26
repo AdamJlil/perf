@@ -1,14 +1,22 @@
 <template>
-  <div class="flip-container relative w-[25%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[350px] aspect-[7/8] max-h-[400px]">
-    <div class="flipper">
-      <!-- Front Side -->
-      <div class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl"
-           :style="frontStyle">
-        <!-- Bottom Text -->
-        <div v-if="title" 
-             class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
-             style="font-weight: 600; letter-spacing: 0px;">
-          {{ title }}
+  <div class="flip-container relative w-[20%] md:w-[30%] lg:w-[20%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[400px] aspect-[7/8] max-h-[400px]">
+        <div class="flipper">
+
+          <!-- Front Side -->
+          <div class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl":style="frontStyle">
+               
+            <div v-if="title" class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
+                 style="font-weight: 600; letter-spacing: 0px;">
+                 {{ title }}
+            </div>
+          </div>
+          <!-- Back Side -->
+          <div class="back absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl bg-[#EFEFEC] flex justify-center items-center">
+            <div class="text-black text-[15px] lg:text-[20px] bg-[#dedcd4] w-full h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
+                 style="font-weight: 400; letter-spacing: 0px;">
+                 {{ backText }}
+            </div>
+          </div>
         </div>
       </div>
       <!-- Back Side -->

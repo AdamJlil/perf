@@ -5,16 +5,16 @@
   >
     <!-- Bloc1 Component -->
     <Bloc1
-      class="mt-60"
+      class="mt-60 md:mt-40 "
       :reversed="true"
       :showButton="false"
       image="/images/coach.png"
-      headingText="“HEY THERE👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF”"
-    />
+      headingText="“HEY THERE👋,<br/>READY TO BURN CALORIES TODAY ?<br/>SCROLLDOWN THEN !”"
+      :showButton="false"/>
 
     <!-- FlipCardBloc Components -->
     <div
-      class="bg-[#EFEFEC] dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] lg:w-full flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-30 lg:mb-[50px] gap-[20%] max-md:gap-[50px] max-md:py-[120px]"
+      class="bg-[#EFEFEC] dark:bg-black  lg:h-[50vh] lg:w-full flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-30 lg:mb-[50px] gap-[120px] sm:gap-[100px] md:gap-[120px] lg:gap-60 md:mt-20"
     >
       <FlipCardBloc
         outsideTitle="calories"
@@ -41,7 +41,7 @@
     <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-20">let's keep it up - keep pushing</h1>
 
     <!-- Chart Container -->
-    <div class=" w-[70%] h-[30vh] md:h-[35vh] lg:h-[40vh] lg:w-[70%] mx-auto p-4 ">
+    <div class=" w-[90%] h-[30vh] md:h-[35vh] lg:h-[40vh] sm:w-[90%] md:w-[85%] lg:w-[70%] mx-auto p-4 ">
       
       <div class="bg-transparent rounded-lg p-6 h-full">
         <Line :chartData="chartData" :chartOptions="chartOptions" class="h-full w-full"/>
