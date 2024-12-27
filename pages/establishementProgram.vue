@@ -9,7 +9,7 @@
       :reversed="true"
       :showButton="false"
       image="/images/coach.png"
-      headingText="“HEY THERE👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF”"
+      :headingText="`HEY THERE ${customerName} 👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF`"
     />
 
     <!-- FlipCardBloc Components -->
@@ -50,7 +50,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -61,10 +61,12 @@ import {
   Legend,
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
 import FlipCardBloc from "~/components/Sections/Establishement/FlipCardBloc.vue";
 
-// Register the necessary Chart.js components
+// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -72,80 +74,86 @@ ChartJS.register(
   LineElement,
   Tooltip,
   Legend
-)
+);
 
-export default {
-  name: 'Dashboard',
-  components: {
-    Bloc1,
-    FlipCardBloc,
-    Line, // Register Line component directly
-  },
-  data() {
-    return {
-      // Chart Data
-      chartData: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        datasets: [
-          {
-            label: '', // Empty label to hide legend
-            data: [10, 20, 30, 20, 50],
-            fill: false,
-            borderColor: 'black',
-            backgroundColor: 'transparent',
-            tension: 0.4, // Curves the line
-            pointRadius: 5, // Increased from 5 to 8 for larger points
-            pointHoverRadius: 1, // Increased from 7 to 10 for larger hover points
-            pointBorderWidth: 0, // Increased border width for more prominence
-            pointBackgroundColor: 'black', // Solid fill color
-            pointBorderColor: 'white', // Contrasting border color
-            pointStyle: 'circle', // Shape of the data points
-          }
-        ]
-      },
-      // Chart Options
-      chartOptions: {
-        //hover with ease mode further from the point
-        hover: {
-          mode: 'nearest',
-          intersect: false,
-        },
-        responsive: true,
-        maintainAspectRatio: false, // Allows the chart to fill the container
-        plugins: {
-          legend: {
-            display: false, // Hide legend
-          },
-          title: {
-            display: false, // Hide title
-          },
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            grid: {
-              display: true, // Hide y-axis grid lines
-              color: 'rgba(0, 0, 0, 0.1)', // Optional: Customize grid line color
-              lineWidth: 1, // Optional: Customize grid line width
-            },
-            ticks: {
-            maxTicksLimit: 10, // Limit the number of x-axis grid lines
-            stepSize: 1,
-          },
-          },
-          x: {
-            grid: {
-              display: false, // Show x-axis grid lines
-            },
-            offset: true, // Show x-axis grid lines
+const route = useRoute();
+const customerName = ref('');
 
-          },
-        },
-        
-      },
+onMounted(async () => {
+  const userId = route.query.userId as string;
+  const customerId = route.query.id as string;
+  
+  if (userId && customerId) {
+    const { getUserById } = await import('~/server/models/user');
+    const user = await getUserById(userId);
+    if (user && user.customers) {
+      const customer = user.customers.find(c => c.et_customer_id === customerId);
+      if (customer) {
+        customerName.value = `${customer.firstName} ${customer.lastName}`;
+      }
     }
+  }
+});
+
+// Chart data and options
+const chartData = {
+  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+  datasets: [
+    {
+      label: '', // Empty label to hide legend
+      data: [10, 20, 30, 20, 50],
+      fill: false,
+      borderColor: 'black',
+      backgroundColor: 'transparent',
+      tension: 0.4, // Curves the line
+      pointRadius: 5, // Increased from 5 to 8 for larger points
+      pointHoverRadius: 1, // Increased from 7 to 10 for larger hover points
+      pointBorderWidth: 0, // Increased border width for more prominence
+      pointBackgroundColor: 'black', // Solid fill color
+      pointBorderColor: 'white', // Contrasting border color
+      pointStyle: 'circle', // Shape of the data points
+    }
+  ]
+};
+
+const chartOptions = {
+  //hover with ease mode further from the point
+  hover: {
+    mode: 'nearest',
+    intersect: false,
   },
-}
+  responsive: true,
+  maintainAspectRatio: false, // Allows the chart to fill the container
+  plugins: {
+    legend: {
+      display: false, // Hide legend
+    },
+    title: {
+      display: false, // Hide title
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      grid: {
+        display: true, // Hide y-axis grid lines
+        color: 'rgba(0, 0, 0, 0.1)', // Optional: Customize grid line color
+        lineWidth: 1, // Optional: Customize grid line width
+      },
+      ticks: {
+        maxTicksLimit: 10, // Limit the number of x-axis grid lines
+        stepSize: 1,
+      },
+    },
+    x: {
+      grid: {
+        display: false, // Show x-axis grid lines
+      },
+      offset: true, // Show x-axis grid lines
+
+    },
+  },
+};
 </script>
 
 <style scoped>

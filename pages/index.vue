@@ -92,14 +92,14 @@ const handleActiveItemChange = (itemId: number) => {
     <HomeOne />
 
     <div class="h-[100vh] w-full ">
-      <div class="">
+        <div class="">
         <CardInfo
       :collection="breakfastCollection"
       :mainTitle="mainTitle"
       :mainSubtitle="mainSubtitle"
       @update:activeItem="handleActiveItemChange"/>
+        </div>
     </div>
-  </div>
     
     <div class="w-full lg:h-[220px] md:h-[160px] max-md:h-[120px] max-sm:h-[70px] bg-[#EFEFEC] flex justify-center items-center text-center">
         <p class="anytime text-black z-9 text-left text-sm sm:text-3xl lg:text-4xl text-center font-medium tracking-wide" style="font-weight: 300;" >
