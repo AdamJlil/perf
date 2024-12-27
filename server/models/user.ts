@@ -17,9 +17,9 @@ const users: User[] = [
     roles: ["USER"],
     type: "ETABLISSEMENT",
     customers: [
-      { firstName: "Mohammed", lastName: "Alami", email: "mohammed.alami@example.com", et_customer_id: "et_id!-mohammedAlami1" },
-      { firstName: "Yasmine", lastName: "Bennani", email: "yasmine.bennani@example.com", et_customer_id: "et_id!-yasmineBennani2" },
-      { firstName: "Karim", lastName: "Idrissi", email: "karim.idrissi@example.com", et_customer_id: "et_id!-karimIdrissi3" }
+      { firstName: "Mohammed", lastName: "Alami", email: "mohammed.alami@example.com", et_customer_id: "et_id!-mohammedAlami1", video: 0 },
+      { firstName: "Yasmine", lastName: "Bennani", email: "yasmine.bennani@example.com", et_customer_id: "et_id!-yasmineBennani2", video: 0 },
+      { firstName: "Karim", lastName: "Idrissi", email: "karim.idrissi@example.com", et_customer_id: "et_id!-karimIdrissi3", video: 0 }
     ]
   },
   {
@@ -30,9 +30,9 @@ const users: User[] = [
     roles: ["USER"],
     type: "ETABLISSEMENT",
     customers: [
-      { firstName: "Amjad", lastName: "Arkhis", email: "amjad.arkhis@example.com", et_customer_id: "et_id!-amjadArkhis1" },
-      { firstName: "Saad", lastName: "Tanttaoui", email: "saad.tanttaoui@example.com", et_customer_id: "et_id!-SaadTanttaoui2" },
-      { firstName: "Lina", lastName: "BenArfa", email: "lina.ben@example.com",et_customer_id: "et_id!-LinaBenArfa3" }
+      { firstName: "Amjad", lastName: "Arkhis", email: "amjad.arkhis@example.com", et_customer_id: "et_id!-amjadArkhis1", video: 0 },
+      { firstName: "Saad", lastName: "Tanttaoui", email: "saad.tanttaoui@example.com", et_customer_id: "et_id!-SaadTanttaoui2", video: 0 },
+      { firstName: "Lina", lastName: "BenArfa", email: "lina.ben@example.com",et_customer_id: "et_id!-LinaBenArfa3", video: 0 }
     ]
   },
   {
@@ -42,6 +42,7 @@ const users: User[] = [
     password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
     roles: ["USER"],
     type: "PARTICULIER",
+    video: 0
   },
 ];
 

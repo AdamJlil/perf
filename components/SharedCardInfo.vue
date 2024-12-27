@@ -9,7 +9,7 @@
     <!-- Content Text -->
     <div :id="contentId" class="w-full">
       <div class="w-full rounded-10 border-1 border-gray-800 flex h-auto flex flex-col justify-around sm:flex-row sm:justify-normal sm:h-[30vh] md:h-[35vh] lg:h-[45vh] gap-5 sm:p-10 sm:pr-0 p-5 ">
-        <div id="content-text" class="w-full sm:w-2/5 flex flex-col">
+        <div id="content-text" class="w-full sm:w-2/5 flex flex-col justify-center">
           <transition name="fade" mode="out-in" appear>
             <p class="uppercase text-red-700 text-center sm:text-start" :key="displayedItem.id + '-price'">
               {{ displayedItem.price }}
@@ -27,7 +27,7 @@
           <div
             v-for="col in collection"
             :key="col.id"
-            class="aspect-square w-[20%] max-w-60 self-center rounded-lg shadow-2xl transition duration-800 ease-in-out relative p-2"
+            class="aspect-square w-[20%] max-w-60 self-center rounded-full overflow-hidden shadow-2xl transition duration-800 ease-in-out relative p-2"
             :class="{
               'w-[20%] sm:w-[40%] ': (col.isActive && !hoveredItemId) || hoveredItemId === col.id,
               'hover:scale-100': true,
@@ -37,6 +37,7 @@
               backgroundImage: `url(${col.image})`,
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'cover',
+              backgroundPosition: 'center',
               cursor: 'pointer',
             }"
             @click="setActive(col.id)"
