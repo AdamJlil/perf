@@ -27,7 +27,7 @@
       <FlipCardBloc
         outsideTitle="calories"
         style="font-family: Montserrat"
-        backText="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Blanditiis officiis quae error praesentium hic!"
+        :backText="caloriesResult"
         frontImage="/images/arrow3.jpg"
       />
       <FlipCardBloc
@@ -94,6 +94,9 @@ const isLoading = ref(true);
 const selectedElement = ref(1);
 const caloriesResult = ref('');
 
+const ageRange = ref("20-40");
+const weightRange = ref("50-70");
+
 // Fonction de calcul des calories
 const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: number) => {
   const calorieData = {
@@ -119,8 +122,7 @@ const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: num
 // Watch pour le changement de poids
 watch(selectedElement, (newValue) => {
   const dumbbellWeight = newValue === 1 ? 2.5 : newValue === 2 ? 5.0 : 10.0;
-  // Using default values for age and weight range for now
-  caloriesResult.value = calculateCalories("20-40", "50-70", dumbbellWeight);
+  caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, dumbbellWeight);
 });
 
 let labels = ref(['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5','Day 6','Day 7']);
@@ -128,33 +130,42 @@ let data = ref([10, 20, 30, 20, 50, 60, 70]);
 
 // Initial calculation
 onMounted(async () => {
-  const userId = route.query.userId as string;
-  const customerId = route.query.id as string;
+  const userId = route.query.userId as string
+  const customerId = route.query.id as string
 
   if (userId && customerId) {
-    const { getUserById } = await import('~/server/models/user');
-    const user = await getUserById(userId);
+    const { getUserById } = await import('~/server/models/user')
+    const user = await getUserById(userId)
 
     if (user && user.customers) {
-      const customer = user.customers.find(c => c.et_customer_id === customerId);
+      const customer = user.customers.find(c => c.et_customer_id === customerId)
 
       if (customer) {
-        customerName.value = `${customer.firstName} ${customer.lastName}`;
-        
-        if (typeof customer.video === 'number' && customer.video >= 0 && customer.video < establishmentUserVideos.length) {
-          videoSource.value = establishmentUserVideos[customer.video];
+        customerName.value = `${customer.firstName} ${customer.lastName}`
+
+        if (
+          typeof customer.video === 'number' &&
+          customer.video >= 0 &&
+          customer.video < establishmentUserVideos.length
+        ) {
+          videoSource.value = establishmentUserVideos[customer.video]
         }
 
         // Update labels and data dynamically based on burnedCalories
-        const burnedCalories = customer.burnedCalories || {};
-        labels.value = Object.keys(burnedCalories); // Extract keys dynamically
-        data.value = Object.values(burnedCalories); // Extract values dynamically
+        const burnedCalories = customer.burnedCalories || {}
+        labels.value = Object.keys(burnedCalories) // Extract keys dynamically
+        data.value = Object.values(burnedCalories) // Extract values dynamically
       }
     }
   }
 
-  isLoading.value = false;
-});
+  // Set default calories for the beginner level
+  const dumbbellWeight = selectedElement.value === 1 ? 2.5 : selectedElement.value === 2 ? 5.0 : 10.0
+  caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, dumbbellWeight)
+
+  isLoading.value = false
+})
+
 
 
 // Chart data and options
