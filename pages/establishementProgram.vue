@@ -12,9 +12,17 @@
       :headingText="`HEY THERE ${customerName} 👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF`"
     />
 
+    <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[10px] mt-35">
+      <div @click="selectedElement = 1" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 1 ? 'bg-black text-white' : 'hover:bg-gray-100']">BEGINNER 2.5kg</div>
+      <div class="w-[3px] h-8 bg-[#6763634a]"></div>
+      <div @click="selectedElement = 2" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 2 ? 'bg-black text-white' : 'hover:bg-gray-100']">MEDIUM 5kg</div>
+      <div class="w-[3px] h-8 bg-[#6763634a]"></div>
+      <div @click="selectedElement = 3" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 3 ? 'bg-black text-white' : 'hover:bg-gray-100']">ADVANCED 10kg</div>
+    </div>
+
     <!-- FlipCardBloc Components -->
     <div
-      class="bg-[#EFEFEC] dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] lg:w-full flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-30 lg:mb-[50px] gap-[20%] max-md:gap-[50px] max-md:py-[120px]"
+      class="bg-[#EFEFEC] dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] lg:w-full flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-5 lg:mb-[50px] gap-[20%] max-md:gap-[50px] max-md:py-[120px]"
     >
       <FlipCardBloc
         outsideTitle="calories"
@@ -32,10 +40,12 @@
 
     <!-- Video Section (Commented Out) -->
     <div class="w-full mt-30" id="video">
-      <video class="w-full h-auto block" controls>
-        <source src="/videos/video_wp_02.mp4" type="video/mp4" />
+      <video class="w-full h-auto block" controls v-if="!isLoading">
+        <source :src="videoSource" type="video/mp4" />
+        {{ console.log(videoSource) }}
         Your browser does not support the video tag.
       </video>
+      <div v-else>Loading...</div>
     </div> 
 
     <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-20">let's keep it up - keep pushing</h1>
@@ -65,6 +75,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
 import FlipCardBloc from "~/components/Sections/Establishement/FlipCardBloc.vue";
+import { establishmentUserVideos } from '../establishment_user_videos';
 
 // Register Chart.js components
 ChartJS.register(
@@ -78,43 +89,94 @@ ChartJS.register(
 
 const route = useRoute();
 const customerName = ref('');
+const videoSource = ref('');
+const isLoading = ref(true);
+const selectedElement = ref(1);
+const caloriesResult = ref('');
 
+// Fonction de calcul des calories
+const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: number) => {
+  const calorieData = {
+    "20-40": {
+      "50-70": { 2.5: "207-288", 5.0: "238-331", 10.0: "270-375" },
+      "70-90": { 2.5: "289-372", 5.0: "332-426", 10.0: "375-480" },
+      "90-120": { 2.5: "375-496", 5.0: "426-563", 10.0: "480-600" }
+    },
+    "40-60": {
+      "50-70": { 2.5: "186-260", 5.0: "215-299", 10.0: "243-338" },
+      "70-90": { 2.5: "260-336", 5.0: "299-386", 10.0: "338-436" },
+      "90-120": { 2.5: "338-448", 5.0: "386-511", 10.0: "436-581" }
+    }
+  };
+
+  try {
+    return calorieData[ageRange][weight][dumbbellWeight] || "207-288"; // Default value if not found
+  } catch (error) {
+    return "207-288"; // Default value in case of error
+  }
+};
+
+// Watch pour le changement de poids
+watch(selectedElement, (newValue) => {
+  const dumbbellWeight = newValue === 1 ? 2.5 : newValue === 2 ? 5.0 : 10.0;
+  // Using default values for age and weight range for now
+  caloriesResult.value = calculateCalories("20-40", "50-70", dumbbellWeight);
+});
+
+let labels = ref(['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5','Day 6','Day 7']);
+let data = ref([10, 20, 30, 20, 50, 60, 70]);
+
+// Initial calculation
 onMounted(async () => {
   const userId = route.query.userId as string;
   const customerId = route.query.id as string;
-  
+
   if (userId && customerId) {
     const { getUserById } = await import('~/server/models/user');
     const user = await getUserById(userId);
+
     if (user && user.customers) {
       const customer = user.customers.find(c => c.et_customer_id === customerId);
+
       if (customer) {
         customerName.value = `${customer.firstName} ${customer.lastName}`;
+        
+        if (typeof customer.video === 'number' && customer.video >= 0 && customer.video < establishmentUserVideos.length) {
+          videoSource.value = establishmentUserVideos[customer.video];
+        }
+
+        // Update labels and data dynamically based on burnedCalories
+        const burnedCalories = customer.burnedCalories || {};
+        labels.value = Object.keys(burnedCalories); // Extract keys dynamically
+        data.value = Object.values(burnedCalories); // Extract values dynamically
       }
     }
   }
+
+  isLoading.value = false;
 });
 
+
 // Chart data and options
-const chartData = {
-  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+const chartData = computed(() => ({
+  labels: labels.value,
   datasets: [
     {
-      label: '', // Empty label to hide legend
-      data: [10, 20, 30, 20, 50],
+      label: '',
+      data: data.value,
       fill: false,
       borderColor: 'black',
       backgroundColor: 'transparent',
-      tension: 0.4, // Curves the line
-      pointRadius: 5, // Increased from 5 to 8 for larger points
-      pointHoverRadius: 1, // Increased from 7 to 10 for larger hover points
-      pointBorderWidth: 0, // Increased border width for more prominence
-      pointBackgroundColor: 'black', // Solid fill color
-      pointBorderColor: 'white', // Contrasting border color
-      pointStyle: 'circle', // Shape of the data points
+      tension: 0.4,
+      pointRadius: 5,
+      pointHoverRadius: 1,
+      pointBorderWidth: 0,
+      pointBackgroundColor: 'black',
+      pointBorderColor: 'white',
+      pointStyle: 'circle',
     }
   ]
-};
+}));
 
 const chartOptions = {
   //hover with ease mode further from the point
@@ -155,9 +217,3 @@ const chartOptions = {
   },
 };
 </script>
-
-<style scoped>
-* {
-  padding: 0;
-}
-</style>
