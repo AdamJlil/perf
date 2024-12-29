@@ -3,7 +3,16 @@ export interface Customer {
   lastName: string;
   email: string;
   et_customer_id: string;
-  video: number
+  video: number;
+  burnedCalories: {
+    'Day 1'?: number;
+    'Day 2'?: number;
+    'Day 3'?: number;
+    'Day 4'?: number;
+    'Day 5'?: number;
+    'Day 6'?: number;
+    'Day 7'?: number;
+  };  
 }
 
 export interface User {

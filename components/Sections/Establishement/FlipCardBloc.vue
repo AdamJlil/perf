@@ -12,7 +12,7 @@
       </div>
       <!-- Back Side -->
       <div class="back absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl bg-[#EFEFEC] flex justify-center items-center">
-        <div class="text-black text-[15px] lg:text-[20px] bg-[#dedcd4] h-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
+        <div class="text-black text-[15px] lg:text-[20px] bg-[#dedcd4] h-full w-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
              style="font-weight: 400; letter-spacing: 0px;">
           {{ backText }}
         </div>

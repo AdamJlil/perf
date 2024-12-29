@@ -17,9 +17,45 @@ const users: User[] = [
     roles: ["USER"],
     type: "ETABLISSEMENT",
     customers: [
-      { firstName: "Mohammed", lastName: "Alami", email: "mohammed.alami@example.com", et_customer_id: "et_id!-mohammedAlami1", video: 0 },
-      { firstName: "Yasmine", lastName: "Bennani", email: "yasmine.bennani@example.com", et_customer_id: "et_id!-yasmineBennani2", video: 0 },
-      { firstName: "Karim", lastName: "Idrissi", email: "karim.idrissi@example.com", et_customer_id: "et_id!-karimIdrissi3", video: 0 }
+      { 
+        firstName: "Mohammed", 
+        lastName: "Alami", 
+        email: "mohammed.alami@example.com", 
+        et_customer_id: "et_id!-mohammedAlami1", 
+        video: 0,
+        burnedCalories: {
+          'Day 1': 213,
+          'Day 2': 288,
+        }
+      },
+      { 
+        firstName: "Yasmine", 
+        lastName: "Bennani", 
+        email: "yasmine.bennani@example.com", 
+        et_customer_id: "et_id!-yasmineBennani2", 
+        video: 1,
+        burnedCalories: {
+          'Day 1': 238,
+          'Day 2': 331,
+          'Day 3': 245,
+        }
+      },
+      { 
+        firstName: "Karim", 
+        lastName: "Idrissi", 
+        email: "karim.idrissi@example.com", 
+        et_customer_id: "et_id!-karimIdrissi3", 
+        video: 2,
+        burnedCalories: {
+          'Day 1': 270,
+          'Day 2': 375,
+          'Day 3': 320,
+          'Day 4': 345,
+          'Day 5': 360,
+          'Day 6': 380,
+          'Day 7': 355
+        }
+      }
     ]
   },
   {
@@ -30,9 +66,54 @@ const users: User[] = [
     roles: ["USER"],
     type: "ETABLISSEMENT",
     customers: [
-      { firstName: "Amjad", lastName: "Arkhis", email: "amjad.arkhis@example.com", et_customer_id: "et_id!-amjadArkhis1", video: 0 },
-      { firstName: "Saad", lastName: "Tanttaoui", email: "saad.tanttaoui@example.com", et_customer_id: "et_id!-SaadTanttaoui2", video: 0 },
-      { firstName: "Lina", lastName: "BenArfa", email: "lina.ben@example.com",et_customer_id: "et_id!-LinaBenArfa3", video: 0 }
+      { 
+        firstName: "Amjad", 
+        lastName: "Arkhis", 
+        email: "amjad.arkhis@example.com", 
+        et_customer_id: "et_id!-amjadArkhis1", 
+        video: 3,
+        burnedCalories: {
+          'Day 1': 0,
+          'Day 2': 0,
+          'Day 3': 0,
+          'Day 4': 0,
+          'Day 5': 0,
+          'Day 6': 0,
+          'Day 7': 0
+        }
+      },
+      { 
+        firstName: "Saad", 
+        lastName: "Tanttaoui", 
+        email: "saad.tanttaoui@example.com", 
+        et_customer_id: "et_id!-SaadTanttaoui2", 
+        video: 4,
+        burnedCalories: {
+          'Day 1': 0,
+          'Day 2': 0,
+          'Day 3': 0,
+          'Day 4': 0,
+          'Day 5': 0,
+          'Day 6': 0,
+          'Day 7': 0
+        }
+      },
+      { 
+        firstName: "Lina", 
+        lastName: "BenArfa", 
+        email: "lina.ben@example.com",
+        et_customer_id: "et_id!-LinaBenArfa3", 
+        video: 2,
+        burnedCalories: {
+          'Day 1': 0,
+          'Day 2': 0,
+          'Day 3': 0,
+          'Day 4': 0,
+          'Day 5': 0,
+          'Day 6': 0,
+          'Day 7': 0
+        }
+      }
     ]
   },
   {
