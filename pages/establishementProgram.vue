@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-[#EFEFEC] my-0"
+    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative py-4 lg:pt-[100px] max-lg:mt-[-40px] max-lg:pt-0 bg-[#EFEFEC] my-0"
     style="font-family: Montserrat"
   >
     <!-- Bloc1 Component -->
@@ -9,15 +9,15 @@
       :reversed="true"
       :showButton="false"
       image="/images/coach.png"
-      :headingText="`HEY THERE ${customerName} 👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF`"
+      :headingText="`HEY ${customerName} 👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF`"
     />
 
     <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[10px] mt-35">
-      <div @click="selectedElement = 1" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 1 ? 'bg-black text-white' : 'hover:bg-gray-100']">BEGINNER 2.5kg</div>
+      <div @click="selectedElement = 1" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 1 ? 'bg-[#D05E33] text-white' : 'hover:bg-gray-100']">BEGINNER 2.5kg</div>
       <div class="w-[3px] h-8 bg-[#6763634a]"></div>
-      <div @click="selectedElement = 2" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 2 ? 'bg-black text-white' : 'hover:bg-gray-100']">MEDIUM 5kg</div>
+      <div @click="selectedElement = 2" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 2 ? 'bg-[#D05E33] text-white' : 'hover:bg-gray-100']">MEDIUM 5kg</div>
       <div class="w-[3px] h-8 bg-[#6763634a]"></div>
-      <div @click="selectedElement = 3" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 3 ? 'bg-black text-white' : 'hover:bg-gray-100']">ADVANCED 10kg</div>
+      <div @click="selectedElement = 3" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 3 ? 'bg-[#D05E33] text-white' : 'hover:bg-gray-100']">ADVANCED 10kg</div>
     </div>
 
     <!-- FlipCardBloc Components -->
@@ -57,6 +57,29 @@
         <Line :chartData="chartData" :chartOptions="chartOptions" class="h-full w-full"/>
       </div>
     </div>
+
+
+    <p
+      class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center p-2 "
+      style="letter-spacing: 0.1em; line-height: 1.3"
+    >
+      TOTAL BURNED UNTIL NOW : {{ totalBurnedCalories }}
+    </p>
+
+
+      <Bloc1
+      class="my-20"
+      :reversed="true"
+      :showButton="true"
+      image="/images/coach.png"
+      :headingText="`HEY ${customerName} 👋, LOVED THE SESSION? <br/> TAKE YOUR JOURNEY FURTHER!`"
+      :showImage="false"
+      :isLogoutButton="true"
+    />
+
+    <HomeFour  image1="/images/work1.png" link="" buttonText="TRANSFORM NOW" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE."/>
+
+
   </div>
 </template>
 
@@ -71,11 +94,14 @@ import {
   Legend,
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import HomeFour from '~/components/home/HomeFour.vue';
 import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
 import FlipCardBloc from "~/components/Sections/Establishement/FlipCardBloc.vue";
 import { establishmentUserVideos } from '../establishment_user_videos';
+import { videoCalorieData } from '~/establishment_user_videos_calories'
+
 
 // Register Chart.js components
 ChartJS.register(
@@ -90,39 +116,32 @@ ChartJS.register(
 const route = useRoute();
 const customerName = ref('');
 const videoSource = ref('');
+const costumerVideo = ref(0);
 const isLoading = ref(true);
 const selectedElement = ref(1);
 const caloriesResult = ref('');
 
-const ageRange = ref("20-40");
-const weightRange = ref("50-70");
+const ageRange = ref("");
+const weightRange = ref("");
+
+const calorieData = ref(videoCalorieData);
 
 // Fonction de calcul des calories
-const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: number) => {
-  const calorieData = {
-    "20-40": {
-      "50-70": { 2.5: "207-288", 5.0: "238-331", 10.0: "270-375" },
-      "70-90": { 2.5: "289-372", 5.0: "332-426", 10.0: "375-480" },
-      "90-120": { 2.5: "375-496", 5.0: "426-563", 10.0: "480-600" }
-    },
-    "40-60": {
-      "50-70": { 2.5: "186-260", 5.0: "215-299", 10.0: "243-338" },
-      "70-90": { 2.5: "260-336", 5.0: "299-386", 10.0: "338-436" },
-      "90-120": { 2.5: "338-448", 5.0: "386-511", 10.0: "436-581" }
-    }
-  };
-
+const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: number, calorieData: any) => {
   try {
-    return calorieData[ageRange][weight][dumbbellWeight] || "207-288"; // Default value if not found
+    if (!calorieData || !calorieData[ageRange] || !calorieData[ageRange][weight]) {
+      return "207-288"; // Return default value if data structure is incomplete
+    }
+    return calorieData[ageRange][weight][dumbbellWeight] || "207-288";
   } catch (error) {
-    return "207-288"; // Default value in case of error
+    return "207-288"; 
   }
 };
 
 // Watch pour le changement de poids
 watch(selectedElement, (newValue) => {
-  const dumbbellWeight = newValue === 1 ? 2.5 : newValue === 2 ? 5.0 : 10.0;
-  caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, dumbbellWeight);
+  const dumbbellWeight = newValue === 1 ? 2.5 : selectedElement.value === 2 ? 5.0 : 10.0;
+  caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, dumbbellWeight, calorieData.value[costumerVideo.value || 0]);
 });
 
 let labels = ref(['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5','Day 6','Day 7']);
@@ -130,6 +149,9 @@ let data = ref([10, 20, 30, 20, 50, 60, 70]);
 
 // Initial calculation
 onMounted(async () => {
+  // Set initial calories with default video index (0)
+  const initialDumbbellWeight = 2.5; // Default to beginner weight
+
   const userId = route.query.userId as string
   const customerId = route.query.id as string
 
@@ -142,6 +164,10 @@ onMounted(async () => {
 
       if (customer) {
         customerName.value = `${customer.firstName} ${customer.lastName}`
+        costumerVideo.value = customer.video
+
+        ageRange.value = customer.ageRange
+        weightRange.value = customer.weightRange
 
         if (
           typeof customer.video === 'number' &&
@@ -155,18 +181,19 @@ onMounted(async () => {
         const burnedCalories = customer.burnedCalories || {}
         labels.value = Object.keys(burnedCalories) // Extract keys dynamically
         data.value = Object.values(burnedCalories) // Extract values dynamically
+        console.log(data.value)
+        caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, 2.5, calorieData.value[costumerVideo.value || 0]);
       }
     }
   }
 
-  // Set default calories for the beginner level
-  const dumbbellWeight = selectedElement.value === 1 ? 2.5 : selectedElement.value === 2 ? 5.0 : 10.0
-  caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, dumbbellWeight)
-
   isLoading.value = false
 })
 
-
+// Add computed property for total burned calories
+const totalBurnedCalories = computed(() => {
+  return data.value.reduce((sum, value) => sum + value, 0);
+});
 
 // Chart data and options
 const chartData = computed(() => ({

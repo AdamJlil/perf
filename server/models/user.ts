@@ -23,9 +23,10 @@ const users: User[] = [
         email: "mohammed.alami@example.com", 
         et_customer_id: "et_id!-mohammedAlami1", 
         video: 0,
+        ageRange: "20-40",
+        weightRange: "50-70",
         burnedCalories: {
-          'Day 1': 213,
-          'Day 2': 288,
+          'Day 1': 0,
         }
       },
       { 
@@ -34,6 +35,8 @@ const users: User[] = [
         email: "yasmine.bennani@example.com", 
         et_customer_id: "et_id!-yasmineBennani2", 
         video: 1,
+        ageRange: "20-40",
+        weightRange: "50-70",
         burnedCalories: {
           'Day 1': 238,
           'Day 2': 331,
@@ -46,6 +49,8 @@ const users: User[] = [
         email: "karim.idrissi@example.com", 
         et_customer_id: "et_id!-karimIdrissi3", 
         video: 2,
+        ageRange: "20-40",
+        weightRange: "50-70",
         burnedCalories: {
           'Day 1': 270,
           'Day 2': 375,
@@ -72,6 +77,8 @@ const users: User[] = [
         email: "amjad.arkhis@example.com", 
         et_customer_id: "et_id!-amjadArkhis1", 
         video: 3,
+        ageRange: "20-40",
+        weightRange: "50-70",
         burnedCalories: {
           'Day 1': 0,
           'Day 2': 0,
@@ -88,6 +95,8 @@ const users: User[] = [
         email: "saad.tanttaoui@example.com", 
         et_customer_id: "et_id!-SaadTanttaoui2", 
         video: 4,
+        ageRange: "20-40",
+        weightRange: "50-70",
         burnedCalories: {
           'Day 1': 0,
           'Day 2': 0,
@@ -104,6 +113,8 @@ const users: User[] = [
         email: "lina.ben@example.com",
         et_customer_id: "et_id!-LinaBenArfa3", 
         video: 2,
+        ageRange: "20-40",
+        weightRange: "50-70",
         burnedCalories: {
           'Day 1': 0,
           'Day 2': 0,

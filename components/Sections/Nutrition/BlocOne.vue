@@ -2,6 +2,7 @@
 <template>
   <div class="bg-[#EFEFEC] dark:bg-black flex flex-col justify-center items-center w-full py-10 gap-8 md:gap-12" :class="reversed ? ' md:flex-row': ' md:flex-row-reverse'">
   <div
+    v-if="showImage"
     class="w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-full overflow-hidden bg-center bg-cover flex-shrink-0"
     :style="{
       backgroundImage: `url('${image}')`,
@@ -18,7 +19,7 @@
       <span v-html="headingText" />
     </p>
 
-    <div v-if="showButton" @click.prevent="scrollToPricing" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9 cursor-pointer" style="font-weight: 300;">
+    <div v-if="showButton" @click.prevent="handleButtonClick" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9 cursor-pointer" style="font-weight: 300;">
            TRANSFORM NOW
     </div>
   </div>
@@ -28,6 +29,9 @@
 
 
 <script lang="ts" setup>
+import { useAuth } from '~/composables/useAuth'
+import { navigateTo } from '#app'
+
 const props = defineProps({
   image: {
     type: String,
@@ -44,10 +48,32 @@ const props = defineProps({
   showButton: {
     type: Boolean,
     default: true
+  },
+  showImage: {
+    type: Boolean,
+    default: true
+  },
+  isLogoutButton: {
+    type: Boolean,
+    default: false
   }
 })
 
-const { image, headingText, showButton } = toRefs(props)
+const { image, headingText, showButton, showImage, isLogoutButton } = toRefs(props)
+const { logout } = useAuth()
+
+const handleButtonClick = async () => {
+  if (isLogoutButton.value) {
+    try {
+      await logout();
+      await navigateTo("/nutritionPlans");
+    } catch (error) {
+      console.error(error);
+    }
+  } else {
+    scrollToPricing();
+  }
+}
 
 const scrollToPricing = () => {
   const pricingSection = document.querySelector('#choice-pricing')

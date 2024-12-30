@@ -13,6 +13,8 @@ export interface Customer {
     'Day 6'?: number;
     'Day 7'?: number;
   };  
+  ageRange?: string;
+  weightRange?: string;
 }
 
 export interface User {
