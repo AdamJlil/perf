@@ -50,7 +50,7 @@ export default {
 };
 </script>
 
-<style scoped>C
+<style scoped>
 .flip-container {
   perspective: 1000px;
 }
