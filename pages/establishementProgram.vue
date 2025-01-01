@@ -48,6 +48,13 @@
       <div v-else>Loading...</div>
     </div> 
 
+    <div class="w-full h-[50px] flex justify-end items-center pr-[40px]">
+      <div class="flex items-center justify-center gap-[10px] p-[10px] hover:bg-[#e7e7e7] cursor-pointer" @click="nextVideo">
+        <span class="text-xl sm:text-lg md:text-2xl ">NEXT VIDEO</span>
+        <NuxtImg src="/images/next-button.png" alt="arrow" width="40" height="40" />
+      </div>
+    </div>
+
     <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-20">let's keep it up - keep pushing</h1>
 
     <!-- Chart Container -->
@@ -67,7 +74,7 @@
     </p>
 
 
-      <Bloc1
+    <Bloc1
       class="my-20"
       :reversed="true"
       :showButton="true"
@@ -77,7 +84,7 @@
       :isLogoutButton="true"
     />
 
-    <HomeFour  image1="/images/work1.png" link="" buttonText="TRANSFORM NOW" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE."/>
+    <HomeFour  image1="/images/work1.png" link="" buttonText="TRANSFORM NOW" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE." :isLogoutButton="true"/>
 
 
   </div>
@@ -181,7 +188,6 @@ onMounted(async () => {
         const burnedCalories = customer.burnedCalories || {}
         labels.value = Object.keys(burnedCalories) // Extract keys dynamically
         data.value = Object.values(burnedCalories) // Extract values dynamically
-        console.log(data.value)
         caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, 2.5, calorieData.value[costumerVideo.value || 0]);
       }
     }
@@ -254,4 +260,12 @@ const chartOptions = {
     },
   },
 };
+
+
+
+const nextVideo = () => {
+  // Increment the video index in DataBase (user.ts)
+  // Incerement Calories Burned in DataBase by (Calories burned today - u canfind it in this file)
+  // Reload the page
+}
 </script>
