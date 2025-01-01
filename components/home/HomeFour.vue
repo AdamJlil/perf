@@ -16,10 +16,10 @@
             <span v-html="headingText" />
           </p>
           
-          <nuxt-link v-if="link.length > 0" :to="link" class="tracking-normal text-nowrap text-center flex justify-center border border-[#ffffff38] max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
+          <nuxt-link v-if="link.length > 0 && !isLogoutButton" :to="link" class="tracking-normal text-nowrap text-center flex justify-center border border-[#ffffff38] max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
             {{ buttonText }}
           </nuxt-link>
-          <div v-else @click.prevent="scrollToPricing"  class="cursor-pointer text-nowrap text-center flex justify-center tracking-normal border border-[#ffffff38] max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
+          <div v-else @click.prevent="handleButtonClick"  class="cursor-pointer text-nowrap text-center flex justify-center tracking-normal border border-[#ffffff38] max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" style="font-weight: 300;">
             {{ buttonText }}
           </div>
       </div>
@@ -27,6 +27,9 @@
   </template>
 
 <script setup lang="ts">
+import { useAuth } from '~/composables/useAuth'
+import { navigateTo } from '#app'
+
 const props = defineProps({
   headingText: {
     type: String,
@@ -47,16 +50,32 @@ const props = defineProps({
   link: {
     type: String,
     default: '/'
+  },
+  isLogoutButton: {
+    type: Boolean,
+    default: false
   }
 })
 
-const { headingText } = toRefs(props)
+const { logout } = useAuth()
+
+const handleButtonClick = async () => {
+  if (props.isLogoutButton) {
+    try {
+      await logout();
+      await navigateTo("/nutritionPlans");
+    } catch (error) {
+      console.error(error);
+    }
+  } else {
+    scrollToPricing();
+  }
+}
+
 const scrollToPricing = () => {
   const pricingSection = document.querySelector('#choice-pricing')
   if (pricingSection) {
     pricingSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 }
-
 </script>
-  

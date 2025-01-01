@@ -31,75 +31,13 @@ import BlocFive from '~/components/sections/BlocFive.vue';
 import VideoSlider from '~/components/sections/VideoSlider.vue';
 import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
 
-const breakfastCollection = ref<CollectionItem[]>([
-  {
-    id: 1,
-    price: "12.50 MAD",
-    title: "Baghrir with Honey & Eggs",
-    description: `
-      2 baghrir, 1 tbsp honey, 2 eggs, 1 orange
-      <br/>
-      <span class="underline">450 kcal</span>
-      / Prot 20g / Carbs 80g / Fats 15g
-    `,
-    image: "https://img.freepik.com/free-photo/cheese-pancake-with-honey_1339-5251.jpg",
-    isActive: true,
-  },
-  {
-    id: 2,
-    price: "15.00 MAD",
-    title: "Thieboudienne",
-    description: `
-      Traditional Senegalese dish with fish, rice
-      <br/>
-      <span class="underline">600 kcal</span>
-      / Prot 30g / Carbs 70g / Fats 25g
-    `,
-    image:
-      "https://img.freepik.com/premium-photo/homemade-traditional-moroccan-baghrir-with-honey-strawberries-mint-moroccan-pancakes-from_58460-8370.jpg",
-    isActive: false,
-  },
-  {
-    id: 3,
-    price: "15.00 MAD",
-    title: "Mac & Cheese",
-    description: `
-      Traditional Senegalese dish with fish, rice, vegetables and other ingredients
-      <br/>
-      <span class="underline">600 kcal</span>
-      / Prot 30g / Carbs 70g / Fats 25g
-    `,
-    image:
-      "https://img.freepik.com/free-photo/high-angle-tasty-truffle-recipe_23-2149525124.jpg?w=1380",
-    isActive: false,
-  },
-]);
 
-// Define main title and subtitle
-const mainTitle = ref("Breakfast Variations");
-const mainSubtitle = ref("( Choose 1 Variation / Day )");
-
-// Handle active item change emitted from CardInfo
-const handleActiveItemChange = (itemId: number) => {
-  breakfastCollection.value = breakfastCollection.value.map(item => ({
-    ...item,
-    isActive: item.id === itemId,
-  }));
-};
 </script>
 
 <template>
     <HomeOne />
 
-    <div class="h-[100vh] w-full ">
-        <div class="">
-        <CardInfo
-      :collection="breakfastCollection"
-      :mainTitle="mainTitle"
-      :mainSubtitle="mainSubtitle"
-      @update:activeItem="handleActiveItemChange"/>
-        </div>
-    </div>
+
     
     <div class="w-full lg:h-[220px] md:h-[160px] max-md:h-[120px] max-sm:h-[70px] bg-[#EFEFEC] flex justify-center items-center text-center">
         <p class="anytime text-black z-9 text-left text-sm sm:text-3xl lg:text-4xl text-center font-medium tracking-wide" style="font-weight: 300;" >
