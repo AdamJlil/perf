@@ -3,7 +3,8 @@ const { login } = useAuth();
 
 const form = reactive({
   data: {
-    email: "particuier1@gmail.com",
+    // email: "particuier1@gmail.com",
+    email: "etablissement1@gmail.com",
     password: "password",
     rememberMe: false,
     etablissement: "", 
@@ -22,7 +23,7 @@ async function onLoginClick() {
 
     const isEtablissement = ref(false);
     const isParticulier = ref(false);
-    const isParticulier_newUser = ref(false);
+    const isFinishedOnboarding = ref(false);
 
     const user = await login(form.data.email, form.data.password, form.data.rememberMe);
     
@@ -32,6 +33,8 @@ async function onLoginClick() {
     } else if (user.value?.type === "PARTICULIER") {
       isParticulier.value = true;
     }
+
+    isFinishedOnboarding.value = user.value?.isFinishedOnboarding
 
     if (isAdmin.value) {
       await navigateTo({
@@ -45,7 +48,7 @@ async function onLoginClick() {
           query: { userId: user.value?.id }
         });
       } else {
-        if (isParticulier_newUser.value) {
+      if (!isFinishedOnboarding.value) {
           await navigateTo({
             path: '/quizNewUser',
             query: { userId: user.value?.id }
@@ -191,9 +194,9 @@ const togglePassword = () => {
           </button>
         </div>
 
-        <div class="flex justify-center items-center gap-[20px] max-md:flex-col mt-4">
+        <!-- <div class="flex justify-center items-center gap-[20px] max-md:flex-col mt-4">
           <nuxt-link to="/signUp" class="text-sm text-black underline">DONT HAVE AN ACCOUNT YET ?</nuxt-link>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

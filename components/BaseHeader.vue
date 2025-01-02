@@ -134,13 +134,13 @@ onMounted(() => {
             <NuxtLink
               v-if="isLoggedIn"
               :to="{ 
-                path: '/nutritionPlans',
+                path: '/particulierHomePlan',
                 query: { userId: userId }
               }"
               class="px-3 text-shadow-white"
               :class="{ 
                   'text-black': !isActive('/'),
-                  'font-bold': isActive('/nutritionPlans'), 
+                  'font-bold': isActive('/particulierHomePlan'), 
               }"
               @click="closeMenu"
             >
@@ -148,15 +148,42 @@ onMounted(() => {
             </NuxtLink>
             <NuxtLink
               v-else
-              to="/nutritionPlans"
+              to="/particulierHomePlan"
               class="px-3 text-shadow-white"
               :class="{ 
                   'text-black': !isActive('/'),
-                  'font-bold': isActive('/nutritionPlans'), 
+                  'font-bold': isActive('/particulierHomePlan'), 
               }"
               @click="closeMenu"
             >
               PERF PROGRAM
+            </NuxtLink>
+            <NuxtLink
+              v-if="isLoggedIn"
+              :to="{ 
+                path: '/establishementHomePlan',
+                query: { userId: userId }
+              }"
+              class="px-3 text-shadow-white"
+              :class="{ 
+                  'text-black': !isActive('/'),
+                  'font-bold': isActive('/establishementHomePlan'), 
+              }"
+              @click="closeMenu"
+            >
+              PERF HOSPITALITY
+            </NuxtLink>
+            <NuxtLink
+              v-else
+              to="/establishementHomePlan"
+              class="px-3 text-shadow-white"
+              :class="{ 
+                  'text-black': !isActive('/'),
+                  'font-bold': isActive('/establishementHomePlan'), 
+              }"
+              @click="closeMenu"
+            >
+              PERF HOSPITALITY
             </NuxtLink>
           </template>
           <NuxtLink
@@ -192,7 +219,7 @@ onMounted(() => {
             to="/products"
             class="px-3 text-shadow-white"
             :class="{ 
-                'text-black': isActive('/nutritionPlans') || isActive('/login') || isActive('/signUp'),
+                'text-black': isActive('/particulierHomePlan') || isActive('/login') || isActive('/signUp'),
                 'font-bold': isActive('/products'), 
                 'font-light': !isActive('/products') 
             }"
@@ -368,20 +395,20 @@ onMounted(() => {
               <NuxtLink
                 v-if="isLoggedIn"
                 :to="{ 
-                  path: '/nutritionPlans',
+                  path: '/particulierHomePlan',
                   query: { userId: userId }
                 }"
                 class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
-                :class="{ 'font-bold': isActive('/nutritionPlans'), 'font-light': !isActive('/nutritionPlans') }"
+                :class="{ 'font-bold': isActive('/particulierHomePlan'), 'font-light': !isActive('/particulierHomePlan') }"
                 @click="closeMenu"
               >
                 PERF PROGRAM
               </NuxtLink>
               <NuxtLink
                 v-else
-                to="/nutritionPlans"
+                to="/particulierHomePlan"
                 class="py-2 mb-[10px] text-shadow-white text-black dark:text-white"
-                :class="{ 'font-bold': isActive('/nutritionPlans'), 'font-light': !isActive('/nutritionPlans') }"
+                :class="{ 'font-bold': isActive('/particulierHomePlan'), 'font-light': !isActive('/particulierHomePlan') }"
                 @click="closeMenu"
               >
                 PERF PROGRAM

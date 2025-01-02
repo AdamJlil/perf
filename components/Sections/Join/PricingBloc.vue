@@ -7,7 +7,11 @@
 
       <div id="choice-pricing" class="w-full max-w-6xl flex flex-col lg:flex-row justify-center items-start lg:items-end gap-8 lg:gap-5">
         <!-- BRONZE -->
-        <div id="Bronze" class="w-full lg:w-1/3 h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8">
+        <div 
+          id="Bronze" 
+          class="w-full lg:w-1/3 h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-105"
+          @click="$emit('planSelected', 'BRONZE')"
+        >
           <h2 class="text-xl uppercase tracking-2">{{ plan_1.title }}</h2>
           <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_1.duration }}</h5>
 
@@ -27,7 +31,11 @@
         </div>
  
         <!-- Platinium -->
-        <div id="Platinum" class="relative w-full lg:w-1/3 h-full font-medium border border-black rounded-10 flex flex-col items-center p-6 lg:p-8">
+        <div 
+          id="Platinum" 
+          class="relative w-full lg:w-1/3 h-full font-medium border border-black rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-105"
+          @click="$emit('planSelected', 'PLATINUM')"
+        >
           <img src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
 
           <h2 class="text-xl uppercase tracking-2">{{ plan_2.title }}</h2>
@@ -49,7 +57,11 @@
         </div>
 
         <!-- GOLD -->
-        <div id="Gold" class="w-full lg:w-1/3 h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8">
+        <div 
+          id="Gold" 
+          class="w-full lg:w-1/3 h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-105"
+          @click="$emit('planSelected', 'GOLD')"
+        >
           <h2 class="text-xl uppercase tracking-2">{{ plan_3.title }}</h2>
           <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_3.duration }}</h5>
 
