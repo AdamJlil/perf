@@ -48,26 +48,12 @@
     </div> 
 
 
-    <div class="w-full h-[50px] flex md:justify-between max-md:justify-end items-center px-[40px] mt-[50px]">
-        <p
-        class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center p-2 text-nowrap max-md:hidden"
-        style="letter-spacing: 0.1em; line-height: 1.3"
-        >
-           TOTAL BURNED UNTIL NOW : {{ totalBurnedCalories }}
-        </p>
-
+    <div class="w-full h-[50px] flex justify-end items-center px-[40px] mt-[50px]">
         <div class="flex items-center justify-center gap-[10px] p-[10px] hover:bg-[#e7e7e7] cursor-pointer" @click="nextVideo">
           <span class="text-xl sm:text-lg md:text-2xl text-nowrap">NEXT VIDEO</span>
           <NuxtImg src="/images/next-button.png" alt="arrow" width="40" height="40" />
         </div>
     </div>
-
-      <p
-        class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center p-2 text-nowrap md:hidden mt-[50px]"
-        style="letter-spacing: 0.1em; line-height: 1.3"
-        >
-           TOTAL BURNED UNTIL NOW : {{ totalBurnedCalories }}
-        </p>
 
       <Bloc1
         class="mt-30"
@@ -123,6 +109,15 @@
       </div>
     </div>
 
+
+    <p
+        class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center p-2 text-nowrap mt-[50px]"
+        style="letter-spacing: 0.1em; line-height: 1.3"
+        >
+           TOTAL BURNED UNTIL NOW : {{ totalBurnedCalories }}
+        </p>
+
+        
   </div>
 </template>
 
@@ -168,12 +163,13 @@ const selectedElement = ref(1);
 const caloriesResult = ref('');
 const burnedCalories = ref<Record<string, number>>({});
 const nutritionPerDay = ref(null)
+const toBeBurnedCaloriesNutrition = ref(0)
 
 const mealPlans = ref(null)
 
 // Calculate total burned calories
 const totalBurnedCalories = computed(() => {
-  return Object.values(burnedCalories.value).reduce((sum, value) => sum + value, 0);
+  return Object.values(burnedCalories.value).reduce((sum, value) => sum + value, 0) + (toBeBurnedCaloriesNutrition.value * Object.keys(burnedCalories.value).length);
 });
 
 const calculateCalories = (videoId: number, ageRange: string, weightRange: string, dumbbellWeight: number) => {
@@ -211,7 +207,7 @@ onMounted(async () => {
       ageRange.value = user.ageRange || '';
       weightRange.value = user.weightRange || '';
       burnedCalories.value = user.burnedCalories || {};
-      
+      toBeBurnedCaloriesNutrition.value = user.toBeBurnedCaloriesNutrition
       mealPlans.value = user.mealPlans || {};
       nutritionPerDay.value = user.nutritionPerDay || {};
 
@@ -223,7 +219,7 @@ onMounted(async () => {
 
       labels.value = Object.keys(user.burnedCalories) 
       data.value = Object.values(user.burnedCalories) 
-      data.value = Object.values(user.burnedCalories).map((calorie: number) => calorie + user.toBeBurnedCaloriesNutrition)
+      data.value = Object.values(user.burnedCalories).map((calorie: number) => calorie + toBeBurnedCaloriesNutrition.value)
 
       
       // Set initial selection to BEGINNER (2.5kg)

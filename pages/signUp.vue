@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
+import CryptoJS from 'crypto-js'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const form = reactive({
   data: {
@@ -7,12 +11,19 @@ const form = reactive({
     email: '',
     password: '',
     confirmPassword: '',
-    userType: '', // Dropdown value (Particulier or Etablissement)
-    acceptTerms: false, // Checkbox 1
-    acceptPrivacy: false // Checkbox 2
+    userType: '', // Will be set from URL
+    acceptTerms: false,
+    acceptPrivacy: false
   },
   error: '',
   pending: false
+})
+
+onMounted(() => {
+  // Set userType from URL parameter
+  if (route.query.userType) {
+    form.data.userType = route.query.userType as string
+  }
 })
 
 const isPasswordVisible = ref(false)
@@ -36,7 +47,7 @@ const togglePassword = (field: 'password' | 'confirmPassword') => {
   }
 }
 
-const onSignupClick = () => {
+const onSignupClick = async () => {
   if (form.data.password !== form.data.confirmPassword) {
     form.error = "Passwords don't match."
     return
@@ -48,6 +59,19 @@ const onSignupClick = () => {
   }
 
   console.log('Signup Data:', form.data)
+
+  // Hash the password before sending
+  const hashedPassword = CryptoJS.SHA256(form.data.password).toString()
+
+  await navigateTo({
+    path: '/payment',
+    query: {
+      name: form.data.name,
+      email: form.data.email,
+      password: hashedPassword,
+      userType: form.data.userType
+    }
+  });
 }
 </script>
 
@@ -62,6 +86,22 @@ const onSignupClick = () => {
       </h1>
 
       <div class="flex flex-col items-center w-full max-w-md">
+
+          <!-- Dropdown -->
+         <div class="w-full flex flex-col sm:flex-row items-center mb-6">
+          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">USER TYPE:</label>
+          <select
+            v-model="form.data.userType"
+            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0"
+            required
+            disabled
+          >
+            <option v-if="!form.data.userType" value="" disabled>Select your type</option>
+            <option value="Particulier">Particular</option>
+            <option value="Establishment">Establishment</option> 
+          </select>
+        </div>
+
         <!-- Name -->
         <div class="w-full flex flex-col sm:flex-row items-center mb-4">
           <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">NAME:</label>
@@ -150,20 +190,6 @@ const onSignupClick = () => {
               @click="togglePassword('confirmPassword')" 
             />
           </span>
-        </div>
-
-        <!-- Dropdown -->
-        <div class="w-full flex flex-col sm:flex-row items-center mb-6">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">USER TYPE:</label>
-          <select
-            v-model="form.data.userType"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0"
-            required
-          >
-            <option value="" disabled selected>Select your type</option>
-            <option value="Particulier">Particular</option>
-            <option value="Etablissement">Establishment</option> 
-          </select>
         </div>
 
         <!-- Checkboxes -->

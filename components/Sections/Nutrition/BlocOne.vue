@@ -66,7 +66,7 @@ const handleButtonClick = async () => {
   if (isLogoutButton.value) {
     try {
       await logout();
-      await navigateTo("/nutritionPlans");
+      await navigateTo("/particulierHomePlan");
     } catch (error) {
       console.error(error);
     }

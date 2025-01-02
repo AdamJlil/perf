@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useRouter } from '#app';
+import { useRouter, useRoute } from 'vue-router';
+import Header from "~/components/Sections/Nutrition/Header.vue";
+import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
+import Bloc2 from "~/components/Sections/Nutrition/BlocTwo.vue";
+import Bloc3 from "~/components/Sections/Nutrition/BlocThree.vue";
+import Bloc4 from "~/components/Sections/Nutrition/BlocFour.vue";
+import HomeFour from '~/components/home/HomeFour.vue';
+import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
+
 const currentUser = useAuthUser();
 const router = useRouter();
+const route = useRoute();
+
 
 // Redirect establishment users to their customer management page
 onMounted(() => {
@@ -14,13 +24,21 @@ onMounted(() => {
   }
 });
 
-import Header from "~/components/Sections/Nutrition/Header.vue";
-import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
-import Bloc2 from "~/components/Sections/Nutrition/BlocTwo.vue";
-import Bloc3 from "~/components/Sections/Nutrition/BlocThree.vue";
-import Bloc4 from "~/components/Sections/Nutrition/BlocFour.vue";
-import HomeFour from '~/components/home/HomeFour.vue';
-import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
+const handlePlanSelection = (plan: string) => {
+    // Get all existing query parameters
+    const currentQuery = { ...route.query };
+    
+    // Add the selected plan to the query parameters
+    router.push({
+    path: '/signUp',
+    query: {
+        ...currentQuery, // This spreads all existing params
+        plan,            // Add the selected plan
+        userType: 'Particulier' // Override or add the userType query param
+    }
+})
+
+};
 </script>
 
 <template>
@@ -35,6 +53,7 @@ import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
     <Bloc3 />
 
     <PricingBloc 
+        @planSelected="handlePlanSelection"
         title="Either you join, or get left behind" 
         :plan_1="{
             title: 'Bronze',
@@ -76,7 +95,6 @@ import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
             discount: 'Save 1006 dh'
           }"
     />
-
     <Bloc4 class="my-[150px]" :isbuttons='true' headingText="EITHER YOU JOIN, <br /> OR YOU GET LEFT BEHIND" />
     <HomeFour image1="/images/blockfour1.jpg" link="/products" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
   </div>
