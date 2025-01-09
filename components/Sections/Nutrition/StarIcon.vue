@@ -2,7 +2,7 @@
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    :class="`h-5 w-5 ${filled ? 'text-yellow-400 dark:text-yellow-300' : 'text-gray-300 dark:text-gray-600'}`"
+    :class="`h-5 w-5 ${filled ? 'text-[#D05E33]' : 'text-gray-300'}`"
     viewBox="0 0 20 20"
     fill="currentColor"
     aria-hidden="true"

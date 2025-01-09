@@ -56,7 +56,7 @@ import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
     <HomeOne 
       background-image="/images/homeone.jpg"
       image-alt="Background Image"
-      main-text="READY TO GET FIT ?"
+      main-text="READY TO GET FIT?"
       button-text="LOG IN"
       button-link="/login"
     />
@@ -67,17 +67,11 @@ import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
     </div>
     <!-- <VideoSlider/> -->
     <HomeTwwo />
-    <HomeThree class="my-[150px]" />
-    <HomeFour image1="/images/blockfour1.jpg" link="/products" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
+    <HomeFour class="my-[150px]"   image1="/images/work1.png" link="/particulierHomePlan" buttonText="MORE" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE."/>    
     <Bloc3 :reviews="reviews" />
+    <HomeThree class="my-[150px]" />
+    <HomeFour image1="/images/blockfour1.jpg" link="/establishementHomePlan" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
     <Bloc4 headingText=" What are you <br /> waiting for?" />
-
-    
-    <!-- <BlocTwo /> -->
-    <!-- <BlocThree /> -->
-    <!-- <BlocFour/> -->
-    <!-- <BlocFive/> -->
-    <!-- <VideoSliderReviews/> -->
 </template>
 
 <style scoped>

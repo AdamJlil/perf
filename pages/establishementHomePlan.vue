@@ -77,7 +77,7 @@ const handlePlanSelection = (plan: string) => {
         button-text="LOG IN"
         button-link="/login"
       />
-    <Bloc2Establishment class="my-[170px]"  />
+    <Bloc2Establishment class="py-[300px]"  />
 
     <div class="relative w-full h-[90vh] max-md:h-[50vh] overflow-hidden">
       <!-- Background Image -->
@@ -95,7 +95,7 @@ const handlePlanSelection = (plan: string) => {
       </div>
     </div>
 
-    <Bloc3 class="mb-[100px]" :reviews="reviews" />
+    <Bloc3 class="my-[100px] py-[100px]" :reviews="reviews" />
     <HomeFour  image1="/images/129.png" link="" buttonText="MORE" image2="/images/128.png" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
    
  
