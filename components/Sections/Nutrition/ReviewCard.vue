@@ -4,10 +4,12 @@
     
     <!-- Reviewer Image Badge -->
     <div
-      class="absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden bg-center bg-cover border-2 border-white dark:border-black shadow-md"
+      class="absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-white dark:border-black shadow-md"
       :style="{
         backgroundImage: `url(${reviewerImage})`,
-        backgroundSize: '120%',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
       }"
       aria-label="Reviewer Avatar"
     ></div>

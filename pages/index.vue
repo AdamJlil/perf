@@ -4,6 +4,24 @@ import { useRouter } from '#app';
 const currentUser = useAuthUser();
 const router = useRouter();
 
+const reviews = [
+  {
+    reviewText: "Before PERF, i hated working out. now i move my body 4 to 5 times a week. i'm more productive, energetic and happier !",
+    reviewerImage: "images/hr1.jpg",
+    filledStars: 5,
+  },
+  {
+    reviewText: "As a busy professional, PERF has transformed how I approach fitness. The flexibility and quality of workouts are unmatched!",
+    reviewerImage: "images/hr2.jpg",
+    filledStars: 5,
+  },
+  {
+    reviewText: "The personalized approach and constant support make PERF stand out. It's not just a fitness app, it's a lifestyle change.",
+    reviewerImage: "images/hr3.jpg",
+    filledStars: 5,
+  },
+];
+
 // Redirect establishment users to their customer management page
 onMounted(() => {
   if (currentUser.value?.type === 'ETABLISSEMENT') {
@@ -35,10 +53,13 @@ import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
 </script>
 
 <template>
-    <HomeOne />
-
-
-    
+    <HomeOne 
+      background-image="/images/homeone.jpg"
+      image-alt="Background Image"
+      main-text="READY TO GET FIT ?"
+      button-text="LOG IN"
+      button-link="/login"
+    />
     <div class="w-full lg:h-[220px] md:h-[160px] max-md:h-[120px] max-sm:h-[70px] bg-[#EFEFEC] flex justify-center items-center text-center">
         <p class="anytime text-black z-9 text-left text-sm sm:text-3xl lg:text-4xl text-center font-medium tracking-wide" style="font-weight: 300;" >
             ANYWHERE, ANYTIME
@@ -48,7 +69,7 @@ import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
     <HomeTwwo />
     <HomeThree class="my-[150px]" />
     <HomeFour image1="/images/blockfour1.jpg" link="/products" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
-    <Bloc3 />
+    <Bloc3 :reviews="reviews" />
     <Bloc4 headingText=" What are you <br /> waiting for?" />
 
     

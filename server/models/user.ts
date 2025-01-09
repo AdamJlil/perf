@@ -14,7 +14,7 @@ const users: any[] = [
     name: "IBIS HOTEL",
     password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
     roles: ["USER"],
-    type: "ETABLISSEMENT",
+    type: "ESTABLISHEMENT",
     customers: [
       { 
         firstName: "Mohammed", 
