@@ -1,11 +1,11 @@
 <template>
   <div
-    class="w-full bg-[#EFEFEC] text-black flex flex-col items-center gap-[100px] relative p-8 pt-[100px]" 
+    class="w-full bg-[#EFEFEC] text-black flex flex-col items-center gap-[150px] relative p-8 pt-[200px]" 
     style="font-family: Montserrat;"
   >
-      <h1 class="text-2xl lg:text-3xl lg:text-3xl uppercase text-center tracking-1">{{ title }}</h1>
+      <h1 class="text-2xl uppercase text-center tracking-1">{{ title }}</h1>
 
-      <div id="choice-pricing" class="w-full max-w-6xl flex flex-col lg:flex-row justify-center items-start lg:items-end gap-8 lg:gap-5">
+      <div id="choice-pricing" class="w-full max-w-6xl flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-5">
         <!-- BRONZE -->
         <div 
           id="Bronze" 
@@ -19,7 +19,7 @@
             <li
               v-for="(feature, i) in plan_1.features"
               :key="i"
-              class="text-center uppercase tracking-1 py-3"
+              class="text-center lowercase tracking-1 py-3"
               :class="{ 'opacity-50': feature.isDisabled }"
             >
               {{ feature.text }}
@@ -33,7 +33,7 @@
         <!-- Platinium -->
         <div 
           id="Platinum" 
-          class="relative w-full lg:w-1/3 h-full font-medium border border-black rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-105"
+          class="md:mt-[-80px] relative w-full lg:w-1/3 h-full font-medium border border-black rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-105"
           @click="$emit('planSelected', 'PLATINUM')"
         >
           <img src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
@@ -45,7 +45,7 @@
             <li
               v-for="(feature, i) in plan_2.features"
               :key="i"
-              class="text-center uppercase tracking-1 py-3"
+              class="text-center lowercase tracking-1 py-3"
               :class="{ 'opacity-50': feature.isDisabled }"
             >
               {{ feature.text }}
@@ -69,7 +69,7 @@
             <li
               v-for="(feature, i) in plan_3.features"
               :key="i"
-              class="text-center uppercase tracking-1 py-3"
+              class="text-center lowercase tracking-1 py-3"
               :class="{ 'opacity-50': feature.isDisabled }"
             >
               {{ feature.text }}
@@ -107,3 +107,59 @@ const props = defineProps({
 
 const { title,plan_1,plan_2,plan_3 } = toRefs(props)
 </script>
+
+<style scoped>
+#choice-pricing {
+  min-height: 800px;
+  display: flex;
+  align-items: flex-start;
+}
+
+#Bronze, #Gold, #Platinum {
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+@media (min-width: 1024px) {
+  #Bronze, #Gold, #Platinum {
+    height: 800px;
+  }
+}
+
+ul {
+  flex: 1;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 2rem 1rem;
+}
+
+li {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.text-[#D05E33] {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  ul {
+    min-height: auto;
+  }
+  
+  #choice-pricing {
+    min-height: auto;
+  }
+}
+</style>

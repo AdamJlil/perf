@@ -9,7 +9,7 @@ const route = useRoute();
 const { logout } = useAuth();
 
 const isLoggedIn = computed(() => !!currentUser.value);
-const isEtablissement = computed(() => currentUser.value?.type === "ETABLISSEMENT");
+const isEtablissement = computed(() => currentUser.value?.type === "ESTABLISHEMENT");
 const userId = computed(() => currentUser.value?.id || route.query.userId);
 
 const form = reactive({

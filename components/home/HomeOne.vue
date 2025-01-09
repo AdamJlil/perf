@@ -13,7 +13,7 @@
 
     <!-- Content -->
     <div class="flex flex-col justify-center max-md:items-center items-start gap-[20px] lg:gap-[100px] md:gap-[50px] ">
-        <p class="texts text-white z-9 text-left text-base sm:text-2xl md:text-3xl lg:text-4xl text-center font-medium tracking-wide" style="font-weight: 200;" >
+        <p class="texts text-white z-9 text-left text-base sm:text-2xl md:text-3xl lg:text-4xl text-center font-medium tracking-tight" style="font-weight: 200;" >
           {{ mainText }}
         </p>
     
@@ -57,12 +57,13 @@ defineProps({
 }
 
 .texts{
-  letter-spacing: 15px;
+  letter-spacing: 5px;
 }
+
 /* Pour les tablettes */
 @media (max-width: 1024px) {
   .texts{
-    letter-spacing: 4px;
+    letter-spacing: 2px;
   }
 }
 

@@ -4,7 +4,7 @@ const { login } = useAuth();
 const form = reactive({
   data: {
     // email: "particuier1@gmail.com",
-    email: "etablissement1@gmail.com",
+    email: "particuier1@gmail.com",
     password: "password",
     rememberMe: false,
     etablissement: "", 
@@ -28,7 +28,7 @@ async function onLoginClick() {
     const user = await login(form.data.email, form.data.password, form.data.rememberMe);
     
     // Set user type based on the returned user data
-    if (user.value?.type === "ETABLISSEMENT") {
+    if (user.value?.type === "ESTABLISHEMENT") {
       isEtablissement.value = true;
     } else if (user.value?.type === "PARTICULIER") {
       isParticulier.value = true;
@@ -50,7 +50,7 @@ async function onLoginClick() {
       } else {
       if (!isFinishedOnboarding.value) {
           await navigateTo({
-            path: '/quizNewUser',
+            path: '/quizParticulier',
             query: { userId: user.value?.id }
           });
         }else{

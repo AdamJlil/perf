@@ -65,10 +65,10 @@ const handlePlanSelection = (plan: string) => {
     <Bloc2  />
     <Bloc1 class="my-[150px]" :reversed='true' image="/images/coach.png" headingText="“HEY THERE👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF”" />
     <HomeFour  image1="/images/work1.png" link="" buttonText="TRANSFORM NOW" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE."/>
-    <Bloc1 class="my-[100px]" :reversed='false' image="/images/amjad.png" headingText="“PLANNING HEALTHY MEALS CAN BE A CHALLENGE,<br/> LET ME DO IT FOR YOU !”" />
+    <Bloc1 class="mt-[100px] mb-[50px]" :reversed='false' image="/images/amjad.png" headingText="“PLANNING HEALTHY MEALS CAN BE A CHALLENGE,<br/> LET ME DO IT FOR YOU !”" />
    
     <Header />
-    <Bloc3 :reviews="reviews" />
+    <Bloc3 :reviews="reviews" class="mb-[100px]" />
 
     <PricingBloc 
         @planSelected="handlePlanSelection"

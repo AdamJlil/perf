@@ -11,7 +11,7 @@
         <img :src="image2" alt="Workout Image 2" class="w-full h-full md:max-h-[510px] max-md:object-contain md:object-cover" />
       </div>
 
-      <div class="md:absolute md:bottom-[50px] md:left-[35px] text-left max-md:text-center text-white max-md:text-black max-md:mt-[70px]">
+      <div class="max-md:flex max-md:flex-col max-md:items-center max-md:justify-center md:absolute md:bottom-[50px] md:left-[35px] text-left max-md:text-center text-white max-md:text-black max-md:mt-[70px]">
           <p class="text-lg md:text-2xl lg:text-3xl mb-[50px]" style="font-weight: 500;">
             <span v-html="headingText" />
           </p>
