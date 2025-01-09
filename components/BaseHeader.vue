@@ -88,7 +88,7 @@ onMounted(() => {
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center justify-between w-full px-8 md:mr-[10px]">
         <!-- Logo - Not clickable when logged in as establishment -->
-        <div v-if="isLoggedIn && isEtablissement">
+        <div v-if="isLoggedIn">
           <NuxtImg
             src="/images/pepe.png"
             alt="Company Logo"
@@ -103,7 +103,7 @@ onMounted(() => {
           />
         </NuxtLink>        
         <div class="flex gap-5 lg:gap-15 items-center">
-          <template v-if="!(isLoggedIn && isEtablissement)">
+          <template v-if="!(isLoggedIn)">
             <NuxtLink
               v-if="isLoggedIn"
               :to="{ 
@@ -202,7 +202,7 @@ onMounted(() => {
             MANAGE USERS
           </NuxtLink>
           <NuxtLink
-            v-if="isLoggedIn && isEtablissement"
+            v-if="isLoggedIn"
             :to="{ 
               path: '/myPlan',
               query: { userId: userId }
@@ -427,7 +427,7 @@ onMounted(() => {
               MANAGE USERS
             </NuxtLink>
             <NuxtLink
-              v-if="isLoggedIn && isEtablissement"
+              v-if="isLoggedIn"
               :to="{ 
                 path: '/establishementProgram',
                 query: { userId: userId }

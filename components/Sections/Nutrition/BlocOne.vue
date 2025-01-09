@@ -12,12 +12,9 @@
   ></div>
 
   <div class="flex flex-col justidy-center items-center gap-[30px]">
-    <p
-      class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center p-2 "
-      style="letter-spacing: 0.1em; line-height: 1.3"
-    >
+    <h1 class="text-[20px] leading-loose font-normal text-center mb-0 py-15 uppercase text-black dark:text-white">
       <span v-html="headingText" />
-    </p>
+    </h1>
 
     <div v-if="showButton" @click.prevent="handleButtonClick" class="tracking-normal border border-black max-md:border-black py-[10px] px-[70px]  text-center text-sm md:text-base lg:text-lg z-9 cursor-pointer" style="font-weight: 300;">
            TRANSFORM NOW

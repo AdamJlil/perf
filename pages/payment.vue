@@ -97,8 +97,10 @@
     <!-- Plan Card -->
     <div 
       v-if="selectedPlan"
-      class="w-full lg:w-1/3 h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 transition-transform duration-300 hover:scale-105"
+      class="w-full lg:w-1/3 relative h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 transition-transform duration-300 hover:scale-105"
     >
+      <img v-if="selectedPlan.title === 'PLATINUM'" src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
+
       <h2 class="text-xl uppercase tracking-2">{{ selectedPlan.title }}</h2>
       <h5 class="pt-1 -tracking-0.3 opacity-80">{{ selectedPlan.duration }}</h5>
 
@@ -106,7 +108,7 @@
         <li
           v-for="(feature, i) in selectedPlan.features"
           :key="i"
-          class="text-center uppercase tracking-1 py-3"
+          class="text-center lowercase tracking-1 py-3"
           :class="{ 'opacity-50': feature.isDisabled }"
         >
           {{ feature.text }}

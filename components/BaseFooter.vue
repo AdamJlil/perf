@@ -117,7 +117,7 @@ a {
 }
 
 a:hover {
-  color: #ffd700; /* Gold color on hover */
+  color: #D05E33; /* Gold color on hover */
 }
 
 /* Ensure images stay proportional */
