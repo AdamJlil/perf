@@ -118,7 +118,7 @@ const users: any[] = [
   {
     id: "PA-d0065700-1707-4ad9-811b-8bbed0364318",
     email: "particuier1@gmail.com",
-    isFinishedOnboarding: false,
+    isFinishedOnboarding: true,
     firstName: "Salah", 
     lastName: "Mo ", 
     password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",

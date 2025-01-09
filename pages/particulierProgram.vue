@@ -11,7 +11,7 @@
       :headingText="`HEY ${userName} 👋, LET'S GET STARTED!`"
     />
 
-    <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[10px] mt-35">
+    <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[10px] my-30">
       <div @click="selectedElement = 1" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 1 ? 'bg-[#D05E33] text-white' : 'hover:bg-gray-100']">BEGINNER 2.5kg</div>
       <div class="w-[3px] h-8 bg-[#6763634a]"></div>
       <div @click="selectedElement = 2" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 2 ? 'bg-[#D05E33] text-white' : 'hover:bg-gray-100']">MEDIUM 5kg</div>
@@ -64,24 +64,24 @@
       />
 
     <div class="flex flex-col items-center justify-center mt-20 mb-20">
-      <h2 class="text-black text-2xl uppercase font-semibold mb-12">PER DAY</h2>
-      <div class="w-[90%] max-w-[600px] px-4 sm:px-8 md:px-12 lg:px-16">
-        <div class="text-black uppercase text-xl sm:text-lg md:text-2xl p-4 sm:p-6 flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
+      <h2 class="text-black text-2xl uppercase mb-12" style="letter-spacing: 0.1em; line-height: 1.3">PER DAY</h2>
+      <div class="w-[90%] max-w-[500px] px-4 sm:px-8 md:px-12 lg:px-16">
+        <div class="text-black uppercase text-[20px] p-4 sm:p-[10px] flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
           <span>CALORIES</span>
           <span class="ml-4 sm:ml-8 md:ml-12 lg:ml-20">{{nutritionPerDay?.calories || ''}} KCAL</span>
         </div>
         <div class="w-full border-t-[2px] border-gray-300"></div>
-        <div class="text-black uppercase text-xl sm:text-lg md:text-2xl p-4 sm:p-6 flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
+        <div class="text-black uppercase text-xl  text-[20px] p-4 sm:p-[10px] flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
           <span>PROTEIN</span>
           <span class="ml-4 sm:ml-8 md:ml-12 lg:ml-20">{{nutritionPerDay?.protein || ''}} G</span>
         </div>
         <div class="w-full border-t-[2px] border-gray-300"></div>
-        <div class="text-black uppercase text-xl sm:text-lg md:text-2xl p-4 sm:p-6 flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
+        <div class="text-black uppercase  text-[20px] p-4 sm:p-[10px] flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
           <span>CARBS</span>
           <span class="ml-4 sm:ml-8 md:ml-12 lg:ml-20">{{nutritionPerDay?.carbs || ''}} G</span>
         </div>
         <div class="w-full border-t-[2px] border-gray-300"></div>
-        <div class="text-black uppercase text-xl sm:text-lg md:text-2xl p-4 sm:p-6 flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
+        <div class="text-black uppercase  text-[20px] p-4 sm:p-[10px] flex justify-between items-center" style="letter-spacing: 0.1em; line-height: 1.3">
           <span>FAT</span>
           <span class="ml-4 sm:ml-8 md:ml-12 lg:ml-20">{{nutritionPerDay?.fat || ''}} G</span>
         </div>
