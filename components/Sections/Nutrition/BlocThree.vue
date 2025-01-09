@@ -24,26 +24,18 @@
 import { computed } from "vue";
 import ReviewCard from "~/components/Sections/Nutrition/ReviewCard.vue";
 
-const reviews = [
-  {
-    reviewText: "“Before PERF, i hated working out. now i move my body 4 to 5 times a week. i’m more productive, energetic and happier !”",
-    reviewerImage: "images/review1.jpg",
-    filledStars: 4,
-  },
-  {
-    reviewText: "As a busy mom, finding time to eat healthy was challenging. This nutrition program not only offers simple recipes but also fits seamlessly into my family's routine. We all love the meals!",
-    reviewerImage: "images/review1.jpg",
-    filledStars: 5,
-  },
-  {
-    reviewText: "“Before PERF, i hated working out. now i move my body 4 to 5 times a week. i’m more productive, energetic and happier !”",
-    reviewerImage: "images/review1.jpg",
-    filledStars: 5,
-  },
-];
+interface Review {
+  reviewText: string;
+  reviewerImage: string;
+  filledStars: number;
+}
+
+const props = defineProps<{
+  reviews: Review[]
+}>();
 
 // Dupliquez les reviews pour le défilement infini
-const repeatedReviews = computed(() => [...reviews, ...reviews]);
+const repeatedReviews = computed(() => [...props.reviews, ...props.reviews]);
 </script>
 
 

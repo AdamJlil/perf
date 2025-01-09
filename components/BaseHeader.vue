@@ -79,7 +79,7 @@ onMounted(() => {
     class="dark:text-slate-500 absolute top-0 left-0 right-0 z-50 md:mt-[30px]"
     style="font-family: Montserrat"
     :class="{
-      'text-black': !isActive('/'),
+      'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
     }"
   >
     <div class="p-3 w-full flex items-center justify-between pr-[30px] max-md:pt-[30px]">
@@ -97,7 +97,7 @@ onMounted(() => {
         </div>
         <NuxtLink v-else to="/">
           <NuxtImg
-            :src="!isActive('/') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+            :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'"
             alt="Company Logo"
             class="w-[80px]"
           />
@@ -112,7 +112,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                 'font-bold': isActive('/'),
               }"
               @click="closeMenu"
@@ -124,7 +124,7 @@ onMounted(() => {
               to="/"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                 'font-bold': isActive('/'),
               }"
               @click="closeMenu"
@@ -139,7 +139,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{ 
-                  'text-black': !isActive('/'),
+                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                   'font-bold': isActive('/particulierHomePlan'), 
               }"
               @click="closeMenu"
@@ -151,7 +151,7 @@ onMounted(() => {
               to="/particulierHomePlan"
               class="px-3 text-shadow-white"
               :class="{ 
-                  'text-black': !isActive('/'),
+                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                   'font-bold': isActive('/particulierHomePlan'), 
               }"
               @click="closeMenu"
@@ -166,7 +166,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{ 
-                  'text-black': !isActive('/'),
+                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                   'font-bold': isActive('/establishementHomePlan'), 
               }"
               @click="closeMenu"
@@ -178,7 +178,7 @@ onMounted(() => {
               to="/establishementHomePlan"
               class="px-3 text-shadow-white"
               :class="{ 
-                  'text-black': !isActive('/'),
+                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                   'font-bold': isActive('/establishementHomePlan'), 
               }"
               @click="closeMenu"
@@ -194,7 +194,7 @@ onMounted(() => {
             }"
             class="px-3 text-shadow-white"
             :class="{ 
-                'text-black': !isActive('/'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                 'font-bold': isActive('/establishementCRUDCostumer'), 
             }"
             @click="closeMenu"
@@ -209,7 +209,7 @@ onMounted(() => {
             }"
             class="px-3 text-shadow-white"
             :class="{ 
-                'text-black': !isActive('/'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
             }"
             @click="closeMenu"
           >
@@ -234,7 +234,7 @@ onMounted(() => {
               to="/login"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
                 'font-bold': isActive('/login'),
               }"
               @click="closeMenu"
@@ -247,7 +247,7 @@ onMounted(() => {
               @click="onLogoutClick"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
               }"
             >
               LOGOUT
@@ -263,7 +263,7 @@ onMounted(() => {
             class="w-6 h-6"
           />
           <img
-            :src="!isActive('/') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+            :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
             alt="arrow"
             class="w-4 h-4 transform transition-transform"
             :class="{ 'rotate-180': isOpen }"
@@ -300,7 +300,7 @@ onMounted(() => {
       <!-- Logo -->
       <NuxtLink to="/" class="order-2 mx-auto  md:hidden">
         <NuxtImg
-          :src="!isActive('/') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+          :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'"
           alt="Company Logo"
           class="w-[50px]"
         />
@@ -317,7 +317,7 @@ onMounted(() => {
           class="w-6 h-6"
         />
         <img
-          :src="!isActive('/') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+          :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
           alt="arrow"
           class="w-4 h-4 transform transition-transform"
           :class="{ 'rotate-180': isOpen }"

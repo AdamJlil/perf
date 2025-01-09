@@ -8,11 +8,11 @@ import Bloc3 from "~/components/Sections/Nutrition/BlocThree.vue";
 import Bloc4 from "~/components/Sections/Nutrition/BlocFour.vue";
 import HomeFour from '~/components/home/HomeFour.vue';
 import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
+import { plans } from '~/types/plans';
 
 const currentUser = useAuthUser();
 const router = useRouter();
 const route = useRoute();
-
 
 // Redirect establishment users to their customer management page
 onMounted(() => {
@@ -24,6 +24,24 @@ onMounted(() => {
   }
 });
 
+const reviews = [
+  {
+    reviewText: "Before PERF, i hated working out. now i move my body 4 to 5 times a week. i'm more productive, energetic and happier !",
+    reviewerImage: "images/pr1.jpg",
+    filledStars: 4,
+  },
+  {
+    reviewText: "As a busy mom, finding time to eat healthy was challenging. This nutrition program not only offers simple recipes but also fits seamlessly into my family's routine. We all love the meals!",
+    reviewerImage: "images/pr2.jpg",
+    filledStars: 5,
+  },
+  {
+    reviewText: "Before PERF, i hated working out. now i move my body 4 to 5 times a week. i'm more productive, energetic and happier !",
+    reviewerImage: "images/pr3.jpg",
+    filledStars: 5,
+  },
+];
+
 const handlePlanSelection = (plan: string) => {
     // Get all existing query parameters
     const currentQuery = { ...route.query };
@@ -34,7 +52,7 @@ const handlePlanSelection = (plan: string) => {
     query: {
         ...currentQuery, // This spreads all existing params
         plan,            // Add the selected plan
-        userType: 'Particulier' // Override or add the userType query param
+        userType: 'PARTICULIER' // Override or add the userType query param
     }
 })
 
@@ -50,50 +68,14 @@ const handlePlanSelection = (plan: string) => {
     <Bloc1 class="my-[100px]" :reversed='false' image="/images/amjad.png" headingText="“PLANNING HEALTHY MEALS CAN BE A CHALLENGE,<br/> LET ME DO IT FOR YOU !”" />
    
     <Header />
-    <Bloc3 />
+    <Bloc3 :reviews="reviews" />
 
     <PricingBloc 
         @planSelected="handlePlanSelection"
-        title="Either you join, or get left behind" 
-        :plan_1="{
-            title: 'Bronze',
-            duration: '3 months',
-            features: [
-            { text: 'Monthly one-to-one consultation', isDisabled: false },
-            { text: 'Nutrition plan adjustments: 1 time', isDisabled: false },
-            { text: 'Personalized workout plans', isDisabled: false },
-            { text: '2 free dumbbells', isDisabled: true },
-            { text: 'Priority support', isDisabled: true }
-            ],
-            price: '999 dh',
-            discount: '1300 dh'
-        }"
-        :plan_2="{
-            title: 'Platinum',
-            duration: '6 months',
-            features: [
-            { text: 'Monthly one-to-one consultation', isDisabled: false },
-            { text: 'Nutrition plan adjustments: 1 time', isDisabled: false },
-            { text: 'Personalized workout plans', isDisabled: false },
-            { text: '2 free dumbbells', isDisabled: false },
-            { text: 'Priority support', isDisabled: true }
-            ],
-            price: '1582 dh',
-            discount: 'Save 410 dh'
-        }"
-        :plan_3="{
-            title: 'Gold',
-            duration: '1 year',
-            features: [
-            { text: 'Monthly one-to-one consultation', isDisabled: false },
-            { text: 'Nutrition plan adjustments: 1 time', isDisabled: false },
-            { text: 'Personalized workout plans', isDisabled: false },
-            { text: '2 free dumbbells', isDisabled: false },
-            { text: 'Priority support', isDisabled: false }
-            ],
-            price: '999 dh',
-            discount: 'Save 1006 dh'
-          }"
+        :title="plans.particular.title"
+        :plan_1="plans.particular.plans.plan_1"
+        :plan_2="plans.particular.plans.plan_2"
+        :plan_3="plans.particular.plans.plan_3"
     />
     <Bloc4 class="my-[150px]" :isbuttons='true' headingText="EITHER YOU JOIN, <br /> OR YOU GET LEFT BEHIND" />
     <HomeFour image1="/images/blockfour1.jpg" link="/products" buttonText="MORE" image2="/images/blockfour2.jpg" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>

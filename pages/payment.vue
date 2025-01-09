@@ -96,16 +96,15 @@
 
     <!-- Plan Card -->
     <div 
-      id="Bronze" 
+      v-if="selectedPlan"
       class="w-full lg:w-1/3 h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 transition-transform duration-300 hover:scale-105"
-      @click="$emit('planSelected', 'BRONZE')"
     >
-      <h2 class="text-xl uppercase tracking-2">{{ plan_1.title }}</h2>
-      <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_1.duration }}</h5>
+      <h2 class="text-xl uppercase tracking-2">{{ selectedPlan.title }}</h2>
+      <h5 class="pt-1 -tracking-0.3 opacity-80">{{ selectedPlan.duration }}</h5>
 
       <ul class="list-disc p-5 lg:w-50 sm:w-90 pt-5">
         <li
-          v-for="(feature, i) in plan_1.features"
+          v-for="(feature, i) in selectedPlan.features"
           :key="i"
           class="text-center uppercase tracking-1 py-3"
           :class="{ 'opacity-50': feature.isDisabled }"
@@ -114,16 +113,17 @@
         </li>
       </ul>
 
-      <h2 class="pt-5 text-lg tracking-1">{{ plan_1.price }}</h2>
-      <h2 class="text-[#D05E33] text-md uppercase line-through">{{ plan_1.discount }}</h2>
+      <h2 class="pt-5 text-lg tracking-1">{{ selectedPlan.price }}</h2>
+      <h2 class="text-[#D05E33] text-md uppercase line-through">{{ selectedPlan.discount }}</h2>
     </div>
   </div>
 </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { plans } from '~/types/plans'
 
 const route = useRoute()
 
@@ -136,70 +136,31 @@ const form = reactive({
   paymentMethod: ''
 })
 
-const plan_1 = ref({
-  title: 'BRONZE',
-  duration: '3 MONTHS',
-  features: [
-    { text: 'Monthly one-to-one consultation', isDisabled: false },
-    { text: 'Nutrition plan adjustments: 1 time', isDisabled: false },
-    { text: 'Personalized workout plans', isDisabled: false },
-    { text: '2 free dumbbells', isDisabled: true },
-    { text: 'Priority support', isDisabled: true }
-  ],
-  price: '59.99 MAD',
-  discount: '99.99 MAD'
+const selectedPlan = ref(null)
+
+onMounted(() => {
+  const planName = route.query.plan as string
+  const userType = route.query.userType as string
+  
+  if (planName && userType) {
+    const planSet = userType === 'PARTICULIER' ? plans.particular : plans.ESTABLISHEMENT
+    
+    // Find the matching plan
+    Object.entries(planSet.plans).forEach(([key, plan]) => {
+      if (plan.title === planName) {
+        selectedPlan.value = plan
+      }
+    })
+  }
 })
 
-// Update plan details based on URL query parameter
-const updatePlanDetails = () => {
-  const selectedPlan = route.query.plan as string
-  
-  switch(selectedPlan) {
-    case 'PLATINUM':
-      plan_1.value = {
-        title: 'PLATINUM',
-        duration: '6 MONTHS',
-        features: [
-          { text: 'Monthly one-to-one consultation', isDisabled: false },
-          { text: 'Nutrition plan adjustments: 2 times', isDisabled: false },
-          { text: 'Personalized workout plans', isDisabled: false },
-          { text: '2 free dumbbells', isDisabled: false },
-          { text: 'Priority support', isDisabled: false }
-        ],
-        price: '89.99 MAD',
-        discount: '149.99 MAD'
-      }
-      break
-    case 'GOLD':
-      plan_1.value = {
-        title: 'GOLD',
-        duration: '12 MONTHS',
-        features: [
-          { text: 'Monthly one-to-one consultation', isDisabled: false },
-          { text: 'Unlimited nutrition plan adjustments', isDisabled: false },
-          { text: 'Personalized workout plans', isDisabled: false },
-          { text: '2 free dumbbells', isDisabled: false },
-          { text: 'Priority support', isDisabled: false }
-        ],
-        price: '129.99 MAD',
-        discount: '199.99 MAD'
-      }
-      break
-  }
-}
-
 const handlePayment = () => {
-  // Here you can handle the payment with both form and plan data
   console.log('Payment details:', {
-    firstName: form.firstName,
-    lastName: form.lastName,
-    plan: plan_1.value.title,
-    price: plan_1.value.price
+    ...form,
+    plan: selectedPlan.value?.title,
+    price: selectedPlan.value?.price
   })
 }
-
-// Call updatePlanDetails when component mounts
-updatePlanDetails()
 </script>
 
 <style scoped>

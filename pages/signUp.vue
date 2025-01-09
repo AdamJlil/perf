@@ -12,6 +12,7 @@ const form = reactive({
     password: '',
     confirmPassword: '',
     userType: '', // Will be set from URL
+    plan: '', // Will be set from URL
     acceptTerms: false,
     acceptPrivacy: false
   },
@@ -20,9 +21,12 @@ const form = reactive({
 })
 
 onMounted(() => {
-  // Set userType from URL parameter
+  // Set userType and plan from URL parameters
   if (route.query.userType) {
     form.data.userType = route.query.userType as string
+  }
+  if (route.query.plan) {
+    form.data.plan = route.query.plan as string
   }
 })
 
@@ -69,7 +73,8 @@ const onSignupClick = async () => {
       name: form.data.name,
       email: form.data.email,
       password: hashedPassword,
-      userType: form.data.userType
+      userType: form.data.userType,
+      plan: form.data.plan
     }
   });
 }
@@ -97,8 +102,8 @@ const onSignupClick = async () => {
             disabled
           >
             <option v-if="!form.data.userType" value="" disabled>Select your type</option>
-            <option value="Particulier">Particular</option>
-            <option value="Establishment">Establishment</option> 
+            <option value="PARTICULIER">Particular</option>
+            <option value="ESTABLISHEMENT">Establishment</option> 
           </select>
         </div>
 
