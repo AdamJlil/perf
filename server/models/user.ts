@@ -10,7 +10,7 @@ const users: any[] = [
   {
     id: "ET-d0065700-1707-4ad9-811b-8bbed0364318",
     email: "etablissement1@gmail.com",
-    isFinishedOnboarding: false,
+    isFinishedOnboarding: true,
     name: "IBIS HOTEL",
     password: "$2y$10$hXPea83sKsVsuf95mtEZZeIYtcFl1vLJ1BXVTEqcgKArf6/5.Zksm",
     roles: ["USER"],
