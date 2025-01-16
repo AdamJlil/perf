@@ -143,7 +143,7 @@ const closeModal = () => {
       </div>
     </section>
 
-    <nuxt-link to="/establishementUserQuiz" class="w-full flex justify-center items-center">
+    <nuxt-link to="/quizEstablishement" class="w-full flex justify-center items-center">
       <div class="flex justify-center items-center gap-[15px] cursor-pointer w-fit hover:bg-[#e7e7e7] p-[20px]">
         <NuxtImg src="/images/plus-icon.png" alt="plus" width="20" height="20" />
         <div class="tracking-normal text-center text-lg cursor-pointer" style="font-weight: 300;">

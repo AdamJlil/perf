@@ -48,18 +48,18 @@ async function onLoginClick() {
           query: { userId: user.value?.id }
         });
       } else {
-      if (!isFinishedOnboarding.value) {
-          await navigateTo({
-            path: '/quizParticulier',
-            query: { userId: user.value?.id }
-          });
-        }else{
-          await navigateTo({
-            path: '/particulierProgram',
-            query: { userId: user.value?.id }
-          });
+        if (!isFinishedOnboarding.value) {
+            await navigateTo({
+              path: '/quizParticulier',
+              query: { userId: user.value?.id }
+            });
+          }else{
+            await navigateTo({
+              path: '/particulierProgram',
+              query: { userId: user.value?.id }
+            });
+          }
         }
-      }
     }
 
   } catch (error: any) {
