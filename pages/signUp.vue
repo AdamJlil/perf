@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from 'vue'
 import CryptoJS from 'crypto-js'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { authService } from '~/services/auth'
 
 const route = useRoute()
+const router = useRouter()
 
 const form = reactive({
   data: {
@@ -34,251 +36,199 @@ const isPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 
 const togglePassword = (field: 'password' | 'confirmPassword') => {
-  const passwordField = document.getElementById(field) as HTMLInputElement
-  const eyeIcon = document.getElementById(`${field}-eye`) as HTMLImageElement
-  const noEyeIcon = document.getElementById(`${field}-noeye`) as HTMLImageElement
-
   if (field === 'password') {
     isPasswordVisible.value = !isPasswordVisible.value
-    passwordField.type = isPasswordVisible.value ? 'text' : 'password'
-    eyeIcon.classList.toggle('hidden', !isPasswordVisible.value)
-    noEyeIcon.classList.toggle('hidden', isPasswordVisible.value)
   } else {
     isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value
-    passwordField.type = isConfirmPasswordVisible.value ? 'text' : 'password'
-    eyeIcon.classList.toggle('hidden', !isConfirmPasswordVisible.value)
-    noEyeIcon.classList.toggle('hidden', isConfirmPasswordVisible.value)
   }
 }
 
 const onSignupClick = async () => {
-  if (form.data.password !== form.data.confirmPassword) {
-    form.error = "Passwords don't match."
-    return
-  }
+  try {
+    form.error = ''
+    form.pending = true
 
-  if (!form.data.acceptTerms || !form.data.acceptPrivacy) {
-    form.error = 'Please accept the terms and privacy policy.'
-    return
-  }
-
-  console.log('Signup Data:', form.data)
-
-  // Hash the password before sending
-  const hashedPassword = CryptoJS.SHA256(form.data.password).toString()
-
-  await navigateTo({
-    path: '/payment',
-    query: {
-      name: form.data.name,
-      email: form.data.email,
-      password: hashedPassword,
-      userType: form.data.userType,
-      plan: form.data.plan
+    if (form.data.password !== form.data.confirmPassword) {
+      form.error = "Passwords don't match."
+      return
     }
-  });
+
+    if (!form.data.acceptTerms || !form.data.acceptPrivacy) {
+      form.error = 'Please accept the terms and privacy policy.'
+      return
+    }
+
+    if (!form.data.email || !form.data.password || !form.data.userType) {
+      form.error = 'Please fill in all required fields.'
+      return
+    }
+
+    // Call the signup API
+    const response = await authService.signup({
+      email: form.data.email,
+      password: form.data.password,
+      type: form.data.userType as 'ESTABLISHEMENT' | 'PARTICULIER' | 'ADMIN'
+    })
+
+    // If successful, navigate to payment page with query params
+    await router.push({
+      path: '/payment',
+      query: {
+        name: form.data.name,
+        email: form.data.email,
+        userType: form.data.userType,
+        plan: form.data.plan
+      }
+    })
+  } catch (error: any) {
+    console.error('Signup error:', error)
+    form.error = error.message || 'Failed to create account. Please try again.'
+  } finally {
+    form.pending = false
+  }
 }
 </script>
 
 <template>
-  <div
-    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-[#EFEFEC] my-0"
-    style="font-family: Montserrat;"
-  >
-    <div class="z-10 flex flex-col items-center w-full px-4">
-      <h1 class="text-[20px] leading-loose font-normal text-center mb-0 py-0 max-md:py-[50px] md:py-[100px] uppercase text-black dark:text-white whitespace-nowrap">
-        <span>YOUR JOURNEY STARTS NOW !</span>
+  <div class="w-full min-h-screen bg-[#EFEFEC] py-[100px] px-4">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-[20px] leading-loose font-normal text-center mb-8 uppercase text-black">
+        YOUR JOURNEY STARTS NOW!
       </h1>
 
-      <div class="flex flex-col items-center w-full max-w-md">
-
-          <!-- Dropdown -->
-         <div class="w-full flex flex-col sm:flex-row items-center mb-6">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">USER TYPE:</label>
-          <select
-            v-model="form.data.userType"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0"
-            required
-            disabled
-          >
-            <option v-if="!form.data.userType" value="" disabled>Select your type</option>
-            <option value="PARTICULIER">Particular</option>
-            <option value="ESTABLISHEMENT">Establishment</option> 
-          </select>
-        </div>
-
-        <!-- Name -->
-        <div class="w-full flex flex-col sm:flex-row items-center mb-4">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">NAME:</label>
-          <input
-            v-model="form.data.name"
-            placeholder="NAME*"
-            type="text"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-400 focus:outline-none focus:ring-0"
-            required
-          />
-        </div>
-
-        <!-- Email -->
-        <div class="w-full flex flex-col sm:flex-row items-center mb-4">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">E-MAIL:</label>
-          <input
-            v-model="form.data.email"
-            placeholder="EMAIL*"
-            type="email"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-400 focus:outline-none focus:ring-0"
-            required
-          />
-        </div>
-
-        <!-- Password -->
-        <div class="w-full flex flex-col sm:flex-row items-center mb-6 relative">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">PASSWORD:</label>
-          <input
-            id="password"
-            v-model="form.data.password"
-            placeholder="PASSWORD*"
-            type="password"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-400 focus:outline-none focus:ring-0"
-            required
-          />
-          <span class="absolute right-0 bottom-1">
-            <NuxtImg 
-              id="password-eye" 
-              src="/images/eye-p.png" 
-              alt="eye" 
-              width="30" 
-              height="30" 
-              class="cursor-pointer hidden pb-1 mb-[-6px]" 
-              @click="togglePassword('password')" 
-            />
-            <NuxtImg 
-              id="password-noeye" 
-              src="/images/eye_hide.png" 
-              alt="noeye" 
-              width="27" 
-              height="27" 
-              class="cursor-pointer" 
-              @click="togglePassword('password')" 
-            />
-          </span>
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="w-full flex flex-col sm:flex-row items-center mb-6 relative">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">CONFIRM PASSWORD:</label>
-          <input
-            id="confirmPassword"
-            v-model="form.data.confirmPassword"
-            placeholder="CONFIRM PASSWORD*"
-            type="password"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-400 focus:outline-none focus:ring-0"
-            required
-          />
-          <span class="absolute right-0 md:bottom-[13px] max-md:bottom-[5px]">
-            <NuxtImg 
-              id="confirmPassword-eye" 
-              src="/images/eye-p.png" 
-              alt="eye" 
-              width="30" 
-              height="30" 
-              class="cursor-pointer hidden pb-1 mb-[-6px]" 
-              @click="togglePassword('confirmPassword')" 
-            />
-            <NuxtImg 
-              id="confirmPassword-noeye" 
-              src="/images/eye_hide.png" 
-              alt="noeye" 
-              width="27" 
-              height="27" 
-              class="cursor-pointer" 
-              @click="togglePassword('confirmPassword')" 
-            />
-          </span>
-        </div>
-
-        <!-- Checkboxes -->
-        <div class="w-full flex items-center mb-4 gap-4">
-          <label class="flex items-center text-sm text-black">
-            <input type="checkbox" class="checkbox-style" v-model="form.data.acceptTerms" />
-            <span>I accept the <a href="#" class="text-[#D05E33] underline">terms and conditions</a>.</span>
-          </label>
-        </div>
-        <div class="w-full flex items-center mb-4 gap-4">
-          <label class="flex items-center text-sm text-black">
-            <input type="checkbox" class="checkbox-style" v-model="form.data.acceptPrivacy" />
-            <span>I accept the <a href="#" class="text-[#D05E33] underline">privacy policy</a>.</span>
-          </label>
-        </div>
-
+      <div class="bg-white rounded-lg shadow-md p-6">
         <!-- Error Message -->
-        <p class="text-[#ff0d0d] mt-2 whitespace-nowrap" v-if="form.error">**{{ form.error }}</p>
-
-        <!-- Signup Button -->
-        <div class="w-full flex justify-center mt-[60px]">
-          <button 
-            type="submit" 
-            class="border-[1px] border-black text-black py-2 px-4 w-full text-center hover:bg-[#00000008] transition-colors duration-300 max-w-[200px]"
-            @click.prevent="onSignupClick"
-          >
-            SIGN UP
-          </button>
+        <div v-if="form.error" class="mb-6 p-4 bg-red-50 text-red-500 rounded-md">
+          {{ form.error }}
         </div>
+
+        <!-- Form -->
+        <form @submit.prevent="onSignupClick" class="space-y-6">
+          <!-- Name -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Name</label>
+            <input
+              v-model="form.data.name"
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D05E33]"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              v-model="form.data.email"
+              type="email"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D05E33]"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Password</label>
+            <div class="relative">
+              <input
+                v-model="form.data.password"
+                :type="isPasswordVisible ? 'text' : 'password'"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D05E33]"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2"
+                @click="togglePassword('password')"
+              >
+                <span class="text-gray-500">
+                  {{ isPasswordVisible ? '🙈' : '👁️' }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <div class="relative">
+              <input
+                v-model="form.data.confirmPassword"
+                :type="isConfirmPasswordVisible ? 'text' : 'password'"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D05E33]"
+                placeholder="Confirm your password"
+                required
+              />
+              <button
+                type="button"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2"
+                @click="togglePassword('confirmPassword')"
+              >
+                <span class="text-gray-500">
+                  {{ isConfirmPasswordVisible ? '🙈' : '👁️' }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- User Type -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">User Type</label>
+            <select
+              v-model="form.data.userType"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D05E33]"
+              required
+            >
+              <option value="" disabled>Select user type</option>
+              <option value="PARTICULIER">Particular</option>
+              <option value="ESTABLISHEMENT">Establishment</option>
+            </select>
+          </div>
+
+          <!-- Terms and Privacy -->
+          <div class="space-y-4">
+            <label class="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                v-model="form.data.acceptTerms"
+                class="rounded border-gray-300 text-[#D05E33] focus:ring-[#D05E33]"
+              />
+              <span class="text-sm text-gray-700">
+                I accept the <a href="#" class="text-[#D05E33] underline">terms and conditions</a>
+              </span>
+            </label>
+            <label class="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                v-model="form.data.acceptPrivacy"
+                class="rounded border-gray-300 text-[#D05E33] focus:ring-[#D05E33]"
+              />
+              <span class="text-sm text-gray-700">
+                I accept the <a href="#" class="text-[#D05E33] underline">privacy policy</a>
+              </span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            :disabled="form.pending"
+            class="w-full py-2 px-4 bg-[#D05E33] text-white rounded-md hover:bg-[#B54E2B] focus:outline-none focus:ring-2 focus:ring-[#D05E33] focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span v-if="!form.pending">Sign Up</span>
+            <span v-else>Creating Account...</span>
+          </button>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-input::placeholder {
-  color: #888; /* Lighter placeholder */
-  opacity: 0.8;
-}
-
 .checkbox-style {
-  width: 18px;
-  height: 18px;
-  border: 1px solid black;
-  appearance: none;
-  display: inline-block;
-  margin-right: 8px;
-  cursor: pointer;
-  position: relative;
-}
-
-.checkbox-style:checked {
-  background-color: #D05E33;
-  border-color: #D05E33;
-}
-
-.checkbox-style:checked::after {
-  content: '';
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  background: white;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-a {
-  text-decoration: none;
-  color: #D05E33;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #d25f35c3;
-}
-
-h1 {
-  white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 16px;
-  }
+  @apply w-4 h-4 mr-2 rounded border-gray-300 text-[#D05E33] focus:ring-[#D05E33];
 }
 </style>
