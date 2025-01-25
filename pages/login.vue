@@ -21,51 +21,33 @@ async function onLoginClick() {
     form.error = "";
     form.pending = true;
 
-    const isEtablissement = ref(false);
-    const isParticulier = ref(false);
-    const isFinishedOnboarding = ref(false);
-
     const user = await login(form.data.email, form.data.password, form.data.rememberMe);
     
-    // Set user type based on the returned user data
-    if (user.value?.type === "ESTABLISHEMENT") {
-      isEtablissement.value = true;
-    } else if (user.value?.type === "PARTICULIER") {
-      isParticulier.value = true;
+    if (!user.value) {
+      form.error = "Login failed. Please check your credentials.";
+      return;
     }
 
-    isFinishedOnboarding.value = user.value?.isFinishedOnboarding
-
-    if (isAdmin.value) {
+    // Set user type based on the returned user data
+    if (user.value.type === "ESTABLISHEMENT") {
+      await navigateTo({
+        path: '/establishementCRUDCostumer',
+        query: { userId: user.value.id }
+      });
+    } else if (user.value.type === "PARTICULIER") {
+      if (!user.value.isFinishedOnboarding) {
+        await navigateTo('/particulierHomePlan');
+      } else {
+        await navigateTo('/particulierHome');
+      }
+    } else if (user.value.type === "ADMIN") {
       await navigateTo({
         path: '/admin',
-        query: { userId: user.value?.id }
+        query: { userId: user.value.id }
       });
-    } else {
-      if (isEtablissement.value) {
-        await navigateTo({
-          path: '/establishementCRUDCostumer',
-          query: { userId: user.value?.id }
-        });
-      } else {
-        if (!isFinishedOnboarding.value) {
-            await navigateTo({
-              path: '/quizParticulier',
-              query: { userId: user.value?.id }
-            });
-          }else{
-            await navigateTo({
-              path: '/particulierProgram',
-              query: { userId: user.value?.id }
-            });
-          }
-        }
     }
-
   } catch (error: any) {
-    console.error(error);
-
-    if (error.data.message) form.error = error.data.message;
+    form.error = error.message || "An error occurred during login";
   } finally {
     form.pending = false;
   }
@@ -180,7 +162,7 @@ const togglePassword = () => {
         </div>
 
         <!-- Error Message -->
-        <p class="text-[#ff0d0d] mt-2" v-if="form.error">**Please enter valid credentials.</p>
+        <p class="text-[#ff0d0d] mt-2" v-if="form.error">**{{ form.error }}</p>
 
         <!-- Login Button -->
         <div class="w-full flex justify-center mt-10">
