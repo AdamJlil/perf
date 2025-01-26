@@ -4,95 +4,167 @@
     style="font-family: Montserrat;"
   >
 
-  <div class="w-full max-w-6xl flex max-md:flex-col justify-center items-start gap-8 mt-[160px] h-fit">
+  <div class="w-full max-w-6xl flex max-md:flex-col justify-between items-start gap-8 mt-[160px] h-fit">
     <!-- Payment Form -->
-    <div class="w-full lg:w-1/2 flex flex-col items-center">
+    <div class="w-full  lg:w-1/2 flex flex-col items-center">
       
       <div class="w-full flex max-md:justify-center md:justify-between h-full">
-        <h2 class="text-lg uppercase tracking-1 mb-8 underline text-underline-offset-4">DELIVERY INFOS : </h2>
+        <h2 class="text-lg uppercase font-medium tracking-1 mb-8 underline text-underline-offset-4">DELIVERY INFOS : </h2>
       </div>
       
-      <div class="w-full">
+      <div class="w-full mt-10 ">
         <!-- Name -->
-        <div class="w-full flex flex-col sm:flex-row items-center">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 sm:mr-4">NAME:</label>
+        <div class="w-full flex  sm:flex-row items-start justify-end">
+          <label class="text-base font-medium text-black  py-0 mr-1 text-nowrap">NAME :</label>
           <input
             v-model="form.name"
             type="text"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 max-md:mb-[40px]"
+            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 "
             required
           />
         </div>
 
         <!-- Address -->
-        <div class="w-full flex flex-col sm:flex-row items-center">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40  sm:mr-4">ADRESSE:</label>
+        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
+          <label class="text-base font-medium text-black  py-0 sm:mr-1 text-nowrap">ADRESSE:</label>
           <input
             v-model="form.address"
             type="text"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 max-md:mb-[40px]"
+            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
             required
           />
         </div>
 
         <!-- City -->
-        <div class="w-full flex flex-col sm:flex-row items-center">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 sm:mr-4 text-nowrap">CITY:</label>
+        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
+          <label class="text-base  font-medium text-black  py-0 sm:mr-1 text-nowrap">CITY :</label>
           <input
             v-model="form.city"
             type="text"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 max-md:mb-[40px]"
+            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
             required
           />
         </div>
 
         <!-- Phone -->
-        <div class="w-full flex flex-col sm:flex-row items-center">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 sm:mr-4 text-nowrap">PHONE:</label>
+        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
+          <label class="text-base font-medium text-black  py-0 sm:mr-1 text-nowrap">PHONE:</label>
           <input
             v-model="form.phone"
             type="tel"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 max-md:mb-[40px]"
+            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
             required
           />
         </div>
 
         <!-- Shipping -->
-        <div class="w-full flex flex-col sm:flex-row items-center">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 sm:mr-4 text-nowrap">SHIPPING:</label>
+        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
+          <label class="text-base font-medium text-black  py-0 sm:mr-1 text-nowrap">SHIPPING:</label>
           <input
             v-model="form.shipping"
             type="text"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 max-md:mb-[40px]"
-            required
+            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
           />
         </div>
+      </div>
 
-        <!-- Payment Method Dropdown -->
-        <div class="w-full flex flex-col sm:flex-row items-center md:gap-[30px]">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 sm:mr-4 text-nowrap">PAYMENT METHOD:</label>
-          <select
-            v-model="form.paymentMethod"
-            class="w-full sm:flex-1 p-1 border-b-1 border-[#0000002b] bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 max-md:mb-[40px]"
-            required
-          >
-            <option value="" disabled>Select payment method</option>
-            <option value="card">Credit Card</option>
-            <option value="paypal">PayPal</option>
-            <option value="bank">Bank Transfer</option>
-          </select>
-        </div>
+      <!-- Payment Method Section -->
+      <div class="w-full flex flex-col items-start mt-8">
+        <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">PAYMENT METHOD:</label>
         
+        <div class="w-full flex flex-row justify-start mt-5">
+          <button 
+            @click="form.paymentMethod = 'bank'" 
+            class="w-auto px-4 py-2 text-black uppercase tracking-wider transition-all duration-300"
+            :class="form.paymentMethod === 'bank' ? 'bg-orange text-white' : 'hover:bg-orange hover:text-white'"
+          >
+            Bank deposit
+          </button>
+          <div id="gapper" class="w-4 bg-[#EFEFEC]" :class="{ 'scale-y-105': form.paymentMethod === 'bank' }"></div>
+          <div id="divider" class="w-[1px] bg-gray-700"></div>
+          <div id="gapper" class="w-4 bg-[#EFEFEC]" :class="{ 'scale-y-110': form.paymentMethod === 'cash' }"></div>
+          <button 
+            @click="form.paymentMethod = 'cash'" 
+            class="w-auto px-4 py-2 text-black uppercase tracking-wider transition-all duration-300"
+            :class="form.paymentMethod === 'cash' ? 'bg-orange text-white' : 'hover:bg-orange hover:text-white'"
+          >
+            Cash on delivery
+          </button>
+        </div>
+
+        <!-- Payment Details -->
+        <div class="w-full ">
+          <!-- Bank Information -->
+          <div v-if="form.paymentMethod === 'bank'" class="w-full flex flex-col border border-gray-700 p-4">
+            <!-- Bank of Africa -->
+            <div class="">
+              <label class="text-base font-medium italic text-black mb-2">Bank of Africa </label>
+              <div class="">
+                <div class="w-full flex sm:flex-row items-stert">
+                  <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">Account number :</label>
+                  <input
+                    v-model="form.BanqAfricaAccountNumber"
+                    type="text"
+                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
+                    required
+                  />
+                </div>
+                <div class="w-full flex sm:flex-row items-start">
+                  <label class="text-base font-medium  text-black py-0 sm:mr-1 text-nowrap">RIB :</label>
+                  <input
+                    v-model="form.BanqAfricaRIB"
+                    type="text"
+                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- CIH -->
+            <div>
+              <label class="text-base font-medium italic text-black mb-2">CIH </label>
+              <div class="">
+                <div class="w-full flex sm:flex-row items-start">
+                  <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">Account number :</label>
+                  <input
+                    v-model="form.CIHAccountNumber"
+                    type="text"
+                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
+                    required
+                  />
+                </div>
+                <div class="w-full flex sm:flex-row items-start">
+                  <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">RIB :</label>
+                  <input
+                    v-model="form.Cihrib"
+                    type="text"
+                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cash Payment Information -->
+          <div v-if="form.paymentMethod === 'cash'" class="w-full flex flex-col border border-gray-700 p-5">
+            <label class="text-sm font-medium text-black py-0 sm:mr-1">
+              Pay directly when you receive your order at the mentioned address above
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- Complete Order Button -->
       <button 
-          @click="handlePayment"
-          class="w-full mt-8 border border-black text-black py-3 px-6 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300"
-        >
-          COMPLETE ORDER
-        </button>
+        @click="handlePayment"
+        class="w-full mt-8 border border-black text-black py-3 px-6 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300"
+      >
+        COMPLETE ORDER
+      </button>
     </div>
+    
 
     <!-- Plan Card -->
     <div 
@@ -120,6 +192,7 @@
     </div>
   </div>
 </div>
+
 </template>
 
 <script setup lang="ts">
@@ -135,7 +208,11 @@ const form = reactive({
   city: '',
   phone: '',
   shipping: '',
-  paymentMethod: ''
+  paymentMethod: '',
+  BanqAfricaAccountNumber: '',
+  BanqAfricaRIB: '',
+  CIHAccountNumber: '',
+  Cihrib: ''
 })
 
 const selectedPlan = ref(null)
@@ -189,5 +266,9 @@ select {
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 1em;
+}
+
+.bg-orange {
+  background-color: #D05E33;
 }
 </style>
