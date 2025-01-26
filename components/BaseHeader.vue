@@ -11,6 +11,7 @@ const { logout } = useAuth();
 const isLoggedIn = computed(() => !!currentUser.value);
 const isEtablissement = computed(() => currentUser.value?.type === "ESTABLISHEMENT");
 const userId = computed(() => currentUser.value?.id || route.query.userId);
+const userFirstName = computed(() => currentUser.value?.first_name || '');
 
 const form = reactive({
   pending: false,
@@ -87,20 +88,25 @@ onMounted(() => {
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center justify-between w-full px-8 md:mr-[10px]">
         <!-- Logo - Not clickable when logged in as establishment -->
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn" class="flex items-center gap-4">
           <NuxtImg
             src="/images/pepe.png"
-            alt="Company Logo"
-            class="w-[80px]"
+            alt="Logo"
+            class="w-[120px] h-auto"
           />
+          <span v-if="userFirstName" class="text-[#D05E33] font-medium">
+            Hello, {{ userFirstName }}!
+          </span>
         </div>
-        <NuxtLink v-else to="/">
-          <NuxtImg
-            :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'"
-            alt="Company Logo"
-            class="w-[80px]"
-          />
-        </NuxtLink>        
+        <div v-else>
+          <NuxtLink to="/">
+            <NuxtImg
+              :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+              alt="Company Logo"
+              class="w-[80px]"
+            />
+          </NuxtLink>        
+        </div>
         <div class="flex gap-5 lg:gap-15 items-center">
           <template v-if="!(isLoggedIn)">
             <NuxtLink

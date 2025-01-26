@@ -7,12 +7,11 @@ const form = reactive({
     email: "particuier1@gmail.com",
     password: "password",
     rememberMe: false,
-    etablissement: "", 
+    etablissement: "",
   },
   error: "",
   pending: false,
 });
-
 
 const isAdmin = useAdmin();
 
@@ -21,64 +20,80 @@ async function onLoginClick() {
     form.error = "";
     form.pending = true;
 
+    const isEtablissement = ref(false);
+    const isParticulier = ref(false);
+    const isFinishedOnboarding = ref(false);
+
     const user = await login(form.data.email, form.data.password, form.data.rememberMe);
-    
-    if (!user.value) {
-      form.error = "Login failed. Please check your credentials.";
-      return;
+    // Set user type based on the returned user data
+    if (user.value?.type === "ESTABLISHEMENT") {
+      isEtablissement.value = true;
+    } else if (user.value?.type === "PARTICULIER") {
+      isParticulier.value = true;
     }
 
-    // Set user type based on the returned user data
-    if (user.value.type === "ESTABLISHEMENT") {
+    isFinishedOnboarding.value = user.value?.is_finished_onboarding;
+
+    if (isAdmin.value) {
       await navigateTo({
-        path: '/establishementCRUDCostumer',
-        query: { userId: user.value.id }
+        path: "/admin",
+        query: { userId: user.value?.id },
       });
-    } else if (user.value.type === "PARTICULIER") {
-      if (!user.value.isFinishedOnboarding) {
-        await navigateTo('/particulierHomePlan');
+    } else {
+      if (isEtablissement.value) {
+        await navigateTo({
+          path: "/establishementCRUDCostumer",
+          query: { userId: user.value?.id },
+        });
       } else {
-        await navigateTo('/particulierHome');
+        console.log(isFinishedOnboarding.value);
+        if (!isFinishedOnboarding.value) {
+          await navigateTo({
+            path: "/quizParticulier",
+            query: { userId: user.value?.id },
+          });
+        } else {
+          await navigateTo({
+            path: "/particulierProgram",
+            query: { userId: user.value?.id },
+          });
+        }
       }
-    } else if (user.value.type === "ADMIN") {
-      await navigateTo({
-        path: '/admin',
-        query: { userId: user.value.id }
-      });
     }
   } catch (error: any) {
-    form.error = error.message || "An error occurred during login";
+    console.error(error);
+
+    if (error.data.message) form.error = error.data.message;
   } finally {
     form.pending = false;
   }
 }
 
-const isPasswordVisible = ref(false)
+const isPasswordVisible = ref(false);
 
 const togglePassword = () => {
-  const passwordField = document.getElementById('pass') as HTMLInputElement
-  const eyeIcon = document.getElementById('eye') as HTMLImageElement
-  const noEyeIcon = document.getElementById('noeye') as HTMLImageElement
+  const passwordField = document.getElementById("pass") as HTMLInputElement;
+  const eyeIcon = document.getElementById("eye") as HTMLImageElement;
+  const noEyeIcon = document.getElementById("noeye") as HTMLImageElement;
 
-  isPasswordVisible.value = !isPasswordVisible.value
+  isPasswordVisible.value = !isPasswordVisible.value;
 
   if (isPasswordVisible.value) {
-    passwordField.type = 'text'
-    eyeIcon.classList.remove('hidden')
-    noEyeIcon.classList.add('hidden')
+    passwordField.type = "text";
+    eyeIcon.classList.remove("hidden");
+    noEyeIcon.classList.add("hidden");
   } else {
-    passwordField.type = 'password'
-    eyeIcon.classList.add('hidden')
-    noEyeIcon.classList.remove('hidden')
+    passwordField.type = "password";
+    eyeIcon.classList.add("hidden");
+    noEyeIcon.classList.remove("hidden");
   }
-}
-
+};
 </script>
 
 <template>
   <div
     class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-[#EFEFEC]"
-    style="font-family: Montserrat;"
+    style="font-family: Montserrat"
   >
     <!-- Dark Overlay -->
     <!-- <div class="absolute top-0 left-0 w-full h-full bg-black opacity-10 z-1"></div> -->
@@ -91,17 +106,17 @@ const togglePassword = () => {
         Lasting results.
       </p> -->
 
-
       <!-- Input Fields -->
       <div class="flex flex-col items-center w-full max-w-md my-[100px] max-md:my-[20px]">
-
         <h1 class="text-[20px] leading-loose font-normal text-center mb-0 py-15 uppercase text-black dark:text-white">
           <span>READY FOR SOME PROGRESS?</span>
         </h1>
 
         <!-- E-mail/Phone -->
         <div class="w-full flex flex-col sm:flex-row items-center mb-4">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">E-MAIL:</label>
+          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4"
+            >E-MAIL:</label
+          >
           <input
             id="email"
             v-model="form.data.email"
@@ -114,7 +129,9 @@ const togglePassword = () => {
 
         <!-- Password -->
         <div class="w-full flex flex-col sm:flex-row items-center mb-6 relative">
-          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4">PASSWORD:</label>
+          <label class="text-sm md:text-base lg:text-lg font-light text-black w-full sm:w-40 mb-2 sm:mb-0 sm:mr-4"
+            >PASSWORD:</label
+          >
           <input
             id="pass"
             v-model="form.data.password"
@@ -125,23 +142,23 @@ const togglePassword = () => {
           />
           <!-- Toggle Password Visibility -->
           <span class="absolute right-0 bottom-1">
-            <NuxtImg 
-              id="eye" 
-              src="/images/eye-p.png" 
-              alt="eye" 
-              width="30" 
-              height="30" 
-              class="cursor-pointer hidden pb-1 mb-[-6px]" 
-              @click="togglePassword" 
+            <NuxtImg
+              id="eye"
+              src="/images/eye-p.png"
+              alt="eye"
+              width="30"
+              height="30"
+              class="cursor-pointer hidden pb-1 mb-[-6px]"
+              @click="togglePassword"
             />
-            <NuxtImg 
-              id="noeye" 
-              src="/images/eye_hide.png" 
-              alt="noeye" 
-              width="27" 
-              height="27" 
-              class="cursor-pointer" 
-              @click="togglePassword" 
+            <NuxtImg
+              id="noeye"
+              src="/images/eye_hide.png"
+              alt="noeye"
+              width="27"
+              height="27"
+              class="cursor-pointer"
+              @click="togglePassword"
             />
           </span>
         </div>
@@ -151,11 +168,7 @@ const togglePassword = () => {
           <label class="flex items-center text-sm text-black">
             REMEMBER ME
             <label class="switch ml-2">
-              <input 
-                id="remember-me" 
-                v-model="form.data.rememberMe"
-                type="checkbox" 
-              />
+              <input id="remember-me" v-model="form.data.rememberMe" type="checkbox" />
               <span class="slider"></span>
             </label>
           </label>
@@ -166,8 +179,8 @@ const togglePassword = () => {
 
         <!-- Login Button -->
         <div class="w-full flex justify-center mt-10">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             :disabled="form.pending"
             class="border-[1px] border-black text-black py-2 px-4 w-full text-center hover:bg-[#00000008] transition-colors duration-300 max-w-[200px]"
             @click="onLoginClick"

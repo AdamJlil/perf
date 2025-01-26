@@ -9,6 +9,7 @@ const router = useRouter()
 
 const form = reactive({
   data: {
+    first_name: '',
     name: '',
     email: '',
     password: '',
@@ -74,6 +75,7 @@ const onSignupClick = async () => {
     await router.push({
       path: '/payment',
       query: {
+        first_name: form.data.first_name,
         name: form.data.name,
         email: form.data.email,
         userType: form.data.userType,
@@ -104,6 +106,16 @@ const onSignupClick = async () => {
 
         <!-- Form -->
         <form @submit.prevent="onSignupClick" class="space-y-6">
+          <!-- First Name -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">First Name</label>
+            <input
+              v-model="form.data.first_name"
+              type="text"
+              required
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#D05E33] focus:border-[#D05E33]"
+            />
+          </div>
           <!-- Name -->
           <div class="space-y-2">
             <label class="block text-sm font-medium text-gray-700">Name</label>

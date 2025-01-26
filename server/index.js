@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 
 const app = express();
 
@@ -27,6 +28,9 @@ app.use(express.json());
 
 // Mount auth routes
 app.use('/api/auth', authRoutes);
+
+// Mount user routes
+app.use('/', userRoutes);
 
 // Handle 404s
 app.use((req, res) => {

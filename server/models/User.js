@@ -121,6 +121,57 @@ class User {
     async validatePassword(providedPassword, storedPassword) {
         return bcrypt.compare(providedPassword, storedPassword);
     }
+
+    async getAllParticularUsers() {
+        console.log('Fetching all PARTICULIER users');
+        let connection;
+        try {
+            connection = await this.getConnection();
+            const [rows] = await connection.execute(
+                'SELECT id, email, name, first_name, last_name, type FROM users WHERE type = ?',
+                ['PARTICULIER']
+            );
+            console.log(`Found ${rows.length} PARTICULIER users`);
+            return rows;
+        } catch (error) {
+            console.error('Error fetching PARTICULIER users:', {
+                code: error.code,
+                errno: error.errno,
+                sqlState: error.sqlState,
+                sqlMessage: error.sqlMessage
+            });
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    }
+
+    async deleteUser(id) {
+        console.log('Deleting user with ID:', id);
+        let connection;
+        try {
+            connection = await this.getConnection();
+            const [result] = await connection.execute(
+                'DELETE FROM users WHERE id = ?',
+                [id]
+            );
+            if (result.affectedRows === 0) {
+                throw new Error('User not found');
+            }
+            console.log('User deleted successfully');
+            return true;
+        } catch (error) {
+            console.error('Error deleting user:', {
+                code: error.code,
+                errno: error.errno,
+                sqlState: error.sqlState,
+                sqlMessage: error.sqlMessage
+            });
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    }
 }
 
 module.exports = new User();

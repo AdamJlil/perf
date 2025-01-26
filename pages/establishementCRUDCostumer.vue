@@ -10,21 +10,32 @@ definePageMeta({
 
 const route = useRoute();
 const userName = ref('');
+const loading = ref(false);
+const error = ref('');
 const customers = ref<Customer[]>([]);
+const showModal = ref(false);
+const selectedUserId = ref<string | null>(null);
 
 onMounted(async () => {
-  const userId = route.query.userId as string;
-  if (userId) {
-    const { getUserById } = await import('~/server/models/user');
-    const user = await getUserById(userId);
-    if (user) {
-      userName.value = user.name;
-      if (user.customers) {
-        customers.value = user.customers;
-      }
-    }
-  }
+  await fetchParticularUsers();
 });
+
+const fetchParticularUsers = async () => {
+  loading.value = true;
+  error.value = '';
+  try {
+    const response = await fetch('/api/users/particulier');
+    if (!response.ok) {
+      throw new Error('Failed to fetch users');
+    }
+    customers.value = await response.json();
+  } catch (err) {
+    error.value = err.message || 'An error occurred while fetching users';
+    console.error('Error fetching users:', err);
+  } finally {
+    loading.value = false;
+  }
+};
 
 // Utility to generate non-repeating warm background colors
 let usedColors: string[] = [];
@@ -49,9 +60,6 @@ const generateRandomColor = (): string => {
   return color;
 };
 
-const showModal = ref(false);
-const selectedUserId = ref<string | null>(null);
-
 // Open confirmation modal
 const confirmDelete = (id: string) => {
   selectedUserId.value = id;
@@ -59,10 +67,25 @@ const confirmDelete = (id: string) => {
 };
 
 // Delete user
-const deleteUser = () => {
+const deleteUser = async () => {
   if (selectedUserId.value) {
-    customers.value = customers.value.filter(customer => customer.et_customer_id !== selectedUserId.value);
-    closeModal();
+    loading.value = true;
+    error.value = '';
+    try {
+      const response = await fetch(`/api/users/${selectedUserId.value}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+      await fetchParticularUsers(); // Refresh the list
+      closeModal();
+    } catch (err) {
+      error.value = err.message || 'An error occurred while deleting the user';
+      console.error('Error deleting user:', err);
+    } finally {
+      loading.value = false;
+    }
   }
 };
 
@@ -90,7 +113,15 @@ const closeModal = () => {
     <section class="w-full max-w-5xl bg-[#EFEFEC] rounded-lg p-6 my-12">
       <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Manage Customers</h2>
       <div class="overflow-x-auto">
-        <table class="w-full border-collapse text-left shadow-md rounded-lg bg-[#EFEFEC]">
+        <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+          {{ error }}
+        </div>
+        
+        <div v-if="loading" class="flex justify-center items-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+
+        <table v-else class="w-full border-collapse text-left shadow-md rounded-lg bg-[#EFEFEC]">
           <thead>
             <tr class="border-b border-gray-300">
               <th class="py-4 px-4 text-gray-700 font-medium"></th>
@@ -101,40 +132,24 @@ const closeModal = () => {
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(customer, i) in customers"
-              :key="i"
-              class="border-b border-gray-300 hover:bg-gray-200 transition"
-            >
-              <nuxt-link
-                :to="{ 
-                  path: '/establishementProgram', 
-                  query: { 
-                    userId: route.query.userId,
-                    id: customer.et_customer_id 
-                  } 
-                }"
-                class="contents"
-              >
-                <td class="py-4 px-4">
-                  <div
-                    class="flex justify-center items-center w-10 h-10 rounded-full text-white font-semibold"
-                    :style="{ backgroundColor: generateRandomColor() }"
-                  >
-                    {{ customer.firstName.charAt(0).toUpperCase() }}
-                  </div>
-                </td>
-                <td class="py-4 px-4">{{ customer.firstName }}</td>
-                <td class="py-4 px-4">{{ customer.lastName }}</td>
-                <td class="py-4 px-4">{{ customer.email }}</td>
-              </nuxt-link>
-              <td class="py-4 px-4 flex items-center gap-[10px]">
-                <button>
-                  <img src="/images/edit-icon3.png" alt="Edit" class="h-5 w-5 cursor-pointer" />
-                </button>
-                <div class="w-[1px] h-5 bg-gray-400"></div>
-                <button @click="confirmDelete(customer.et_customer_id)">
-                  <img src="/images/delete-icon3.png" alt="Delete" class="h-5 w-5 cursor-pointer" />
+            <tr v-for="customer in customers" :key="customer.id" class="border-b border-gray-200">
+              <td class="py-4 px-4">
+                <div
+                  class="flex justify-center items-center w-10 h-10 rounded-full text-white font-semibold"
+                  :style="{ backgroundColor: generateRandomColor() }"
+                >
+                  {{ customer.first_name.charAt(0).toUpperCase() }}
+                </div>
+              </td>
+              <td class="py-4 px-4">{{ customer.first_name }}</td>
+              <td class="py-4 px-4">{{ customer.last_name }}</td>
+              <td class="py-4 px-4">{{ customer.email }}</td>
+              <td class="py-4 px-4">
+                <button
+                  @click="confirmDelete(customer.id)"
+                  class="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  Delete
                 </button>
               </td>
             </tr>
