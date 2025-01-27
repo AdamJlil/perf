@@ -46,8 +46,9 @@ async function onLoginClick() {
           query: { userId: user.value?.id },
         });
       } else {
-        console.log(isFinishedOnboarding.value);
-        if (!isFinishedOnboarding.value) {
+        // For PARTICULIER users, check if quiz is already filled
+        const isQuizFilled = user.value?.age && user.value?.height && user.value?.weight;
+        if (!isQuizFilled) {
           await navigateTo({
             path: "/quizParticulier",
             query: { userId: user.value?.id },
@@ -60,10 +61,12 @@ async function onLoginClick() {
         }
       }
     }
-  } catch (error: any) {
-    console.error(error);
-
-    if (error.data.message) form.error = error.data.message;
+  } catch (error) {
+    console.error("Login error:", error);
+    form.error =
+      error?.response?.data?.error ||
+      error?.message ||
+      "An error occurred during login";
   } finally {
     form.pending = false;
   }

@@ -98,12 +98,25 @@ router.post('/signin', async (req, res) => {
 
         const token = JWTUtil.generateToken(user);
         
-        // Remove sensitive data before sending response
-        const { password: _, ...userWithoutPassword } = user;
+        // Remove sensitive data and include quiz data
+        const { 
+            password: _, 
+            ...userWithoutPassword 
+        } = user;
 
         res.json({
             message: 'Login successful',
-            user: userWithoutPassword,
+            user: {
+                ...userWithoutPassword,
+                age: user.age || null,
+                height: user.height || null,
+                weight: user.weight || null,
+                gender: user.gender || null,
+                has_allergies: user.has_allergies || false,
+                allergies_details: user.allergies_details || null,
+                has_medical_conditions: user.has_medical_conditions || false,
+                medical_conditions_details: user.medical_conditions_details || null
+            },
             token
         });
     } catch (error) {

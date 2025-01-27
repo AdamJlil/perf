@@ -157,9 +157,19 @@
 
     <!-- Button Start -->
     <div class="flex justify-center items-center mt-[150px]">
-      <button @click="handleSubmit" class="border-[1px] border-black text-black py-2 px-4 w-full text-center hover:bg-[#00000008] transition-colors duration-300 max-w-[200px]">
-        START
+      <button 
+        @click="handleSubmit" 
+        :disabled="submitting"
+        class="border-[1px] border-black text-black py-2 px-4 w-full text-center hover:bg-[#00000008] transition-colors duration-300 max-w-[200px] disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <span v-if="submitting">Saving...</span>
+        <span v-else>START</span>
       </button>
+    </div>
+
+    <!-- Add error message display -->
+    <div v-if="submitError" class="mt-4 text-[#D05E33] text-center">
+      {{ submitError }}
     </div>
   </div>
 </template>
@@ -170,6 +180,9 @@ import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+
+const submitting = ref(false)
+const submitError = ref('')
 
 const formData = reactive({
   age: '',
@@ -294,18 +307,59 @@ const validateForm = () => {
   return isValid
 }
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (validateForm()) {
-    console.log('Form data:', formData)
-    const userId = route.query.userId as string
-    if (userId) {
-      router.push({
-        path: '/particulierProgram',
-        query: { userId }
-      })
+    submitting.value = true
+    submitError.value = ''
+    
+    try {
+      // Get the auth token from the stored user object
+      const userStr = localStorage.getItem('user');
+      if (!userStr) {
+        throw new Error('You must be logged in to update your profile');
+      }
+
+      const userData = JSON.parse(userStr);
+      const token = userData.token;
+      if (!token) {
+        throw new Error('Authentication token not found. Please log in again.');
+      }
+
+      const response = await fetch('http://localhost:3001/api/users/quiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          age: parseInt(formData.age),
+          height: parseInt(formData.height),
+          weight: parseInt(formData.weight),
+          gender: formData.gender,
+          hasAllergies: formData.hasAllergies,
+          allergiesDetails: formData.allergiesDetails || '',
+          hasMedicalConditions: formData.hasMedicalConditions,
+          medicalConditionsDetails: formData.medicalDetails || ''
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save quiz data');
+      }
+
+      // Navigate to the next page after successful submission
+      router.push('/particulierProgram');
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+      submitError.value = error.message || 'Failed to save your data. Please try again.';
+    } finally {
+      submitting.value = false;
     }
   }
-}
+};
 </script>
 
 <style scoped>

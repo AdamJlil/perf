@@ -8,7 +8,7 @@
       :reversed="true"
       :showButton="false"
       image="/images/coach.png"
-      :headingText="`HEY ${userName} 👋, LET'S GET STARTED!`"
+      :headingText="`HEY ${userFirstName} 👋, LET'S GET STARTED!`"
     />
 
     <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[10px] my-30">
@@ -60,7 +60,7 @@
         :reversed="true"
         :showButton="false"
         image="/images/amjad.png"
-        :headingText="`HEY ${userName} 👋, </br> HERE IS YOUR BUDGET FRIENDLY PLAN`"
+        :headingText="`HEY ${userFirstName} 👋, </br> HERE IS YOUR BUDGET FRIENDLY PLAN`"
       />
 
     <div class="flex flex-col items-center justify-center mt-20 mb-20">
@@ -128,7 +128,7 @@ import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
 import FlipCardBloc from "~/components/Sections/Establishement/FlipCardBloc.vue";
 import { particulierVideosData } from '../particulier_videos';
 import CardInfo from "~/components/SharedCardInfo.vue";
-
+import { useAuthUser } from '~/composables/useAuthUser';
 
 import {
   Chart as ChartJS,
@@ -151,9 +151,10 @@ ChartJS.register(
   Legend
 );
 
+const currentUser = useAuthUser();
+const userFirstName = computed(() => currentUser.value?.first_name || '');
 
 const route = useRoute();
-const userName = ref('');
 const videoSource = ref('');
 const ageRange = ref('');
 const weightRange = ref('');
@@ -202,7 +203,6 @@ onMounted(async () => {
     const user = await getUserById(userId)
 
     if (user) {
-      userName.value = `${user.firstName} ${user.lastName}`;
       userVideo.value = user.video || 0;
       ageRange.value = user.ageRange || '';
       weightRange.value = user.weightRange || '';
