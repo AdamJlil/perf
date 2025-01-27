@@ -12,6 +12,15 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(255),
     type ENUM('ESTABLISHEMENT', 'PARTICULIER', 'ADMIN') NOT NULL,
     roles JSON NOT NULL,
+    customers JSON,  -- Store array of customer IDs for establishments
+    age INT,
+    height INT,
+    weight INT,
+    gender VARCHAR(10),
+    has_allergies BOOLEAN,
+    allergies_details TEXT,
+    has_medical_conditions BOOLEAN,
+    medical_conditions_details TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

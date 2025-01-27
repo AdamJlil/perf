@@ -29,11 +29,12 @@ app.use(express.json());
 // Mount auth routes
 app.use('/api/auth', authRoutes);
 
-// Mount user routes
-app.use('/', userRoutes);
+// Mount user routes with /api/users prefix
+app.use('/api/users', userRoutes);
 
 // Handle 404s
 app.use((req, res) => {
+  console.log('404 Not Found:', req.method, req.url);
   res.status(404).json({ error: `Route ${req.url} not found` });
 });
 

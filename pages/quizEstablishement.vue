@@ -138,6 +138,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+const API_BASE_URL = 'http://localhost:3001'
 
 const formData = ref({
   firstName: '',
@@ -257,16 +258,94 @@ const validateForm = () => {
   return isValid
 }
 
-const handleSubmit = () => {
+const getAgeRange = (age: number) => {
+  if (age < 20) {
+    return '18-20'
+  } else if (age < 30) {
+    return '21-30'
+  } else if (age < 40) {
+    return '31-40'
+  } else if (age < 50) {
+    return '41-50'
+  } else if (age < 60) {
+    return '51-60'
+  } else {
+    return '61+'
+  }
+}
+
+const getWeightRange = (weight: number) => {
+  if (weight < 40) {
+    return '20-40'
+  } else if (weight < 60) {
+    return '41-60'
+  } else if (weight < 80) {
+    return '61-80'
+  } else if (weight < 100) {
+    return '81-100'
+  } else if (weight < 120) {
+    return '101-120'
+  } else {
+    return '121+'
+  }
+}
+
+const handleSubmit = async () => {
   if (validateForm()) {
-    console.log('Form data:', {
-      ...formData.value,
-      firstName: formData.value.firstName.trim(),
-      lastName: formData.value.lastName.trim()
-    })
-    router.push({
-      path: '/particulierProgram'
-    })
+    try {
+      const userStr = localStorage.getItem('user')
+      if (!userStr) {
+        throw new Error('Not logged in')
+      }
+      const userData = JSON.parse(userStr)
+      const token = userData.token
+
+      console.log('Form data before submission:', formData.value);
+
+      // Create a unique customer ID
+      const customerId = `et_id!-${formData.value.firstName.toLowerCase()}${formData.value.lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}`
+
+      // Create the customer object with correct property names
+      const customerData = {
+        et_customer_id: customerId,
+        firstName: formData.value.firstName.trim(),
+        lastName: formData.value.lastName.trim(),
+        email: formData.value.email.trim(),
+        ageRange: getAgeRange(parseInt(formData.value.age)),
+        weightRange: getWeightRange(parseFloat(formData.value.weight)),
+        video: 0,
+        burnedCalories: {
+          'Day 1': 0
+        }
+      }
+
+      console.log('Customer data being sent:', customerData);
+
+      // Add the customer using the API
+      const response = await fetch(`${API_BASE_URL}/api/users/customers/add/${customerId}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(customerData)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
+        throw new Error(errorData.error || 'Failed to add customer');
+      }
+
+      const responseData = await response.json();
+      console.log('Server response:', responseData);
+
+      // If successful, redirect to the customer management page
+      router.push('/establishementCRUDCostumer')
+    } catch (error) {
+      console.error('Error adding customer:', error)
+      errors.value.email = error.message || 'Failed to add customer'
+    }
   }
 }
 </script>

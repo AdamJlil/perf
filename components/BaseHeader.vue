@@ -11,7 +11,7 @@ const { logout } = useAuth();
 const isLoggedIn = computed(() => !!currentUser.value);
 const isEtablissement = computed(() => currentUser.value?.type === "ESTABLISHEMENT");
 const userId = computed(() => currentUser.value?.id || route.query.userId);
-const userFirstName = computed(() => currentUser.value?.first_name || '');
+const userFirstName = computed(() => currentUser.value?.first_name || "");
 
 const form = reactive({
   pending: false,
@@ -48,31 +48,29 @@ const isActive = (route: string): boolean => {
 const isWorkoutProgram = ref(true);
 const isNutritionProgram = ref(true);
 
-const languages = ['FR', 'EN']
-const currentLanguage = ref('EN')
+const languages = ["FR", "EN"];
+const currentLanguage = ref("EN");
 
-const isOpen = ref(false)
+const isOpen = ref(false);
 
 const toggleDropdown = () => {
-  isOpen.value = !isOpen.value
-}
+  isOpen.value = !isOpen.value;
+};
 
 const selectLanguage = (lang: string) => {
-  currentLanguage.value = lang
-  isOpen.value = false 
-}
+  currentLanguage.value = lang;
+  isOpen.value = false;
+};
 
 onMounted(() => {
-  window.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement
-    if (!target.closest('.relative')) {
-      isOpen.value = false
+  window.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest(".relative")) {
+      isOpen.value = false;
     }
-  })
-})
-
+  });
+});
 </script>
-
 
 <template>
   <header
@@ -83,37 +81,31 @@ onMounted(() => {
     }"
   >
     <div class="p-3 w-full flex items-center justify-between pr-[30px] max-md:pt-[30px]">
-      
       <!-- v-if="currentUser" -->
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center justify-between w-full px-8 md:mr-[10px]">
         <!-- Logo - Not clickable when logged in as establishment -->
         <div v-if="isLoggedIn" class="flex items-center gap-4">
-          <NuxtImg
-            src="/images/pepe.png"
-            alt="Logo"
-            class="w-[120px] h-auto"
-          />
-          <span v-if="userFirstName" class="text-[#D05E33] font-medium">
-            Hello, {{ userFirstName }}!
-          </span>
+          <NuxtImg src="/images/pepe.png" alt="Logo" class="w-[120px] h-auto" />
         </div>
         <div v-else>
           <NuxtLink to="/">
             <NuxtImg
-              :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+              :src="
+                !isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'
+              "
               alt="Company Logo"
               class="w-[80px]"
             />
-          </NuxtLink>        
+          </NuxtLink>
         </div>
         <div class="flex gap-5 lg:gap-15 items-center">
-          <template v-if="!(isLoggedIn)">
+          <template v-if="!isLoggedIn">
             <NuxtLink
               v-if="isLoggedIn"
-              :to="{ 
+              :to="{
                 path: '/',
-                query: { userId: userId }
+                query: { userId: userId },
               }"
               class="px-3 text-shadow-white"
               :class="{
@@ -138,14 +130,14 @@ onMounted(() => {
             </NuxtLink>
             <NuxtLink
               v-if="isLoggedIn"
-              :to="{ 
+              :to="{
                 path: '/particulierHomePlan',
-                query: { userId: userId }
+                query: { userId: userId },
               }"
               class="px-3 text-shadow-white"
-              :class="{ 
-                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-                  'font-bold': isActive('/particulierHomePlan'), 
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/particulierHomePlan'),
               }"
               @click="closeMenu"
             >
@@ -155,9 +147,9 @@ onMounted(() => {
               v-else
               to="/particulierHomePlan"
               class="px-3 text-shadow-white"
-              :class="{ 
-                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-                  'font-bold': isActive('/particulierHomePlan'), 
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/particulierHomePlan'),
               }"
               @click="closeMenu"
             >
@@ -165,14 +157,14 @@ onMounted(() => {
             </NuxtLink>
             <NuxtLink
               v-if="isLoggedIn"
-              :to="{ 
+              :to="{
                 path: '/establishementHomePlan',
-                query: { userId: userId }
+                query: { userId: userId },
               }"
               class="px-3 text-shadow-white"
-              :class="{ 
-                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-                  'font-bold': isActive('/establishementHomePlan'), 
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/establishementHomePlan'),
               }"
               @click="closeMenu"
             >
@@ -182,17 +174,16 @@ onMounted(() => {
               v-else
               to="/establishementHomePlan"
               class="px-3 text-shadow-white"
-              :class="{ 
-                  'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-                  'font-bold': isActive('/establishementHomePlan'), 
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/establishementHomePlan'),
               }"
               @click="closeMenu"
             >
               PERF HOSPITALITY
             </NuxtLink>
           </template>
-          
-          
+
           <!-- <NuxtLink
             to="/products"
             class="px-3 text-shadow-white"
@@ -207,7 +198,6 @@ onMounted(() => {
           </NuxtLink> -->
         </div>
         <div class="relative flex items-center gap-[15px]">
-          
           <template v-if="!isLoggedIn">
             <NuxtLink
               to="/login"
@@ -223,34 +213,36 @@ onMounted(() => {
           </template>
           <template v-else>
             <NuxtLink
-            v-if="isLoggedIn && isEtablissement && !isActive('/quizEstablishement') && !isActive('/establishementProgram')"
-            :to="{ 
-              path: '/establishementCRUDCostumer',
-              query: { userId: userId }
-            }"
-            class="px-3 text-shadow-white"
-            :class="{ 
+              v-if="
+                isLoggedIn && isEtablissement && !isActive('/quizEstablishement') && !isActive('/establishementProgram')
+              "
+              :to="{
+                path: '/establishementCRUDCostumer',
+                query: { userId: userId },
+              }"
+              class="px-3 text-shadow-white"
+              :class="{
                 'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-                'font-bold': isActive('/establishementCRUDCostumer'), 
-            }"
-            @click="closeMenu"
-          >
-            MANAGE USERS
-          </NuxtLink>
+                'font-bold': isActive('/establishementCRUDCostumer'),
+              }"
+              @click="closeMenu"
+            >
+              MANAGE USERS
+            </NuxtLink>
             <NuxtLink
-            v-if="isLoggedIn && !isActive('/quizEstablishement') && !isActive('/establishementProgram')"
-            :to="{ 
-              path: '/myPlan',
-              query: { userId: userId }
-            }"
-            class="px-3 text-shadow-white"
-            :class="{ 
+              v-if="isLoggedIn && !isActive('/quizEstablishement') && !isActive('/establishementProgram')"
+              :to="{
+                path: '/myPlan',
+                query: { userId: userId },
+              }"
+              class="px-3 text-shadow-white"
+              :class="{
                 'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-            }"
-            @click="closeMenu"
-          >
-            MY PLAN
-          </NuxtLink>
+              }"
+              @click="closeMenu"
+            >
+              MY PLAN
+            </NuxtLink>
             <button
               @click="onLogoutClick"
               class="px-3 text-shadow-white"
@@ -261,41 +253,41 @@ onMounted(() => {
               LOGOUT
             </button>
           </template>
-        <div
-          class="flex items-center gap-2 cursor-pointer"
-          @click="toggleDropdown"
-        >
-          <img
-            :src="currentLanguage === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
-            alt="Current Language"
-            class="w-6 h-6"
-          />
-          <img
-            :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
-            alt="arrow"
-            class="w-4 h-4 transform transition-transform"
-            :class="{ 'rotate-180': isOpen }"
-          />
-        </div>
-        <div
-          v-if="isOpen"
-          class="absolute top-full left-[64px] mt-2 text-black dark:text-white w-20 shadow-lg rounded-sm backdrop-blur-md"
-      >
-          <div
-            v-for="lang in languages"
-            :key="lang"
-            @click="selectLanguage(lang)"
-            class="px-3 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 flex justify-center"
-          >
+          <div class="flex items-center gap-2 cursor-pointer" @click="toggleDropdown">
             <img
-              :src="lang === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
-              :alt="lang"
+              :src="currentLanguage === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
+              alt="Current Language"
               class="w-6 h-6"
             />
+            <img
+              :src="
+                !isActive('/') && !isActive('/establishementHomePlan')
+                  ? '/images/down-arrow.png'
+                  : '/images/arrow-down-white.png'
+              "
+              alt="arrow"
+              class="w-4 h-4 transform transition-transform"
+              :class="{ 'rotate-180': isOpen }"
+            />
+          </div>
+          <div
+            v-if="isOpen"
+            class="absolute top-full left-[64px] mt-2 text-black dark:text-white w-20 shadow-lg rounded-sm backdrop-blur-md"
+          >
+            <div
+              v-for="lang in languages"
+              :key="lang"
+              @click="selectLanguage(lang)"
+              class="px-3 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 flex justify-center"
+            >
+              <img
+                :src="lang === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
+                :alt="lang"
+                class="w-6 h-6"
+              />
+            </div>
           </div>
         </div>
-      </div>
-
       </nav>
 
       <!-- Mobile Menu Button -->
@@ -306,26 +298,29 @@ onMounted(() => {
       </button>
 
       <!-- Logo -->
-      <NuxtLink to="/" class="order-2 mx-auto  md:hidden">
+      <NuxtLink to="/" class="order-2 mx-auto md:hidden">
         <NuxtImg
-          :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'"
+          :src="
+            !isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'
+          "
           alt="Company Logo"
           class="w-[50px]"
         />
       </NuxtLink>
 
-     <!-- Language Selector en Mobile -->
-      <div 
-        class="relative hidden max-md:flex items-center gap-2 cursor-pointer order-3" 
-        @click.stop="toggleDropdown" 
-      >
+      <!-- Language Selector en Mobile -->
+      <div class="relative hidden max-md:flex items-center gap-2 cursor-pointer order-3" @click.stop="toggleDropdown">
         <img
           :src="currentLanguage === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
           alt="Current Language"
           class="w-6 h-6"
         />
         <img
-          :src="!isActive('/') && !isActive('/establishementHomePlan') ? '/images/down-arrow.png' : '/images/arrow-down-white.png'"
+          :src="
+            !isActive('/') && !isActive('/establishementHomePlan')
+              ? '/images/down-arrow.png'
+              : '/images/arrow-down-white.png'
+          "
           alt="arrow"
           class="w-4 h-4 transform transition-transform"
           :class="{ 'rotate-180': isOpen }"
@@ -349,15 +344,13 @@ onMounted(() => {
         </div>
       </div>
 
-
       <!-- Mobile Overlay -->
       <div
         v-show="isMenuOpen"
         class="fixed inset-0 bg-black bg-opacity-50 z-30"
         @click="closeMenu"
         aria-hidden="true"
-      >
-      </div>
+      ></div>
       <!-- Mobile Menu -->
       <div
         :class="[
@@ -376,64 +369,46 @@ onMounted(() => {
               />
             </svg>
           </div>
-      
+
           <div class="flex flex-col">
             <template v-if="isLoggedIn && !isEtablissement">
               <NuxtLink
-                :to="{ 
+                :to="{
                   path: '/particulierProgram',
-                  query: { userId: userId }
+                  query: { userId: userId },
                 }"
                 class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800"
                 @click="closeMenu"
               >
                 MY PLAN
               </NuxtLink>
-              <button
-                @click="onLogoutClick"
-                class="py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
+              <button @click="onLogoutClick" class="py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-800">
                 LOGOUT
               </button>
             </template>
             <template v-else-if="isLoggedIn && isEtablissement">
               <NuxtLink
-                :to="{ 
+                :to="{
                   path: '/establishementProgram',
-                  query: { userId: userId }
+                  query: { userId: userId },
                 }"
                 class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800"
                 @click="closeMenu"
               >
                 MY PLAN
               </NuxtLink>
-              <NuxtLink
-                to="/manageUsers"
-                class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800"
-                @click="closeMenu"
-              >
+              <NuxtLink to="/manageUsers" class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800" @click="closeMenu">
                 MANAGE USERS
               </NuxtLink>
-              <button
-                @click="onLogoutClick"
-                class="py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
+              <button @click="onLogoutClick" class="py-2 px-4 text-left hover:bg-gray-100 dark:hover:bg-gray-800">
                 LOGOUT
               </button>
             </template>
             <template v-else>
-              <NuxtLink
-                to="/login"
-                class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800"
-                @click="closeMenu"
-              >
+              <NuxtLink to="/login" class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800" @click="closeMenu">
                 LOGIN
               </NuxtLink>
-              <NuxtLink
-                to="/register"
-                class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800"
-                @click="closeMenu"
-              >
+              <NuxtLink to="/register" class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800" @click="closeMenu">
                 REGISTER
               </NuxtLink>
             </template>
@@ -441,8 +416,6 @@ onMounted(() => {
         </nav>
       </div>
     </div>
-
-
   </header>
 </template>
 

@@ -8,6 +8,15 @@ export interface LoginResponse {
     email: string;
     type: 'ESTABLISHEMENT' | 'PARTICULIER' | 'ADMIN';
     isFinishedOnboarding: boolean;
+    // Quiz data fields
+    age?: number;
+    height?: number;
+    weight?: number;
+    gender?: string;
+    has_allergies?: boolean;
+    allergies_details?: string;
+    has_medical_conditions?: boolean;
+    medical_conditions_details?: string;
   };
   token: string;
 }
@@ -56,7 +65,13 @@ export const authService = {
 
   getCurrentUser() {
     const userStr = localStorage.getItem('user');
-    if (!userStr) return null;
-    return JSON.parse(userStr);
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
+      }
+    }
+    return null;
   }
 };
