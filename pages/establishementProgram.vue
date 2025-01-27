@@ -109,6 +109,7 @@ import FlipCardBloc from "~/components/Sections/Establishement/FlipCardBloc.vue"
 import { establishmentUserVideos } from '../establishment_user_videos';
 import { videoCalorieData } from '~/establishment_user_videos_calories'
 
+const API_BASE_URL = 'http://localhost:3001';
 
 // Register Chart.js components
 ChartJS.register(
@@ -159,42 +160,55 @@ onMounted(async () => {
   // Set initial calories with default video index (0)
   const initialDumbbellWeight = 2.5; // Default to beginner weight
 
-  const userId = route.query.userId as string
-  const customerId = route.query.id as string
+  const customerId = route.query.customerId as string
 
-  if (userId && customerId) {
-    const { getUserById } = await import('~/server/models/user')
-    const user = await getUserById(userId)
+  if (customerId) {
+    try {
+      const userStr = localStorage.getItem('user');
+      if (!userStr) {
+        throw new Error('User not found in localStorage');
+      }
 
-    if (user && user.customers) {
-      const customer = user.customers.find(c => c.et_customer_id === customerId)
+      const userData = JSON.parse(userStr);
+      const token = userData.token;
 
+      const response = await fetch(`${API_BASE_URL}/api/users/customers`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch customer data');
+      }
+
+      const customers = await response.json();
+      const customer = customers.find(c => c.id === customerId || c._id === customerId || c.et_customer_id === customerId);
+      
       if (customer) {
-        customerName.value = `${customer.firstName} ${customer.lastName}`
-        costumerVideo.value = customer.video
+        customerName.value = customer.name || `${customer.first_name || ''} ${customer.last_name || ''}`;
+        costumerVideo.value = customer.video || 0;
+        ageRange.value = customer.age_range || customer.ageRange || '';
+        weightRange.value = customer.weight_range || customer.weightRange || '';
 
-        ageRange.value = customer.ageRange
-        weightRange.value = customer.weightRange
-
-        if (
-          typeof customer.video === 'number' &&
-          customer.video >= 0 &&
-          customer.video < establishmentUserVideos.length
-        ) {
-          videoSource.value = establishmentUserVideos[customer.video]
+        if (typeof costumerVideo.value === 'number' && costumerVideo.value >= 0 && costumerVideo.value < establishmentUserVideos.length) {
+          videoSource.value = establishmentUserVideos[costumerVideo.value];
         }
 
         // Update labels and data dynamically based on burnedCalories
-        const burnedCalories = customer.burnedCalories || {}
-        labels.value = Object.keys(burnedCalories) // Extract keys dynamically
-        data.value = Object.values(burnedCalories) // Extract values dynamically
+        const burnedCalories = customer.burned_calories || customer.burnedCalories || {};
+        labels.value = Object.keys(burnedCalories); // Extract keys dynamically
+        data.value = Object.values(burnedCalories); // Extract values dynamically
         caloriesResult.value = calculateCalories(ageRange.value, weightRange.value, 2.5, calorieData.value[costumerVideo.value || 0]);
       }
+    } catch (error) {
+      console.error('Error fetching customer:', error);
     }
   }
 
-  isLoading.value = false
-})
+  isLoading.value = false;
+});
 
 // Add computed property for total burned calories
 const totalBurnedCalories = computed(() => {

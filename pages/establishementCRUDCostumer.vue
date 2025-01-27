@@ -396,7 +396,15 @@ let usedColors: string[] = [];
               </div>
 
               <!-- Remove Customer Button -->
-              <div class="flex justify-end pt-4 border-t">
+              <div class="flex justify-end gap-3 pt-4 border-t">
+                <NuxtLink :to="`/establishementProgram?customerId=${selectedCustomer?.id}`"
+                        class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Start Program
+                </NuxtLink>
                 <button @click.stop="showConfirmDialog = true"
                         class="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
