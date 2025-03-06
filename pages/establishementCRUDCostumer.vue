@@ -3,6 +3,7 @@ import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from 'vue-router';
 import type { Customer } from '~/types';
+import { useAuthUser } from '~/composables/useAuthUser';
 
 const API_BASE_URL = 'http://localhost:3001';
 
@@ -102,7 +103,7 @@ const removeCustomer = async (customerId: string) => {
       throw new Error('Authentication token not found');
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/users/customers/${customerId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/users/customers/remove/${customerId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -115,11 +116,32 @@ const removeCustomer = async (customerId: string) => {
       throw new Error(errorData.error || 'Failed to remove customer');
     }
 
-    // Remove the customer from the local list
+    const result = await response.json();
+    
+    // Update customers list
     customers.value = customers.value.filter(c => c.id !== customerId);
+
+    // Update localStorage with new customers list
+    const updatedUserData = {
+      ...userData,
+      user: {
+        ...userData.user,
+        customers: result.customers // Use the updated customers from the server
+      }
+    };
+    localStorage.setItem('user', JSON.stringify(updatedUserData));
+
+    // Update the user state
+    const user = useAuthUser();
+    if (user.value) {
+      user.value = {
+        ...user.value,
+        customers: result.customers
+      };
+    }
   } catch (err) {
     console.error('Error removing customer:', err);
-    error.value = err.message || 'An error occurred while removing the customer';
+    error.value = err instanceof Error ? err.message : 'Failed to remove customer';
   }
 };
 

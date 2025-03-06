@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS users (
     allergies_details TEXT,
     has_medical_conditions BOOLEAN,
     medical_conditions_details TEXT,
+    plan JSON,  -- Store plan information directly in JSON format
+    burned_calories JSON, -- Store burned calories data in JSON format
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

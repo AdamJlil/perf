@@ -1,11 +1,31 @@
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import CryptoJS from 'crypto-js'
 import { useRoute, useRouter } from 'vue-router'
 import { authService } from '~/services/auth'
+import { plans } from '~/types/plans'
 
 const route = useRoute()
 const router = useRouter()
+
+// Define establishment plan prices based on plans.ts
+const establishmentPlans = {
+  BRONZE: {
+    title: plans.ESTABLISHEMENT.plans.plan_1.title,
+    price: plans.ESTABLISHEMENT.plans.plan_1.price.split(' ')[0], // Get numeric value only
+    status: "Active"
+  },
+  PLATINUM: {
+    title: plans.ESTABLISHEMENT.plans.plan_2.title,
+    price: plans.ESTABLISHEMENT.plans.plan_2.price.split(' ')[0], // Get numeric value only
+    status: "Active"
+  },
+  GOLD: {
+    title: plans.ESTABLISHEMENT.plans.plan_3.title,
+    price: plans.ESTABLISHEMENT.plans.plan_3.price.split(' ')[0], // Get numeric value only
+    status: "Active"
+  }
+}
 
 const form = reactive({
   data: {
@@ -14,7 +34,7 @@ const form = reactive({
     email: '',
     password: '',
     confirmPassword: '',
-    userType: '', // Will be set from URL
+    userType: 'ESTABLISHEMENT', // Always ESTABLISHEMENT
     plan: '', // Will be set from URL
     acceptTerms: false,
     acceptPrivacy: false
@@ -23,11 +43,16 @@ const form = reactive({
   pending: false
 })
 
-onMounted(() => {
-  // Set userType and plan from URL parameters
-  if (route.query.userType) {
-    form.data.userType = route.query.userType as string
+// Computed property to get the selected plan details
+const selectedPlan = computed(() => {
+  if (form.data.plan) {
+    return establishmentPlans[form.data.plan as keyof typeof establishmentPlans];
   }
+  return null;
+})
+
+onMounted(() => {
+  // Set plan from URL parameters
   if (route.query.plan) {
     form.data.plan = route.query.plan as string
   }
@@ -59,16 +84,28 @@ const onSignupClick = async () => {
       return
     }
 
-    if (!form.data.email || !form.data.password || !form.data.userType) {
+    if (!form.data.email || !form.data.password) {
       form.error = 'Please fill in all required fields.'
       return
     }
 
-    // Call the signup API
+    // Prepare the plan data for establishment users
+    const planData = selectedPlan.value ? {
+      title: selectedPlan.value.title,
+      price: selectedPlan.value.price,
+      status: selectedPlan.value.status,
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
+    } : null;
+
+    // Call the signup API with plan data
     const response = await authService.signup({
       email: form.data.email,
       password: form.data.password,
-      type: form.data.userType as 'ESTABLISHEMENT' | 'PARTICULIER' | 'ADMIN'
+      type: form.data.userType as 'ESTABLISHEMENT' | 'PARTICULIER' | 'ADMIN',
+      first_name: form.data.first_name,
+      name: form.data.name,
+      plan: planData ? JSON.stringify(planData) : null
     })
 
     // If successful, navigate to payment page with query params
@@ -79,7 +116,8 @@ const onSignupClick = async () => {
         name: form.data.name,
         email: form.data.email,
         userType: form.data.userType,
-        plan: form.data.plan
+        plan: form.data.plan,
+        price: selectedPlan.value?.price || ''
       }
     })
   } catch (error: any) {
@@ -97,6 +135,12 @@ const onSignupClick = async () => {
       <h1 class="text-[20px] leading-loose font-normal text-center mb-8 uppercase text-black">
         YOUR JOURNEY STARTS NOW!
       </h1>
+
+      <!-- Show selected plan info for establishments -->
+      <div v-if="selectedPlan" class="mb-8 p-4 bg-white rounded-lg shadow-sm">
+        <h2 class="text-lg font-semibold mb-2">Selected Plan: {{ selectedPlan.title }}</h2>
+        <p class="text-gray-600">Price: {{ selectedPlan.price }} dh/month</p>
+      </div>
 
       <div class="bg-white rounded-lg shadow-md p-6">
         <!-- Error Message -->
@@ -186,17 +230,18 @@ const onSignupClick = async () => {
             </div>
           </div>
 
-          <!-- User Type -->
+          <!-- Plan -->
           <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700">User Type</label>
+            <label class="block text-sm font-medium text-gray-700">Plan</label>
             <select
-              v-model="form.data.userType"
+              v-model="form.data.plan"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#D05E33]"
               required
             >
-              <option value="" disabled>Select user type</option>
-              <option value="PARTICULIER">Particular</option>
-              <option value="ESTABLISHEMENT">Establishment</option>
+              <option value="" disabled>Select plan</option>
+              <option value="BRONZE">Bronze</option>
+              <option value="PLATINUM">Platinum</option>
+              <option value="GOLD">Gold</option>
             </select>
           </div>
 

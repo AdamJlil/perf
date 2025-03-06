@@ -44,7 +44,7 @@ class User {
             password: '[REDACTED]'
         });
 
-        const { email, password, name, first_name, last_name, type } = userData;
+        const { email, password, name, first_name, last_name, type, plan } = userData;
         const hashedPassword = await bcrypt.hash(password, 10);
         const id = `user_${Date.now()}`;
         const roles = JSON.stringify(['USER']);
@@ -59,22 +59,24 @@ class User {
                 first_name: first_name || null,
                 last_name: last_name || null,
                 type,
-                roles
+                roles,
+                plan: plan || null
             });
 
             const [result] = await connection.execute(
-                'INSERT INTO users (id, email, password, name, first_name, last_name, type, roles) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                [id, email, hashedPassword, name || null, first_name || null, last_name || null, type, roles]
+                'INSERT INTO users (id, email, password, name, first_name, last_name, type, roles, plan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [id, email, hashedPassword, name || null, first_name || null, last_name || null, type, roles, plan || null]
             );
 
             console.log('User created successfully:', {
                 id,
                 email,
                 name,
-                type
+                type,
+                plan: plan || null
             });
 
-            return { id, email, name, first_name, last_name, type };
+            return { id, email, name, first_name, last_name, type, plan };
         } catch (error) {
             console.error('Error creating user:', {
                 code: error.code,
@@ -239,6 +241,55 @@ class User {
             throw error;
         } finally {
             if (connection) connection.release();
+        }
+    }
+
+    async upgradePlan(userId, planData) {
+        console.log('Upgrading plan for user:', userId);
+        let connection;
+        try {
+            connection = await this.getConnection();
+
+            // Start transaction
+            await connection.beginTransaction();
+
+            try {
+                // Update user's plan
+                const [result] = await connection.execute(
+                    'UPDATE users SET plan = ? WHERE id = ?',
+                    [JSON.stringify(planData), userId]
+                );
+
+                if (result.affectedRows === 0) {
+                    throw new Error('User not found');
+                }
+
+                // Get updated user data
+                const [rows] = await connection.execute(
+                    'SELECT id, email, name, first_name, last_name, type, plan, customers FROM users WHERE id = ?',
+                    [userId]
+                );
+
+                // Commit the transaction
+                await connection.commit();
+                
+                const updatedUser = rows[0];
+                console.log('Plan upgraded successfully for user:', userId);
+                
+                return updatedUser;
+            } catch (error) {
+                // Rollback in case of error
+                await connection.rollback();
+                console.error('Error in upgrade plan transaction:', error);
+                throw error;
+            }
+        } catch (error) {
+            console.error('Error upgrading plan:', error);
+            throw new Error('Failed to upgrade plan: ' + (error.sqlMessage || error.message));
+        } finally {
+            if (connection) {
+                connection.release();
+            }
         }
     }
 

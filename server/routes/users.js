@@ -104,7 +104,10 @@ router.delete('/customers/remove/:customerId', verifyToken, async (req, res) => 
     const establishmentId = req.user.id;
 
     const customers = await User.removeCustomer(establishmentId, customerId);
-    res.json({ message: 'Customer removed successfully', customers });
+    res.json({ 
+      message: 'Customer removed successfully', 
+      customers: JSON.stringify(customers) // Ensure customers are stringified
+    });
   } catch (error) {
     console.error('Error removing customer:', error);
     res.status(500).json({ error: 'Failed to remove customer' });
@@ -163,6 +166,31 @@ router.post('/customers/add/:customerId', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Error adding customer:', error);
     res.status(500).json({ error: 'Failed to add customer', details: error.message });
+  }
+});
+
+// Upgrade user plan
+router.put('/plan/upgrade', verifyToken, async (req, res) => {
+  try {
+    console.log('Plan upgrade request:', {
+      userId: req.user.id,
+      plan: req.body.plan
+    });
+
+    if (!req.body.plan) {
+      return res.status(400).json({ error: 'Plan data is required' });
+    }
+
+    // Update the user's plan
+    const updatedUser = await User.upgradePlan(req.user.id, req.body.plan);
+    
+    res.json({ 
+      message: 'Plan upgraded successfully',
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error('Error upgrading plan:', error);
+    res.status(500).json({ error: 'Failed to upgrade plan', details: error.message });
   }
 });
 

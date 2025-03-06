@@ -25,6 +25,9 @@ export interface SignupData {
   email: string;
   password: string;
   type: 'ESTABLISHEMENT' | 'PARTICULIER' | 'ADMIN';
+  first_name?: string;
+  name?: string;
+  plan?: string;
 }
 
 export const authService = {
