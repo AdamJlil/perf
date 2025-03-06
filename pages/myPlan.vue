@@ -21,9 +21,10 @@
 
         <div class="flex flex-col items-center justify-end">
           <button
-            class="uppercase cursor-pointer tracking-2 border-1 font-semibold border-gray-6 px-5 py-2 text-gray-6 text-xs"
+            @click="scrollToPlans"
+            class="uppercase cursor-pointer tracking-2 border-1 font-semibold border-gray-6 px-5 py-2 text-gray-6 text-xs hover:bg-gray-100"
           >
-            {{ user.type === 'ESTABLISHEMENT' ? 'manage customers' : 'upgrade plan' }}
+            upgrade plan
           </button>
         </div>
       </div>
@@ -80,8 +81,36 @@
       </div>
 
       <div class="h-full">
-        <div class="h-full">
-          <PricingBloc :plan_1="bronzePlan" :plan_2="platinumPlan" :plan_3="goldPlan" />
+        <div class="h-full" ref="plansSection">
+          <PricingBloc 
+            @planSelected="handlePlanUpgrade" 
+            :title="'Upgrade Your Plan'"
+            :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
+            :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
+            :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
+          />
+        </div>
+      </div>
+
+      <!-- Confirmation Modal -->
+      <div v-if="showUpgradeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+          <h2 class="text-xl font-bold mb-4">Confirm Plan Upgrade</h2>
+          <p class="mb-6">Are you sure you want to upgrade to the {{ selectedUpgradePlan }} plan?</p>
+          <div class="flex justify-end space-x-4">
+            <button 
+              @click="showUpgradeModal = false"
+              class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button 
+              @click="confirmUpgrade"
+              class="px-4 py-2 bg-[#D05E33] text-white rounded-md hover:bg-[#B54D22]"
+            >
+              Confirm
+            </button>
+          </div>
         </div>
       </div>
     </template>
@@ -90,10 +119,15 @@
 
 <script lang="ts" setup>
 import PricingBloc from "~/components/Sections/Join/PricingBloc.vue";
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, onMounted, watch } from "vue";
 import { useAuthUser } from '~/composables/useAuthUser';
+import { plans } from '~/types/plans';
 
 const user = useAuthUser();
+const plansSection = ref(null);
+const showUpgradeModal = ref(false);
+const selectedUpgradePlan = ref('');
+const isUpgrading = ref(false);
 
 // Parse customers JSON if it exists
 const customers = computed(() => {
@@ -132,52 +166,127 @@ const currentPlan = computed(() => {
   return null;
 });
 
-// Additional computed property for plan breakdown
-const planBreakdown = computed(() => {
-  if (!currentPlan.value?.planBreakdown) return [];
-  return Object.entries(currentPlan.value.planBreakdown).map(([title, count]) => ({
-    title,
-    count
-  }));
+// Function to fetch and update user data
+const updateUserData = async () => {
+  try {
+    const userData = localStorage.getItem('user');
+    if (!userData) return;
+    
+    const { token } = JSON.parse(userData);
+    
+    // Fetch latest user data
+    const response = await fetch('http://localhost:3001/api/users/customers', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+    
+    const customers = await response.json();
+    
+    // Update the user state with new customers
+    if (user.value) {
+      user.value = {
+        ...user.value,
+        customers: JSON.stringify(customers)
+      };
+    }
+  } catch (error) {
+    console.error('Error updating user data:', error);
+  }
+};
+
+// Watch for customer changes
+watch(() => user.value?.customers, (newCustomers, oldCustomers) => {
+  if (newCustomers !== oldCustomers) {
+    updateUserData();
+  }
+}, { deep: true });
+
+// Initial data fetch
+onMounted(() => {
+  updateUserData();
 });
 
-// Define the plan types for pricing bloc
-const bronzePlan = reactive({
-  title: "Bronze",
-  duration: "Monthly",
-  features: [
-    { text: "Access to basic features", isDisabled: false },
-    { text: "Email Support", isDisabled: false },
-    { text: "Limited Storage", isDisabled: true },
-    { text: "Community Access", isDisabled: true },
-  ],
-  price: "$19.99",
-  discount: "$24.99",
-});
+const scrollToPlans = () => {
+  plansSection.value?.scrollIntoView({ behavior: 'smooth' });
+};
 
-const platinumPlan = reactive({
-  title: "Platinum",
-  duration: "Monthly",
-  features: [
-    { text: "All Bronze features", isDisabled: false },
-    { text: "Priority Email Support", isDisabled: false },
-    { text: "Unlimited Storage", isDisabled: false },
-    { text: "Exclusive Webinars", isDisabled: true },
-  ],
-  price: "$49.99",
-  discount: "save 145dh",
-});
+const handlePlanUpgrade = async (planType: string) => {
+  selectedUpgradePlan.value = planType;
+  showUpgradeModal.value = true;
+};
 
-const goldPlan = reactive({
-  title: "Gold",
-  duration: "Monthly",
-  features: [
-    { text: "All Platinum features", isDisabled: false },
-    { text: "Dedicated Account Manager", isDisabled: false },
-    { text: "24/7 Support", isDisabled: false },
-    { text: "Personalized Reports", isDisabled: false },
-  ],
-  price: "$99.99",
-  discount: "$119.99",
-});
+const confirmUpgrade = async () => {
+  if (isUpgrading.value) return;
+  
+  try {
+    isUpgrading.value = true;
+    
+    // Map plan names to the correct keys
+    const planMap = {
+      'BRONZE': 'plan_1',
+      'PLATINUM': 'plan_2',
+      'GOLD': 'plan_3'
+    };
+    
+    const planKey = planMap[selectedUpgradePlan.value];
+    if (!planKey) {
+      throw new Error('Invalid plan selected');
+    }
+
+    const selectedPlan = plans.ESTABLISHEMENT.plans[planKey];
+    
+    const planData = {
+      title: selectedPlan.title,
+      price: selectedPlan.price,
+      status: "Active",
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      maxCustomers: selectedPlan.maxCustomers
+    };
+
+    // Get token from user data in localStorage
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+      throw new Error('Not authenticated');
+    }
+    const { token } = JSON.parse(userData);
+    if (!token) {
+      throw new Error('Not authenticated');
+    }
+
+    // Make API call to upgrade plan
+    const response = await fetch('http://localhost:3001/api/users/plan/upgrade', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ plan: planData })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to upgrade plan');
+    }
+
+    const { user: updatedUser } = await response.json();
+    
+    // Update local user state
+    user.value = updatedUser;
+    
+    // Show success message
+    alert('Plan upgraded successfully!');
+  } catch (error) {
+    console.error('Error upgrading plan:', error);
+    alert(error.message || 'Failed to upgrade plan. Please try again.');
+  } finally {
+    isUpgrading.value = false;
+    showUpgradeModal.value = false;
+  }
+};
 </script>

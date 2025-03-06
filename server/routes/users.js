@@ -169,4 +169,29 @@ router.post('/customers/add/:customerId', verifyToken, async (req, res) => {
   }
 });
 
+// Upgrade user plan
+router.put('/plan/upgrade', verifyToken, async (req, res) => {
+  try {
+    console.log('Plan upgrade request:', {
+      userId: req.user.id,
+      plan: req.body.plan
+    });
+
+    if (!req.body.plan) {
+      return res.status(400).json({ error: 'Plan data is required' });
+    }
+
+    // Update the user's plan
+    const updatedUser = await User.upgradePlan(req.user.id, req.body.plan);
+    
+    res.json({ 
+      message: 'Plan upgraded successfully',
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error('Error upgrading plan:', error);
+    res.status(500).json({ error: 'Failed to upgrade plan', details: error.message });
+  }
+});
+
 module.exports = router;

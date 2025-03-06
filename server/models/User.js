@@ -244,6 +244,55 @@ class User {
         }
     }
 
+    async upgradePlan(userId, planData) {
+        console.log('Upgrading plan for user:', userId);
+        let connection;
+        try {
+            connection = await this.getConnection();
+
+            // Start transaction
+            await connection.beginTransaction();
+
+            try {
+                // Update user's plan
+                const [result] = await connection.execute(
+                    'UPDATE users SET plan = ? WHERE id = ?',
+                    [JSON.stringify(planData), userId]
+                );
+
+                if (result.affectedRows === 0) {
+                    throw new Error('User not found');
+                }
+
+                // Get updated user data
+                const [rows] = await connection.execute(
+                    'SELECT id, email, name, first_name, last_name, type, plan, customers FROM users WHERE id = ?',
+                    [userId]
+                );
+
+                // Commit the transaction
+                await connection.commit();
+                
+                const updatedUser = rows[0];
+                console.log('Plan upgraded successfully for user:', userId);
+                
+                return updatedUser;
+            } catch (error) {
+                // Rollback in case of error
+                await connection.rollback();
+                console.error('Error in upgrade plan transaction:', error);
+                throw error;
+            }
+        } catch (error) {
+            console.error('Error upgrading plan:', error);
+            throw new Error('Failed to upgrade plan: ' + (error.sqlMessage || error.message));
+        } finally {
+            if (connection) {
+                connection.release();
+            }
+        }
+    }
+
     async addCustomer(establishmentId, customerData) {
         console.log('Adding customer to establishment:', {
             establishmentId,
