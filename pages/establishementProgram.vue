@@ -277,9 +277,89 @@ const chartOptions = {
 
 
 
-const nextVideo = () => {
-  // Increment the video index in DataBase (user.ts)
-  // Incerement Calories Burned in DataBase by (Calories burned today - u canfind it in this file)
-  // Reload the page
+const nextVideo = async () => {
+  try {
+    const userStr = localStorage.getItem('user');
+    if (!userStr) {
+      throw new Error('User not found in localStorage');
+    }
+
+    const userData = JSON.parse(userStr);
+    const token = userData.token;
+    const customerId = route.query.customerId as string;
+
+    if (!customerId) {
+      throw new Error('Customer ID not found');
+    }
+
+    // Get current customer data to update
+    const response = await fetch(`${API_BASE_URL}/api/users/customers`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch customer data');
+    }
+
+    const customers = await response.json();
+    const customer = customers.find((c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId);
+    
+    if (!customer) {
+      throw new Error('Customer not found');
+    }
+
+    // Calculate next video index
+    const nextVideoIndex = (customer.video + 1) % establishmentUserVideos.length;
+
+    // Get current day's calories
+    const dumbbellWeight = selectedElement.value === 1 ? 2.5 : selectedElement.value === 2 ? 5.0 : 10.0;
+    const currentCalories = calculateCalories(ageRange.value, weightRange.value, dumbbellWeight, calorieData.value[customer.video || 0]);
+    
+    // Parse the calories range and get the average
+    const [minCal, maxCal] = currentCalories.split('-').map(Number);
+    const avgCalories = Math.round((minCal + maxCal) / 2);
+
+    // Update customer's burned calories for the current day
+    const burnedCalories = customer.burned_calories || customer.burnedCalories || {};
+    const today = `Day ${Object.keys(burnedCalories).length + 1}`;
+    
+    // Update the customer data
+    const updatedBurnedCalories = { ...burnedCalories, [today]: avgCalories };
+
+    // Create updated customer data, preserving the name fields
+    const updatedCustomer = {
+      et_customer_id: customer.et_customer_id,
+      firstName: customer.firstName || customer.first_name,
+      lastName: customer.lastName || customer.last_name,
+      email: customer.email,
+      ageRange: customer.ageRange || customer.age_range,
+      weightRange: customer.weightRange || customer.weight_range,
+      video: nextVideoIndex,
+      burnedCalories: updatedBurnedCalories
+    };
+
+    // Update the customer data in the database using the add endpoint
+    const updateResponse = await fetch(`${API_BASE_URL}/api/users/customers/add/${customerId}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedCustomer)
+    });
+
+    if (!updateResponse.ok) {
+      throw new Error('Failed to update customer data');
+    }
+
+    // Reload the page to show the next video
+    window.location.reload();
+  } catch (error) {
+    console.error('Error in nextVideo:', error);
+    alert('Failed to move to next video. Please try again.');
+  }
 }
 </script>
