@@ -44,7 +44,7 @@ class User {
             password: '[REDACTED]'
         });
 
-        const { email, password, name, first_name, last_name, type } = userData;
+        const { email, password, name, first_name, last_name, type, plan } = userData;
         const hashedPassword = await bcrypt.hash(password, 10);
         const id = `user_${Date.now()}`;
         const roles = JSON.stringify(['USER']);
@@ -59,22 +59,24 @@ class User {
                 first_name: first_name || null,
                 last_name: last_name || null,
                 type,
-                roles
+                roles,
+                plan: plan || null
             });
 
             const [result] = await connection.execute(
-                'INSERT INTO users (id, email, password, name, first_name, last_name, type, roles) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                [id, email, hashedPassword, name || null, first_name || null, last_name || null, type, roles]
+                'INSERT INTO users (id, email, password, name, first_name, last_name, type, roles, plan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [id, email, hashedPassword, name || null, first_name || null, last_name || null, type, roles, plan || null]
             );
 
             console.log('User created successfully:', {
                 id,
                 email,
                 name,
-                type
+                type,
+                plan: plan || null
             });
 
-            return { id, email, name, first_name, last_name, type };
+            return { id, email, name, first_name, last_name, type, plan };
         } catch (error) {
             console.error('Error creating user:', {
                 code: error.code,

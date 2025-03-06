@@ -104,7 +104,10 @@ router.delete('/customers/remove/:customerId', verifyToken, async (req, res) => 
     const establishmentId = req.user.id;
 
     const customers = await User.removeCustomer(establishmentId, customerId);
-    res.json({ message: 'Customer removed successfully', customers });
+    res.json({ 
+      message: 'Customer removed successfully', 
+      customers: JSON.stringify(customers) // Ensure customers are stringified
+    });
   } catch (error) {
     console.error('Error removing customer:', error);
     res.status(500).json({ error: 'Failed to remove customer' });

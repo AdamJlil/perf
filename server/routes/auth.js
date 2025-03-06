@@ -35,7 +35,17 @@ router.post('/signup', validateSignupInput, async (req, res) => {
             return res.status(400).json({ error: 'Email already exists' });
         }
 
-        const user = await User.create(req.body);
+        // Extract user data from request body
+        const userData = {
+            email: req.body.email,
+            password: req.body.password,
+            type: req.body.type,
+            first_name: req.body.first_name,
+            name: req.body.name,
+            plan: req.body.plan // Include plan data
+        };
+
+        const user = await User.create(userData);
         const token = JWTUtil.generateToken(user);
 
         res.status(201).json({
@@ -44,7 +54,8 @@ router.post('/signup', validateSignupInput, async (req, res) => {
                 id: user.id,
                 email: user.email,
                 name: user.name,
-                type: user.type
+                type: user.type,
+                plan: user.plan // Include plan in response
             },
             token
         });

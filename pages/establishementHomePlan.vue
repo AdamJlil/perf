@@ -45,19 +45,17 @@ onMounted(() => {
 });
 
 const handlePlanSelection = (plan: string) => {
-    // Get all existing query parameters
-    const currentQuery = { ...route.query };
+  // Get all existing query parameters
+  const currentQuery = { ...route.query };
     
-    // Add the selected plan to the query parameters
-    router.push({
+  // Add the selected plan to the query parameters
+  router.push({
     path: '/signUp',
     query: {
-        ...currentQuery, // This spreads all existing params
-        plan,            // Add the selected plan
-        userType: 'ESTABLISHEMENT' // Override or add the userType query param
+      ...currentQuery, // This spreads all existing params
+      plan            // Add the selected plan
     }
-})
-
+  });
 };
 </script>
 
@@ -70,14 +68,14 @@ const handlePlanSelection = (plan: string) => {
 
 <template>
   <div>
-      <HomeOne 
-        background-image="/images/hospi1.png"
-        image-alt="Background Image"
-        main-text="TAKE YOUR VISITORS SATISFACTION HIGHER"
-        button-text="LOG IN"
-        button-link="/login"
-      />
-    <Bloc2Establishment class="py-[300px]"  />
+    <HomeOne 
+      background-image="/images/hospi1.png"
+      image-alt="Background Image"
+      main-text="TAKE YOUR VISITORS SATISFACTION HIGHER"
+      button-text="LOG IN"
+      button-link="/login"
+    />
+    <Bloc2Establishment class="py-[300px]" />
 
     <div class="relative w-full h-[90vh] max-md:h-[50vh] overflow-hidden">
       <!-- Background Image -->
@@ -96,16 +94,14 @@ const handlePlanSelection = (plan: string) => {
     </div>
 
     <Bloc3 class="my-[100px] py-[100px]" :reviews="reviews" />
-    <HomeFour  image1="/images/129.png" link="" buttonText="MORE" image2="/images/128.png" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
+    <HomeFour image1="/images/129.png" link="" buttonText="MORE" image2="/images/128.png" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
    
- 
-
     <PricingBloc 
-        @planSelected="handlePlanSelection"
-        :title="plans.ESTABLISHEMENT.title"
-        :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
-        :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
-        :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
+      @planSelected="handlePlanSelection"
+      :title="plans.ESTABLISHEMENT.title"
+      :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
+      :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
+      :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
     />
   </div>
 </template>
