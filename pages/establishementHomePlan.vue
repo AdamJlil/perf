@@ -10,6 +10,7 @@ import Bloc4 from "~/components/Sections/Nutrition/BlocFour.vue";
 import HomeOne from '~/components/home/HomeOne.vue';
 import HomeFour from '~/components/home/HomeFour.vue';
 import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
+import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.vue';
 import { plans } from '~/types/plans';
 
 const currentUser = useAuthUser();
@@ -75,6 +76,8 @@ const handlePlanSelection = (plan: string) => {
       button-text="LOG IN"
       button-link="/login"
     />
+    <div class="w-full h-20 bg-white" style="background-image: url('/images/hotels.png'); background-size: 70%; background-position: center; background-repeat: no-repeat;">
+    </div>
     <Bloc2Establishment class="py-[300px]" />
 
     <div class="relative w-full h-[90vh] max-md:h-[50vh] overflow-hidden">
@@ -94,7 +97,80 @@ const handlePlanSelection = (plan: string) => {
     </div>
 
     <Bloc3 class="my-[100px] py-[100px]" :reviews="reviews" />
-    <HomeFour image1="/images/129.png" link="" buttonText="MORE" image2="/images/128.png" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/>
+
+
+
+    <!-- What do you get -->
+    <div class="w-full pb-20">
+      <div class="w-full p-10 flex justify-center items-center flex-col gap-10" style="font-family: Montserrat;">
+      <h1 class="font-bold text-center text-4xl text-gray-700 uppercase pb-20">What do you get ?</h1>
+      <div class="w-80 h-4 bg-gray-400"></div>
+
+      <div class="flex justify-center items-center flex-col p-5">
+        <div class="flex justify-center items-center gap-10">
+          <div><img class="w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+          <p class="text-gray-800 text-xl w-60 text-left">Eco-friendly Fitness Solutions</p>
+          <p class="text-gray-800 text-xl w-60 text-right">Training and nutrition Support</p>
+          <div><img class="w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+        </div>
+
+        <div class="flex justify-center items-center gap-10">
+          <div><img class="w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+          <p class="text-gray-800 text-xl w-60 text-left">Space Optimization</p>
+          <p class="text-gray-800 text-xl w-60 text-right">Digital Platforms</p>
+          <div><img class="w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+        </div>
+
+        <div class="flex justify-center items-center gap-10">
+          <div><img class="w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+          <p class="text-gray-800 text-xl w-60 text-left">Customer Experience</p>
+          <p class="text-gray-800 text-xl w-60 text-right">Sustainable Practices</p>
+          <div><img class="w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+        </div>
+        
+      </div>
+
+      <div class="w-80 h-4 bg-gray-400"></div>
+
+      <div class="w-full h-40 flex justify-center items-center pt-40">
+        <button class=" text-black px-10 py-3 uppercase text-lg tracking-[10px] border-black border-2">Start now</button>
+      </div>
+    </div>
+    </div>
+
+
+
+    <!-- INCREASE OCCUPANCY RATES -->   
+    <Bloc3Establishment 
+      image1="/images/128.png" 
+      link="" 
+      TitleText="INCREASE OCCUPANCY RATES"
+      DescText="Hotels and accommodations with fitness
+solutions report up to a 10% increase in
+bookings. Be the preferred choice for healthconscious travelers.
+"
+      EndText="(McKinsey, 2023)"
+      :TitleStyle="{ color: '#545454', fontWeight: 600, padding: '10px' }"
+      :DescStyle="{ color: '#545454', fontWeight: 400, padding: '10px' }"
+      :EndStyle="{ color: '#545454', fontWeight: 400, padding: '10px' }"
+      buttonText="MORE" 
+      image2="/images/statistic-grow-svgrepo-com.png" 
+      headingText="INDOORS & OUTDOORS"
+      :image1Style="{ filter: 'contrast(120%) brightness(90%)' }"
+      :buttonStyle="{  fontWeight: '600', border: '2px solid', shadow: '2px 2px 8px rgba(0, 0, 0, 1)' }"
+      :headingStyle="{ textShadow: '1px 1px 5px black'}"
+    />
+
+
+    <!-- Why PERF -->
+     <div class="w-full pt-50 bg-[#F2F2F2]">
+      <h1 class="font-bold text-center text-4xl text-gray-700 uppercase pb-20">Why PERF ? </h1>
+      <div class="w-full h-[100vh] bg-white" style="background-image: url('/images/whyPerf.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+      </div>
+     </div>
+    
+
+    <!-- <HomeFour image1="/images/129.png" link="" buttonText="MORE" image2="/images/128.png" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/> -->
    
     <PricingBloc 
       @planSelected="handlePlanSelection"

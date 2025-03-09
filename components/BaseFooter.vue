@@ -6,10 +6,10 @@
       <!-- Column 1 -->
       <div class="w-full md:w-1/3 flex justify-center p-4 md:p-8">
         <div class="flex flex-col w-auto text-center md:text-left">
-          <a href="#" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
+          <a href="/aboutUs" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
             >ABOUT</a
           >
-          <a href="#" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
+          <a href="/contact" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
             >CONTACT</a
           >
           <a href="#" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
