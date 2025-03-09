@@ -182,6 +182,65 @@ onMounted(() => {
             >
               PERF HOSPITALITY
             </NuxtLink>
+            <NuxtLink
+              v-if="isLoggedIn"
+              :to="{
+                path: '/aboutUs',
+                query: { userId: userId },
+              }"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/aboutUs'),
+              }"
+              @click="closeMenu"
+            >
+              ABOUT US
+            </NuxtLink>
+            <NuxtLink
+              v-else
+              to="/aboutUs"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/aboutUs'),
+              }"
+              @click="closeMenu"
+            >
+              ABOUT US
+            </NuxtLink>
+
+
+            <NuxtLink
+              v-if="isLoggedIn"
+              :to="{
+                path: '/contact',
+                query: { userId: userId },
+              }"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/contact'),
+              }"
+              @click="closeMenu"
+            >
+              CONTACT
+            </NuxtLink>
+            <NuxtLink
+              v-else
+              to="/contact"
+              class="px-3 text-shadow-white"
+              :class="{
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'font-bold': isActive('/contact'),
+              }"
+              @click="closeMenu"
+            >
+              CONTACT
+            </NuxtLink>
+
+            
+
           </template>
 
           <!-- <NuxtLink
