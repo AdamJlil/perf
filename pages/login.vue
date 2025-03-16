@@ -23,7 +23,7 @@ async function onLoginClick() {
     const isEtablissement = ref(false);
     const isParticulier = ref(false);
     const isFinishedOnboarding = ref(false);
-
+    console.log("i am here ");
     const user = await login(form.data.email, form.data.password, form.data.rememberMe);
     // Set user type based on the returned user data
     if (user.value?.type === "ESTABLISHEMENT") {
@@ -31,7 +31,7 @@ async function onLoginClick() {
     } else if (user.value?.type === "PARTICULIER") {
       isParticulier.value = true;
     }
-
+    console.log(user.value);
     isFinishedOnboarding.value = user.value?.is_finished_onboarding;
 
     if (isAdmin.value) {
