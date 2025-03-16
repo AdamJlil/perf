@@ -61,6 +61,7 @@
     <div class=" w-[70%] h-[30vh] md:h-[35vh] lg:h-[40vh] lg:w-[70%] mx-auto p-4 ">
       
       <div class="bg-transparent rounded-lg p-6 h-full">
+        {{console.log(chartData)}}
         <Line :chartData="chartData" :chartOptions="chartOptions" class="h-full w-full"/>
       </div>
     </div>
@@ -74,7 +75,7 @@
     </p>
 
 
-    <Bloc1
+    <!-- <Bloc1
       class="my-20"
       :reversed="true"
       :showButton="true"
@@ -82,10 +83,10 @@
       :headingText="`HEY ${customerName} 👋, LOVED THE SESSION? <br/> TAKE YOUR JOURNEY FURTHER!`"
       :showImage="false"
       :isLogoutButton="true"
-    />
+    /> -->
 
-    <HomeFour  image1="/images/work1.png" link="" buttonText="TRANSFORM NOW" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE." :isLogoutButton="true"/>
-
+    <!-- <HomeFour  image1="/images/work1.png" link="" buttonText="TRANSFORM NOW" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE." :isLogoutButton="true"/>
+ -->
 
   </div>
 </template>
@@ -216,25 +217,37 @@ const totalBurnedCalories = computed(() => {
 });
 
 // Chart data and options
-const chartData = computed(() => ({
-  labels: labels.value,
-  datasets: [
-    {
-      label: '',
-      data: data.value,
-      fill: false,
-      borderColor: 'black',
-      backgroundColor: 'transparent',
-      tension: 0.4,
-      pointRadius: 5,
-      pointHoverRadius: 1,
-      pointBorderWidth: 0,
-      pointBackgroundColor: 'black',
-      pointBorderColor: 'white',
-      pointStyle: 'circle',
-    }
-  ]
-}));
+const chartData = computed(() => {
+  // Calculate accumulated values
+  const accumulatedData = [];
+  let runningTotal = 0;
+  
+  // Transform the data to show accumulated values
+  data.value.forEach(value => {
+    runningTotal += value;
+    accumulatedData.push(runningTotal);
+  });
+  
+  return {
+    labels: labels.value,
+    datasets: [
+      {
+        label: '',
+        data: accumulatedData,
+        fill: false,
+        borderColor: 'black',
+        backgroundColor: 'transparent',
+        tension: 0.4,
+        pointRadius: 5,
+        pointHoverRadius: 1,
+        pointBorderWidth: 0,
+        pointBackgroundColor: 'black',
+        pointBorderColor: 'white',
+        pointStyle: 'circle',
+      }
+    ]
+  };
+});
 
 const chartOptions = {
   //hover with ease mode further from the point
@@ -333,7 +346,7 @@ const nextVideo = async () => {
     const updatedCustomer = {
       et_customer_id: customer.et_customer_id,
       firstName: customer.firstName || customer.first_name,
-      lastName: customer.lastName || customer.last_name,
+      lastName: customer.LastName || customer.last_name,
       email: customer.email,
       ageRange: customer.ageRange || customer.age_range,
       weightRange: customer.weightRange || customer.weight_range,

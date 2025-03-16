@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import Header from "~/components/Sections/Nutrition/Header.vue";
 import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
@@ -16,6 +16,14 @@ import { plans } from '~/types/plans';
 const currentUser = useAuthUser();
 const router = useRouter();
 const route = useRoute();
+
+// Reference to the pricing section
+const pricingSection = ref<HTMLElement | null>(null);
+
+// Function to scroll to pricing section
+const scrollToPricing = () => {
+  pricingSection.value?.scrollIntoView({ behavior: 'smooth' });
+};
 
 const reviews = [
   {
@@ -133,7 +141,7 @@ const handlePlanSelection = (plan: string) => {
       <div class="w-80 h-4 bg-gray-400"></div>
 
       <div class="w-full h-40 flex justify-center items-center pt-40">
-        <button class=" text-black px-10 py-3 uppercase text-lg tracking-[10px] border-black border-2">Start now</button>
+        <button @click="scrollToPricing" class="text-black px-10 py-3 uppercase text-lg tracking-[10px] border-black border-2 hover:bg-gray-100 transition-colors cursor-pointer">Start now</button>
       </div>
     </div>
     </div>
@@ -172,12 +180,14 @@ bookings. Be the preferred choice for healthconscious travelers.
 
     <!-- <HomeFour image1="/images/129.png" link="" buttonText="MORE" image2="/images/128.png" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/> -->
    
-    <PricingBloc 
-      @planSelected="handlePlanSelection"
-      :title="plans.ESTABLISHEMENT.title"
-      :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
-      :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
-      :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
-    />
+    <div ref="pricingSection">
+      <PricingBloc 
+        @planSelected="handlePlanSelection"
+        :title="plans.ESTABLISHEMENT.title"
+        :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
+        :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
+        :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
+      />
+    </div>
   </div>
 </template>

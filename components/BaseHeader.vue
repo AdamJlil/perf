@@ -128,7 +128,7 @@ onMounted(() => {
             >
               HOME
             </NuxtLink>
-            <NuxtLink
+            <!-- <NuxtLink
               v-if="isLoggedIn"
               :to="{
                 path: '/particulierHomePlan',
@@ -154,7 +154,7 @@ onMounted(() => {
               @click="closeMenu"
             >
               PERF PROGRAM
-            </NuxtLink>
+            </NuxtLink> -->
             <NuxtLink
               v-if="isLoggedIn"
               :to="{
@@ -464,11 +464,24 @@ onMounted(() => {
               </button>
             </template>
             <template v-else>
-              <NuxtLink to="/login" class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800" @click="closeMenu">
-                LOGIN
-              </NuxtLink>
-              <NuxtLink to="/register" class="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800" @click="closeMenu">
+              
+              <!-- <NuxtLink to="/register" class="py-2 px-4 hover:bg-gray-100 " @click="closeMenu">
                 REGISTER
+              </NuxtLink> -->
+              <NuxtLink to="/" class="py-2 px-4 text-black " @click="closeMenu">
+                HOME
+              </NuxtLink>
+              <NuxtLink to="/establishementHomePlan" class="py-2 px-4 text-black " @click="closeMenu">
+                PERF HOSPITALITY
+              </NuxtLink>
+              <NuxtLink to="/aboutus" class="py-2 px-4 text-black " @click="closeMenu">
+                ABOUT US
+              </NuxtLink>
+              <NuxtLink to="/contact" class="py-2 px-4 text-black " @click="closeMenu">
+                CONTACT
+              </NuxtLink>
+              <NuxtLink to="/login" class="py-2 px-4 text-black " @click="closeMenu">
+                LOGIN
               </NuxtLink>
             </template>
           </div>
