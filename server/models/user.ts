@@ -641,6 +641,32 @@ export async function getUserById(id: string) {
   return users.find((user) => user.id === id);
 }
 
-export async function isAdmin(user?: User) {
+export async function isAdmin(user?: any) {
   return user && user.roles.includes("ADMIN");
+}
+
+export async function getAllParticularUsers() {
+  return users.filter((user) => user.type === "PARTICULIER");
+}
+
+export class User {
+  async getUsers() {
+    return users;
+  }
+
+  async getUserByEmail(email: string) {
+    return users.find((user) => user.email === email);
+  }
+
+  async getUserById(id: string) {
+    return users.find((user) => user.id === id);
+  }
+
+  async isAdmin(user?: any) {
+    return user && user.roles.includes("ADMIN");
+  }
+
+  async getAllParticularUsers() {
+    return users.filter((user) => user.type === "PARTICULIER");
+  }
 }
