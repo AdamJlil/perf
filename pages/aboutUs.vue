@@ -6,9 +6,9 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 
 <div class="w-full h-[90vh] relative" style="background-image: url('/images/123.png'); background-size: cover; filter: saturate(0.2);  background-position: center; background-repeat: no-repeat;" >
   
-  <div class="w-full md:h-[25vh] bg-white flex justify-center absolute bottom-0 left-0 right-0">
+  <div class="w-full md:h-[30vh] bg-white flex justify-center absolute bottom-0 left-0 right-0">
 
-    <div class="w-full md:w-[80vw] h-full flex flex-col md:flex-row justify-between items-center p-4 md:p-0">
+    <div class="w-full md:w-[90vw] lg:w-[80vw] h-full flex flex-col md:flex-row justify-between items-center p-4 md:p-0">
 
       <div class="w-full md:w-40 flex justify-between flex-col mb-6 md:mb-0">
         <div>
@@ -100,36 +100,36 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 
 </div>
 
-<div class="w-full pb-10 md:pb-20">
-      <div class="w-full p-5 md:p-10 flex justify-center items-center flex-col gap-5 md:gap-10" style="font-family: Montserrat;">
-      <h1 class="font-bold text-center text-3xl md:text-4xl text-gray-700 uppercase pb-10 md:pb-20">STUFF WE ARE GOOD AT</h1>
-      <div class="w-40 md:w-80 h-2 md:h-4 bg-gray-400"></div>
+<div class="w-full pb-10 md:pb-16 lg:pb-20">
+      <div class="w-full p-4 sm:p-6 md:p-10 flex justify-center items-center flex-col gap-4 sm:gap-6 md:gap-10" style="font-family: Montserrat;">
+      <h1 class="font-bold text-center text-2xl sm:text-3xl md:text-4xl text-gray-700 uppercase pb-6 sm:pb-10 md:pb-16 lg:pb-20">STUFF WE ARE GOOD AT</h1>
+      <div class="w-32 sm:w-40 md:w-60 lg:w-80 h-1 sm:h-2 md:h-3 lg:h-4 bg-gray-400"></div>
 
-      <div class="flex justify-center items-center flex-col p-5">
-        <div class="flex flex-col md:flex-row justify-center items-center gap-5 md:gap-10 mb-8">
-          <div><img class="w-8 md:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Eco-friendly Fitness Solutions</p>
-          <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Training and nutrition Support</p>
-          <div><img class="w-8 md:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
+      <div class="flex justify-center items-center flex-col p-3 sm:p-4 md:p-5 w-full max-w-4xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 mb-6 sm:mb-8 w-full">
+          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
+          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-left">Eco-friendly Fitness Solutions</p>
+          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-right">Training and nutrition Support</p>
+          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
         </div>
 
-        <div class="flex flex-col md:flex-row justify-center items-center gap-5 md:gap-10 mb-8">
-          <div><img class="w-8 md:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Space Optimization</p>
-          <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Digital Platforms</p>
-          <div><img class="w-8 md:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 mb-6 sm:mb-8 w-full">
+          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
+          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-left">Space Optimization</p>
+          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-right">Digital Platforms</p>
+          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
         </div>
 
-        <div class="flex flex-col md:flex-row justify-center items-center gap-5 md:gap-10">
-          <div><img class="w-8 md:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Customer Experience</p>
-          <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Sustainable Practices</p>
-          <div><img class="w-8 md:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 w-full">
+          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
+          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-left">Customer Experience</p>
+          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-right">Sustainable Practices</p>
+          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
         </div>
         
       </div>
 
-      <div class="w-40 md:w-80 h-2 md:h-4 bg-gray-400 mt-5"></div>
+      <div class="w-32 sm:w-40 md:w-60 lg:w-80 h-1 sm:h-2 md:h-3 lg:h-4 bg-gray-400 mt-4 sm:mt-5 md:mt-6 lg:mt-8"></div>
 
      
     </div>
@@ -137,10 +137,11 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 
 
     <div class="w-full pt-5 md:pt-10 bg-white">
-      <h1 class="font-bold text-center text-3xl md:text-4xl text-gray-700 uppercase pb-10 md:pb-20">OUR PROCESS </h1>
-      <div class="w-full h-[50vh] md:h-[100vh] bg-white" style="background-image: url('/images/OurProcess.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+      <h1 class="font-bold text-center text-3xl md:text-4xl lg:text-5xl text-gray-700 uppercase pb-5 md:pb-10 lg:pb-20">OUR PROCESS</h1>
+      <div class="w-full h-[35vh] sm:h-[40vh] md:h-[60vh] lg:h-[80vh] xl:h-[100vh] bg-white relative overflow-hidden">
+        <img src="/images/OurProcess.png" alt="Our Process" class="absolute inset-0 w-full   object-center" />
       </div>
-     </div>
+    </div>
 
      <div class="w-full pt-10 md:pt-20 bg-white">
 
