@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const adminRoutes = require('./routes/admin');
+const paymentRoutes = require('./routes/payment');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 
@@ -31,6 +34,15 @@ app.use('/api/auth', authRoutes);
 
 // Mount user routes with /api/users prefix
 app.use('/api/users', userRoutes);
+
+// Mount admin routes with /api/admin prefix
+app.use('/api/admin', adminRoutes);
+
+// Mount payment routes with /api/payment prefix
+app.use('/api/payment', paymentRoutes);
+
+// Mount contact routes with /api/contact prefix
+app.use('/api/contact', contactRoutes);
 
 // Handle 404s
 app.use((req, res) => {

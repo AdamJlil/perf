@@ -1,0 +1,77 @@
+const express = require('express');
+const router = express.Router();
+const emailService = require('../services/emailService');
+
+// Route to handle payment notifications and send emails
+router.post('/notify', async (req, res) => {
+  try {
+    const paymentData = req.body;
+    console.log('Received payment notification:', paymentData);
+    
+    // Validate required fields
+    if (!paymentData) {
+      return res.status(400).json({ success: false, message: 'Missing payment data' });
+    }
+    
+    // Ensure all fields have default values if missing
+    const sanitizedData = {
+      email: paymentData.email || '',
+      name: paymentData.name || '',
+      first_name: paymentData.first_name || '',
+      plan: paymentData.plan || '',
+      price: paymentData.price || '',
+      address: paymentData.address || '',
+      city: paymentData.city || '',
+      phone: paymentData.phone || '',
+      shipping: paymentData.shipping || '',
+      paymentMethod: paymentData.paymentMethod || 'unknown',
+      orderDate: paymentData.orderDate || new Date().toISOString()
+    };
+    
+    // Send email notification
+    const emailResult = await emailService.sendPaymentNotification(sanitizedData);
+    
+    if (emailResult && emailResult.success) {
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Payment notification emails sent successfully',
+        adminMessageId: emailResult.adminMessageId,
+        userMessageId: emailResult.userMessageId
+      });
+    } else {
+      console.error('Failed to send email:', emailResult.error || 'Unknown error');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Failed to send payment notification emails',
+        error: emailResult.error || 'Unknown error'
+      });
+    }
+  } catch (error) {
+    console.error('Error in payment notification route:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error', 
+      error: error.message || 'Unknown error' 
+    });
+  }
+});
+
+// Add a simple GET route for the payment page to test if the API is working
+router.get('/test', (req, res) => {
+  res.status(200).json({ success: true, message: 'Payment API is working' });
+});
+
+// Add a debug route to log URL parameters
+router.get('/debug', (req, res) => {
+  console.log('Payment debug route accessed');
+  console.log('Query parameters:', req.query);
+  
+  // Return the query parameters as JSON
+  res.status(200).json({ 
+    success: true, 
+    message: 'Debug route accessed successfully',
+    params: req.query
+  });
+});
+
+module.exports = router;

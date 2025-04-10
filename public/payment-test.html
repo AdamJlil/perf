@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    pre {
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    .url-input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Payment Test Page</h1>
+    
+    <h2>Test Payment API</h2>
+    <button id="test-api">Test API Endpoint</button>
+    <pre id="api-result">Results will appear here...</pre>
+    
+    <h2>Test Payment Redirect</h2>
+    <input type="text" id="redirect-url" class="url-input" value="/payment?first_name=tester2&name=tester2&email=tester2@gmail.com&userType=ESTABLISHEMENT&plan=BRONZE&price=2999">
+    <button id="test-redirect">Test Redirect</button>
+    
+    <h2>Test Direct Payment Notification</h2>
+    <button id="test-notification">Send Test Payment Notification</button>
+    <pre id="notification-result">Results will appear here...</pre>
+  </div>
+
+  <script>
+    document.getElementById('test-api').addEventListener('click', async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/payment/test');
+        const data = await response.json();
+        document.getElementById('api-result').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('api-result').textContent = 'Error: ' + error.message;
+      }
+    });
+
+    document.getElementById('test-redirect').addEventListener('click', () => {
+      const redirectUrl = document.getElementById('redirect-url').value;
+      window.location.href = redirectUrl;
+    });
+
+    document.getElementById('test-notification').addEventListener('click', async () => {
+      try {
+        const paymentData = {
+          first_name: 'tester2',
+          name: 'tester2',
+          email: 'tester2@gmail.com',
+          userType: 'ESTABLISHEMENT',
+          plan: 'BRONZE',
+          price: '2999',
+          address: 'Test Address',
+          city: 'Test City',
+          phone: '1234567890',
+          shipping: 'Standard',
+          paymentMethod: 'bank',
+          orderDate: new Date().toISOString()
+        };
+
+        const response = await fetch('http://localhost:3001/api/payment/notify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(paymentData)
+        });
+
+        const data = await response.json();
+        document.getElementById('notification-result').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('notification-result').textContent = 'Error: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>

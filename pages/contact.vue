@@ -10,16 +10,39 @@ const formData = reactive({
 const formSubmitted = ref(false);
 const formError = ref(false);
 
-const submitForm = () => {
+const submitForm = async () => {
   if (!formData.name || !formData.email || !formData.message) {
     formError.value = true;
     return;
   }
 
-  // Here you would typically send the data to your backend
-  console.log("Form submitted:", formData);
-  formSubmitted.value = true;
-  formError.value = false;
+  try {
+    // Send the form data to our API endpoint
+    const response = await fetch('http://localhost:3001/api/contact/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+    
+    if (result.success) {
+      formSubmitted.value = true;
+      formError.value = false;
+      // Reset form after successful submission
+      formData.name = '';
+      formData.email = '';
+      formData.message = '';
+    } else {
+      formError.value = true;
+      console.error('Error submitting form:', result.message);
+    }
+  } catch (error) {
+    formError.value = true;
+    console.error('Error submitting form:', error);
+  }
 };
 </script>
 
@@ -98,7 +121,7 @@ const submitForm = () => {
 
           <!-- Error message -->
           <div v-if="formError" class="w-full text-center bg-red-100 text-red-800 rounded p-2">
-            Please fill in all fields before submitting.
+            There was an error processing your request. Please fill in all fields and try again.
           </div>
         </div>
       </div>

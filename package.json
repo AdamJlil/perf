@@ -17,6 +17,7 @@
     "axios": "^1.7.9",
     "chart.js": "^3.9.1",
     "crypto-js": "^4.2.0",
+    "nodemailer": "^6.10.0",
     "oslo": "^1.2.0",
     "swiper": "^11.1.14",
     "vue-chartjs": "^4.1.1"

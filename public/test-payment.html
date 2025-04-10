@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #333;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    pre {
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Payment API Test Tool</h1>
+    
+    <div>
+      <h2>1. Test API Connection</h2>
+      <button id="test-api">Test API Endpoint</button>
+      <pre id="api-result">Results will appear here...</pre>
+    </div>
+
+    <div>
+      <h2>2. Debug URL Parameters</h2>
+      <div class="form-group">
+        <label for="debug-params">URL Parameters (e.g. first_name=test&name=test)</label>
+        <input type="text" id="debug-params" value="first_name=tester2&name=tester2&email=tester2@gmail.com&userType=ESTABLISHEMENT&plan=BRONZE&price=2999">
+      </div>
+      <button id="test-debug">Test Parameters</button>
+      <pre id="debug-result">Results will appear here...</pre>
+    </div>
+
+    <div>
+      <h2>3. Test Payment Notification</h2>
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" value="tester2">
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" value="tester2">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" value="tester2@gmail.com">
+      </div>
+      <div class="form-group">
+        <label for="user-type">User Type</label>
+        <input type="text" id="user-type" value="ESTABLISHEMENT">
+      </div>
+      <div class="form-group">
+        <label for="plan">Plan</label>
+        <input type="text" id="plan" value="BRONZE">
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input type="text" id="price" value="2999">
+      </div>
+      <button id="test-notify">Send Payment Notification</button>
+      <pre id="notify-result">Results will appear here...</pre>
+    </div>
+
+    <div>
+      <h2>4. Go to Payment Page</h2>
+      <div class="form-group">
+        <label for="payment-url">Payment URL</label>
+        <input type="text" id="payment-url" value="/payment?first_name=tester2&name=tester2&email=tester2@gmail.com&userType=ESTABLISHEMENT&plan=BRONZE&price=2999">
+      </div>
+      <button id="go-to-payment">Go to Payment Page</button>
+    </div>
+  </div>
+
+  <script>
+    // Test API Connection
+    document.getElementById('test-api').addEventListener('click', async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/payment/test');
+        const data = await response.json();
+        document.getElementById('api-result').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('api-result').textContent = 'Error: ' + error.message;
+      }
+    });
+
+    // Debug URL Parameters
+    document.getElementById('test-debug').addEventListener('click', async () => {
+      try {
+        const params = document.getElementById('debug-params').value;
+        const response = await fetch(`http://localhost:3001/api/payment/debug?${params}`);
+        const data = await response.json();
+        document.getElementById('debug-result').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('debug-result').textContent = 'Error: ' + error.message;
+      }
+    });
+
+    // Test Payment Notification
+    document.getElementById('test-notify').addEventListener('click', async () => {
+      try {
+        const paymentData = {
+          first_name: document.getElementById('first-name').value,
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          userType: document.getElementById('user-type').value,
+          plan: document.getElementById('plan').value,
+          price: document.getElementById('price').value,
+          address: 'Test Address',
+          city: 'Test City',
+          phone: '1234567890',
+          shipping: 'Standard',
+          paymentMethod: 'bank',
+          orderDate: new Date().toISOString()
+        };
+
+        console.log('Sending payment data:', paymentData);
+
+        const response = await fetch('http://localhost:3001/api/payment/notify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(paymentData)
+        });
+
+        const data = await response.json();
+        document.getElementById('notify-result').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('notify-result').textContent = 'Error: ' + error.message;
+      }
+    });
+
+    // Go to Payment Page
+    document.getElementById('go-to-payment').addEventListener('click', () => {
+      const url = document.getElementById('payment-url').value;
+      window.location.href = url;
+    });
+  </script>
+</body>
+</html>

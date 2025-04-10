@@ -23,8 +23,25 @@ async function onLoginClick() {
     const isEtablissement = ref(false);
     const isParticulier = ref(false);
     const isFinishedOnboarding = ref(false);
-    console.log("i am here ");
     const user = await login(form.data.email, form.data.password, form.data.rememberMe);
+    
+    // Check if the user needs to make a payment
+    if (user.value?.needsPayment && user.value?.redirectUrl) {
+      console.log("User needs to make a payment, redirecting to payment page");
+      await navigateTo(user.value.redirectUrl);
+      return;
+    }
+    
+    // Check if user is admin - being in the Admins table automatically makes them an admin
+    if (user.value?.is_admin) {
+      console.log("Admin user detected, redirecting to admin dashboard");
+      await navigateTo({
+        path: "/admindash",
+        query: { userId: user.value?.id },
+      });
+      return;
+    }
+    
     // Set user type based on the returned user data
     if (user.value?.type === "ESTABLISHEMENT") {
       isEtablissement.value = true;
@@ -61,7 +78,7 @@ async function onLoginClick() {
         }
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login error:", error);
     form.error =
       error?.response?.data?.error ||

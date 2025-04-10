@@ -179,6 +179,49 @@ const toggleCustomer = (customerId: string) => {
 };
 
 onMounted(async () => {
+  // Check if user has paid
+  try {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const userData = JSON.parse(userStr);
+      const user = userData.user;
+      
+      // Check if the user has paid
+      if (user && (user.paid !== true && user.paid !== 1)) {
+        console.log('User has not paid, redirecting to order page');
+        
+        // Determine price based on plan
+        let price = '';
+        if (user.plan) {
+          const planTitle = typeof user.plan === 'string' ? 
+            (JSON.parse(user.plan).title || '') : 
+            (user.plan.title || '');
+          
+          if (user.type === 'ESTABLISHEMENT') {
+            if (planTitle === 'BRONZE') price = '2999';
+            else if (planTitle === 'PLATINUM') price = '4999';
+            else if (planTitle === 'GOLD') price = '8999';
+          } else {
+            // PARTICULIER prices
+            if (planTitle === 'BRONZE') price = '999';
+            else if (planTitle === 'PLATINUM') price = '1582';
+            else if (planTitle === 'GOLD') price = '999';
+          }
+        }
+        
+        // Construct the order URL with user information
+        const orderUrl = `/order?first_name=${encodeURIComponent(user.first_name || '')}&name=${encodeURIComponent(user.name || '')}&email=${encodeURIComponent(user.email)}&userType=${encodeURIComponent(user.type)}&plan=${encodeURIComponent(user.plan ? (typeof user.plan === 'string' ? JSON.parse(user.plan).title || '' : user.plan.title || '') : '')}&price=${encodeURIComponent(price)}`;
+        
+        // Redirect to order page
+        window.location.href = orderUrl;
+        return;
+      }
+    }
+  } catch (error) {
+    console.error('Error checking payment status:', error);
+  }
+  
+  // Continue with normal page loading if user has paid
   getUserInfo();
   await fetchCustomers();
 });
