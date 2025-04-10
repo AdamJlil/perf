@@ -19,6 +19,8 @@ export interface LoginResponse {
     medical_conditions_details?: string;
   };
   token: string;
+  needsPayment?: boolean;
+  redirectUrl?: string;
 }
 
 export interface SignupData {

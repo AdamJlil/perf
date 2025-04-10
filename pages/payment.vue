@@ -1,7 +1,6 @@
 <template>
 <div
     class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center relative p-4 pt-[100px] bg-[#EFEFEC] my-0"
-    style="font-family: Montserrat;"
   >
 
   <div class="w-full max-w-6xl flex max-md:flex-col justify-between items-start gap-8 mt-[160px] h-fit">
@@ -200,6 +199,15 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { plans } from '~/types/plans'
 
+// Define the Plan interface to fix TypeScript errors
+interface Plan {
+  title: string;
+  duration: string;
+  features: Array<{text: string; isDisabled?: boolean}>;
+  price: string;
+  discount: string;
+}
+
 const route = useRoute()
 
 const form = reactive({
@@ -215,31 +223,196 @@ const form = reactive({
   Cihrib: ''
 })
 
-const selectedPlan = ref(null)
+const selectedPlan = ref<Plan | null>(null)
 
 onMounted(() => {
-  const planName = route.query.plan as string
-  const userType = route.query.userType as string
-  
-  if (planName && userType) {
-    const planSet = userType === 'PARTICULIER' ? plans.particular : plans.ESTABLISHEMENT
+  try {
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const firstName = urlParams.get('first_name') || '';
+    const name = urlParams.get('name') || '';
+    const email = urlParams.get('email') || '';
+    const userType = urlParams.get('userType') || '';
+    const planName = urlParams.get('plan') || '';
+    const price = urlParams.get('price') || '';
     
-    // Find the matching plan
-    Object.entries(planSet.plans).forEach(([key, plan]) => {
-      if (plan.title === planName) {
-        selectedPlan.value = plan
-      }
-    })
+    console.log('URL Parameters:', { firstName, name, email, userType, planName, price });
+    
+    // Pre-fill form with data from URL
+    if (name) {
+      form.name = name;
+    }
+    
+    // Set default payment method
+    form.paymentMethod = 'bank';
+    
+    // If we don't have all the necessary parameters, try to fetch them from the API
+    if (!firstName || !name || !email || !userType || !planName || !price) {
+      console.log('Missing parameters, will try to fetch from API');
+      fetchUserData();
+    } else {
+      // Create a plan object based on URL parameters
+      createPlanObject(planName, userType, price);
+    }
+  } catch (error: any) {
+    console.error('Error in onMounted:', error);
   }
-})
+});
 
-const handlePayment = () => {
-  console.log('Payment details:', {
-    ...form,
-    plan: selectedPlan.value?.title,
-    price: selectedPlan.value?.price
-  })
-}
+// Function to fetch user data from the API
+const fetchUserData = async () => {
+  try {
+    // Get email from URL if available
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+    
+    if (!email) {
+      console.error('No email parameter found in URL');
+      return;
+    }
+    
+    // Call the API to get user data
+    const response = await fetch(`http://localhost:3001/api/users/by-email?email=${encodeURIComponent(email)}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const userData = await response.json();
+    console.log('Fetched user data:', userData);
+    
+    if (userData && userData.user) {
+      // Update form with user data
+      form.name = userData.user.name || '';
+      
+      // Determine price based on plan
+      let price = '';
+      if (userData.user.plan) {
+        const planTitle = typeof userData.user.plan === 'string' ? 
+          (JSON.parse(userData.user.plan).title || '') : 
+          (userData.user.plan.title || '');
+        
+        if (userData.user.type === 'ESTABLISHEMENT') {
+          if (planTitle === 'BRONZE') price = '2999';
+          else if (planTitle === 'PLATINUM') price = '4999';
+          else if (planTitle === 'GOLD') price = '8999';
+        } else {
+          // PARTICULIER prices
+          if (planTitle === 'BRONZE') price = '999';
+          else if (planTitle === 'PLATINUM') price = '1582';
+          else if (planTitle === 'GOLD') price = '999';
+        }
+      }
+      
+      // Create plan object
+      if (userData.user.plan) {
+        const planTitle = typeof userData.user.plan === 'string' ? 
+          (JSON.parse(userData.user.plan).title || '') : 
+          (userData.user.plan.title || '');
+        
+        createPlanObject(planTitle, userData.user.type, price);
+      }
+    }
+  } catch (error: any) {
+    console.error('Error fetching user data:', error);
+  }
+};
+
+// Function to create a plan object
+const createPlanObject = (planName: string, userType: string, price: string) => {
+  try {
+    selectedPlan.value = {
+      title: planName,
+      price: price ? `${price} dh` : '',
+      duration: planName === 'BRONZE' ? '3 months' : 
+               planName === 'PLATINUM' ? '6 months' : '1 year',
+      features: [
+        { text: userType === 'ESTABLISHEMENT' ? 'Member accounts' : 'Monthly consultation', isDisabled: false },
+        { text: userType === 'ESTABLISHEMENT' ? 'Analytics dashboard' : 'Nutrition plan', isDisabled: false },
+        { text: userType === 'ESTABLISHEMENT' ? 'Email support' : 'Workout plans', isDisabled: false },
+        { text: userType === 'ESTABLISHEMENT' ? 'Custom branding' : 'Free equipment', isDisabled: planName === 'BRONZE' },
+        { text: 'Priority support', isDisabled: planName !== 'GOLD' }
+      ],
+      discount: userType === 'ESTABLISHEMENT' ? 
+              (planName === 'BRONZE' ? '3500 dh' : 
+               planName === 'PLATINUM' ? 'Save 1000 dh' : 'Save 2000 dh') :
+              (planName === 'BRONZE' ? '1300 dh' : 
+               planName === 'PLATINUM' ? 'Save 410 dh' : 'Save 1006 dh')
+    };
+    
+    console.log('Created plan object:', selectedPlan.value);
+  } catch (error: any) {
+    console.error('Error creating plan object:', error);
+  }
+};
+
+const handlePayment = async () => {
+  try {
+    // Validate form fields
+    if (!form.name) {
+      alert('Please enter your name');
+      return;
+    }
+    
+    // Get URL parameters for payment information
+    const urlParams = new URLSearchParams(window.location.search);
+    const first_name = urlParams.get('first_name') || '';
+    const email = urlParams.get('email') || '';
+    const userType = urlParams.get('userType') || '';
+    const plan = urlParams.get('plan') || '';
+    const price = urlParams.get('price') || '';
+    
+    // Prepare payment data for email notification
+    const paymentData = {
+      first_name,
+      name: form.name,
+      email,
+      userType,
+      plan,
+      price,
+      address: form.address,
+      city: form.city,
+      phone: form.phone,
+      shipping: form.shipping,
+      paymentMethod: form.paymentMethod,
+      orderDate: new Date().toISOString()
+    };
+    
+    console.log('Sending payment notification with data:', paymentData);
+    
+    // Send email notification directly to the server
+    // Make sure the server is running on port 3001
+    try {
+      const response = await fetch('http://localhost:3001/api/payment/notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(paymentData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        alert('Your payment has been processed successfully!');
+        // Redirect to home page or dashboard
+        window.location.href = '/';
+      } else {
+        alert(`Error: ${data.message || 'Unknown error'}`);
+      }
+    } catch (error: any) {
+      console.error('Error sending payment notification:', error);
+      alert(`Error: ${error.message || 'Failed to process payment'}`);
+    }
+  } catch (error: any) {
+    console.error('Error in handlePayment:', error);
+    alert(`Error: ${error.message || 'An unexpected error occurred'}`);
+  }
+};
 </script>
 
 <style scoped>
