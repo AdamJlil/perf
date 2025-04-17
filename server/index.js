@@ -10,7 +10,17 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3001', 'http://localhost:3000'],
+  origin: [
+    'http://localhost:3001', 
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://host.docker.internal:3000',
+    'http://frontend:3000',
+    // Allow all origins in development (comment this out in production)
+    (origin, callback) => {
+      callback(null, true);
+    }
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],

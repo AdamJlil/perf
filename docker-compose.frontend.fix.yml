@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  frontend-fix:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend.fix
+    container_name: perf-frontend-fix
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      # Connect to the host machine's Docker container
+      - NUXT_PUBLIC_API_BASE=http://host.docker.internal:3001
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+      # Add this to help with circular dependency issues
+      - NITRO_PRESET=node-server
+    volumes:
+      # Mount specific directories instead of the entire project
+      - ./components:/app/components:delegated
+      - ./composables:/app/composables:delegated
+      - ./layouts:/app/layouts:delegated
+      - ./middleware:/app/middleware:delegated
+      - ./pages:/app/pages:delegated
+      - ./plugins:/app/plugins:delegated
+      - ./public:/app/public:delegated
+      - ./services:/app/services:delegated
+      - ./stores:/app/stores:delegated
+      - ./types:/app/types:delegated
+      - ./nuxt.config.ts:/app/nuxt.config.ts:delegated
+      - ./app.vue:/app/app.vue:delegated
+      - ./types.ts:/app/types.ts:delegated
+      - ./unocss.config.ts:/app/unocss.config.ts:delegated
+      - ./package.json:/app/package.json:delegated
+      - ./package-lock.json:/app/package-lock.json:delegated
+      - node_modules:/app/node_modules
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - perf-frontend-network
+    stdin_open: true
+    tty: true
+
+volumes:
+  node_modules:
+
+networks:
+  perf-frontend-network:
+    driver: bridge
