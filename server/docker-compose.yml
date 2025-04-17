@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: perf-server
+    restart: always
+    ports:
+      - "3001:3001"
+    # This is the key configuration for Windows Docker Desktop to connect to XAMPP MySQL
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - DOCKER_ENV=true
+      # Optional: You can override these if needed
+      # - DB_HOST=host.docker.internal
+      # - DB_USER=root
+      # - DB_PASSWORD=
+      # - DB_NAME=perf_db

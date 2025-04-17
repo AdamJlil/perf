@@ -1,0 +1,40 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Install UnoCSS reset explicitly
+RUN npm install @unocss/reset
+
+# Copy necessary project files (excluding server and build directories)
+COPY components/ ./components/
+COPY composables/ ./composables/
+COPY layouts/ ./layouts/
+COPY middleware/ ./middleware/
+COPY pages/ ./pages/
+COPY plugins/ ./plugins/
+COPY public/ ./public/
+COPY services/ ./services/
+COPY stores/ ./stores/
+COPY types/ ./types/
+COPY nuxt.config.ts ./
+COPY app.vue ./
+COPY types.ts ./
+COPY unocss.config.ts ./
+
+# Create empty directories for Nuxt to use
+RUN mkdir -p .nuxt .output
+
+# Set development environment
+ENV NODE_ENV=development
+ENV NUXT_TELEMETRY_DISABLED=1
+ENV NUXT_PUBLIC_API_BASE=http://host.docker.internal:3001
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Start the development server with specific options to avoid circular dependencies
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
