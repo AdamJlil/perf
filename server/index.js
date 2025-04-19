@@ -6,6 +6,20 @@ const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payment');
 const contactRoutes = require('./routes/contact');
 
+// Add global unhandled rejection handler
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't exit the process, just log the error
+});
+
+// Add global uncaught exception handler
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  // Don't exit the process, just log the error
+});
+
+console.log('Starting server initialization...');
+
 const app = express();
 
 // CORS configuration
@@ -30,6 +44,8 @@ const corsOptions = {
   maxAge: 86400
 };
 
+console.log('Configuring middleware...');
+
 // Enable CORS with the above configuration
 app.use(cors(corsOptions));
 
@@ -38,6 +54,8 @@ app.options('*', cors(corsOptions));
 
 // Parse JSON bodies
 app.use(express.json());
+
+console.log('Setting up routes...');
 
 // Mount auth routes
 app.use('/api/auth', authRoutes);
@@ -54,6 +72,11 @@ app.use('/api/payment', paymentRoutes);
 // Mount contact routes with /api/contact prefix
 app.use('/api/contact', contactRoutes);
 
+// Add a simple health check route
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Handle 404s
 app.use((req, res) => {
   console.log('404 Not Found:', req.method, req.url);
@@ -67,6 +90,15 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Health check available at: http://localhost:${PORT}/health`);
+});
+
+// Add server error handling
+server.on('error', (error) => {
+  console.error('Server error:', error);
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Please use a different port.`);
+  }
 });

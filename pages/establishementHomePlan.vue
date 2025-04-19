@@ -7,7 +7,6 @@ import Bloc2 from "~/components/Sections/Nutrition/BlocTwo.vue"
 import Bloc2Establishment from "~/components/Sections/Establishement/BlocTwo.vue"
 import Bloc3 from "~/components/Sections/Nutrition/BlocThree.vue";
 import Bloc4 from "~/components/Sections/Nutrition/BlocFour.vue";
-import HomeOne from '~/components/home/HomeOne.vue';
 import HomeFour from '~/components/home/HomeFour.vue';
 import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
 import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.vue';
@@ -69,79 +68,217 @@ const handlePlanSelection = (plan: string) => {
 </script>
 
 <style scoped>
-/* Add specific shadow for pricing text to ensure readability */
-:deep(.shadowme) {
+.shadowme {
   text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.big-text-mobile {
+  font-size: 6vw !important; 
+  font-weight: 700 !important;
+  letter-spacing: 3px !important;
+  line-height: 1.2 !important;
+}
+
+.mobile-highlight-text {
+  font-size: 3vw;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+@media (max-width: 768px) {
+  .mobile-highlight-text {
+    font-size: 7vw !important;
+    font-weight: 900 !important;
+    letter-spacing: 2px !important;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.9) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .big-text-mobile {
+    font-size: 3vw !important;
+    letter-spacing: 15px !important;
+  }
+}
+
+/* Custom mobile banner styles */
+.custom-banner {
+  position: relative;
+  width: 100%;
+  height: 25vh;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .custom-banner {
+    height: 60vh;
+  }
+}
+
+.banner-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.banner-text {
+  color: white;
+  font-family: Montserrat, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  margin-bottom: 1rem;
+  max-width: 90%;
+}
+
+.banner-button {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.banner-button:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+@media (min-width: 768px) {
+  .banner-content {
+    align-items: flex-start;
+    padding-left: 5rem;
+    text-align: left;
+  }
+  
+  .banner-text {
+    font-size: 2rem;
+    letter-spacing: 5px;
+  }
+  
+  .banner-button {
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+  }
 }
 </style>
 
 <template>
   <div>
-    <HomeOne 
-      background-image="/images/hospi1.png"
-      image-alt="Background Image"
-      main-text="TAKE YOUR VISITORS SATISFACTION HIGHER"
-      button-text="LOG IN"
-      button-link="/login"
-    />
-    <div class="w-full h-20 bg-white" style="background-image: url('/images/hotels.png'); background-size: 70%; background-position: center; background-repeat: no-repeat;">
+    <!-- Custom banner that replaces HomeOne with better mobile control -->
+    <div class="custom-banner">
+      <img src="/images/hospi1.png" alt="Background Image" class="banner-image" />
+      <div class="banner-content">
+        <p class="banner-text">TAKE YOUR VISITORS SATISFACTION HIGHER</p>
+        <nuxt-link to="/login" class="banner-button">LOG IN</nuxt-link>
+      </div>
     </div>
-    <Bloc2Establishment class="py-[300px]" />
+    <!-- <div class="w-full h-20 bg-[#EFEFEC]" style="background-image: url('/images/hotels.png'); background-size: 70%; background-position: center; background-repeat: no-repeat;">
+    </div> -->
+    <div class="w-full py-6 md:py-8 bg-[#EFEFEC] flex flex-wrap items-center justify-center gap-6 md:gap-[80px] mt-[10px] sm:mt-[20px]">
+      <NuxtImg src="/images/forsea.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
+      <NuxtImg src="/images/sofitel.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
+      <NuxtImg src="/images/riuu.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
+    </div>
+    <Bloc2Establishment />
 
-    <div class="relative w-full h-[90vh] max-md:h-[50vh] overflow-hidden">
+    <div class="relative w-full h-[50vh] max-md:h-[15vh] overflow-hidden mt-[40px]">
       <!-- Background Image -->
-      <img 
-        src="/images/123.png" 
-        alt="Background Image" 
-        class="absolute top-0 left-0 w-full h-full object-cover"
-      />
+      <div class="absolute inset-0 bg-black/20">
+        <img 
+          src="/images/123.png" 
+          alt="Background Image" 
+          class="absolute top-0 left-0 w-full h-full object-cover"
+        />
+      </div>
       
       <!-- Content -->
-      <div class="relative h-full w-full flex justify-end max-md:justify-center items-center px-[90px] max-md:px-[20px]">
-        <p class="shadowme text-white z-10 text-right max-md:text-center text-base sm:text-2xl md:text-3xl lg:text-4xl font-medium tracking-[15px] max-md:tracking-[4px]" style="font-weight: 700;">
+      <div class="relative h-full w-full flex justify-end max-md:justify-center items-center px-[90px] max-md:px-[10px]">
+        <div class="hidden md:block text-white z-10 text-right max-w-[80%] text-[3vw] font-bold tracking-wide" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
           ANY SPACE, ANY TIME
-        </p>
+        </div>
+        <div class="md:hidden text-white z-10 text-center max-w-[100%] text-[7vw] font-black tracking-wider" style="text-shadow: 2px 2px 6px rgba(0,0,0,1); line-height: 1;">
+          ANY SPACE, ANY TIME
+        </div>
       </div>
     </div>
 
-    <Bloc3 class="my-[100px] py-[100px]" :reviews="reviews" />
+    <Bloc3 class="my-[100px]" :reviews="reviews" />
 
 
 
     <!-- What do you get -->
-    <div class="w-full pb-20">
-      <div class="w-full p-10 flex justify-center items-center flex-col gap-10" style="font-family: Montserrat;">
-      <h1 class="font-bold text-center text-4xl text-gray-700 uppercase pb-20">What do you get ?</h1>
-      <div class="w-80 h-4 bg-gray-400"></div>
+    <div class="w-full pb-10 md:pb-20">
+      <div class="w-full p-4 md:p-10 flex justify-center items-center flex-col gap-6 md:gap-10" style="font-family: Montserrat;">
+      <h1 class="font-bold text-center text-2xl md:text-4xl text-gray-700 uppercase pb-10 md:pb-20">What do you get ?</h1>
+      <div class="w-64 md:w-80 h-3 md:h-4 bg-gray-400"></div>
 
-      <div class="flex justify-center items-center flex-col p-5">
-        <div class="flex justify-center items-center gap-10">
-          <div><img class="w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-xl w-60 text-left">Eco-friendly Fitness Solutions</p>
-          <p class="text-gray-800 text-xl w-60 text-right">Training and nutrition Support</p>
-          <div><img class="w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+      <div class="flex justify-center items-center flex-col p-3 md:p-5">
+        <!-- First row - stack on mobile, side by side on md+ -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6 md:mb-0">
+          <div class="flex items-center md:w-auto w-full">
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Eco-friendly Fitness Solutions</p>
+          </div>
+          
+          <div class="flex items-center md:w-auto w-full">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Training and nutrition Support</p>
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+          </div>
         </div>
 
-        <div class="flex justify-center items-center gap-10">
-          <div><img class="w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-xl w-60 text-left">Space Optimization</p>
-          <p class="text-gray-800 text-xl w-60 text-right">Digital Platforms</p>
-          <div><img class="w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+        <!-- Second row - stack on mobile, side by side on md+ -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6 md:mb-0">
+          <div class="flex items-center md:w-auto w-full">
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Space Optimization</p>
+          </div>
+          
+          <div class="flex items-center md:w-auto w-full">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Digital Platforms</p>
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+          </div>
         </div>
 
-        <div class="flex justify-center items-center gap-10">
-          <div><img class="w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-xl w-60 text-left">Customer Experience</p>
-          <p class="text-gray-800 text-xl w-60 text-right">Sustainable Practices</p>
-          <div><img class="w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+        <!-- Third row - stack on mobile, side by side on md+ -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10">
+          <div class="flex items-center md:w-auto w-full">
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Customer Experience</p>
+          </div>
+          
+          <div class="flex items-center md:w-auto w-full">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Sustainable Practices</p>
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+          </div>
         </div>
         
       </div>
 
-      <div class="w-80 h-4 bg-gray-400"></div>
+      <div class="w-64 md:w-80 h-3 md:h-4 bg-gray-400"></div>
 
-      <div class="w-full h-40 flex justify-center items-center pt-40">
-        <button @click="scrollToPricing" class="text-black px-10 py-3 uppercase text-lg tracking-[10px] border-black border-2 hover:bg-gray-100 transition-colors cursor-pointer">Start now</button>
+      <div class="w-full h-32 md:h-40 flex justify-center items-center md:pt-40 pt-20">
+        <button @click="scrollToPricing" class="text-black px-6 md:px-10 py-2 md:py-3 uppercase text-md md:text-lg tracking-[6px] md:tracking-[10px] border-black border-2 hover:bg-gray-100 transition-colors cursor-pointer">Start now</button>
       </div>
     </div>
     </div>
@@ -171,11 +308,76 @@ bookings. Be the preferred choice for healthconscious travelers.
 
 
     <!-- Why PERF -->
-     <div class="w-full pt-50 bg-[#F2F2F2]">
-      <h1 class="font-bold text-center text-4xl text-gray-700 uppercase pb-20">Why PERF ? </h1>
-      <div class="w-full h-[100vh] bg-white" style="background-image: url('/images/whyPerf.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="bg-[#EFEFEC] py-[40px] lg:py-[200px] px-4">
+  <!-- DESKTOP: 10% OVERLAP VENN LAYOUT -->
+  <div class="hidden lg:flex justify-center relative h-[320px] w-full">
+    <div class="relative w-[896px] h-80">
+      <!-- Left Circle -->
+      <div class="absolute top-0 left-0 w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+        DISCOVER
       </div>
-     </div>
+      <!-- Middle Circle -->
+      <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#d57753]/80 rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">
+        DESIGN
+      </div>
+      <!-- Right Circle -->
+      <div class="absolute top-0 left-[576px] w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+        DELIVER
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE/TABLET: VERTICAL LAYOUT -->
+  <div class="flex flex-col gap-10 lg:hidden mt-10 text-neutral-900 text-sm items-center text-center">
+    <!-- DISCOVER -->
+    <div class="flex flex-col items-center gap-4">
+      <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
+        DISCOVER
+      </div>
+      <p class="max-w-xs">
+        Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+      </p>
+    </div>
+    <!-- DESIGN -->
+    <div class="flex flex-col items-center gap-4">
+      <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
+        DESIGN
+      </div>
+      <p class="max-w-xs">
+        Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+      </p>
+    </div>
+    <!-- DELIVER -->
+    <div class="flex flex-col items-center gap-4">
+      <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
+        DELIVER
+      </div>
+      <p class="max-w-xs">
+        Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+      </p>
+    </div>
+  </div>
+
+  <!-- DESKTOP TEXT BELOW CIRCLES -->
+  <div class="max-w-6xl mx-auto mt-20 hidden lg:grid grid-cols-3 gap-10 text-sm text-center text-neutral-900">
+    <div>
+      <p>
+        Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+      </p>
+    </div>
+    <div>
+      <p>
+        Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+      </p>
+    </div>
+    <div>
+      <p>
+        Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+      </p>
+    </div>
+  </div>
+</div>
+
     
 
     <!-- <HomeFour image1="/images/129.png" link="" buttonText="MORE" image2="/images/128.png" headingText="AT HOME, OUTDOORS, </br> OR WHILE TRAVELING!"/> -->

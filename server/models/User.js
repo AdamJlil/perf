@@ -430,6 +430,9 @@ class User {
     try {
       connection = await this.getConnection();
 
+      console.log('------------------------')
+      console.log(connection)
+
       // Get the establishment's customers array
       const query = 'SELECT customers FROM users WHERE id = ? AND type = "ESTABLISHEMENT"';
       console.log("Executing query:", query, "with values:", [establishmentId]);

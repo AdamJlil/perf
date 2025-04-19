@@ -47,9 +47,9 @@
           </a>
           <a href="#" aria-label="Twitter">
             <img
-              src="/twitter-2-svgrepo-com.svg"
+              src="/x-social-media-round-icon.svg"
               alt="Twitter"
-              class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200 invert dark:invert-0"
+              class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200"
             />
           </a>
           <a href="#" aria-label="Instagram">

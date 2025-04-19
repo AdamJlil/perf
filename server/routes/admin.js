@@ -53,7 +53,7 @@ router.get('/customers', verifyAdminToken, async (req, res) => {
       } else if (user.paid === 0 || user.paid === '0' || user.paid === false) {
         paidValue = false;
       }
-      
+
       return {
         id: user.id,
         email: user.email,
@@ -64,8 +64,8 @@ router.get('/customers', verifyAdminToken, async (req, res) => {
         age: user.age,
         height: user.height,
         gender: user.gender,
-        allergies: user.has_allergies ? user.allergies_details : null,
-        medicalConditions: user.has_medical_conditions ? user.medical_conditions_details : null,
+        allergies: user.allergies_details,
+        medicalConditions: user.medical_conditions_details,
         details: null, // You can add any additional details here if needed
         createdAt: user.created_at,
         plan: planData,

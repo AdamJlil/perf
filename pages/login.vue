@@ -4,15 +4,16 @@ const { login } = useAuth();
 const form = reactive({
   data: {
     // email: "particuier1@gmail.com",
-    email: "particuier1@gmail.com",
-    password: "password",
+    email: "elmehdi.arkhis@gmail.com",
+    password: "elmehdi@123",
     rememberMe: false,
     etablissement: "",
   },
   error: "",
   pending: false,
 });
-
+// email: "tester2@gmail.com",
+// password: "tester2@gmail.com",
 const isAdmin = useAdmin();
 
 async function onLoginClick() {

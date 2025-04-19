@@ -1,9 +1,24 @@
 <script lang="ts" setup>
 import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
-import { ref, onMounted, watch } from "vue";
-import { useRoute } from 'vue-router';
+import { ref, reactive, onMounted, watch, computed } from "vue";
+import { useRoute, useRouter } from 'vue-router';
 import type { Customer } from '~/types';
 import { useAuthUser } from '~/composables/useAuthUser';
+
+// Define proper customer interface to fix TypeScript errors
+interface Customer {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  et_customer_id: string;
+  video: number;
+  burnedCalories: {
+    [key: string]: number;
+  };
+  ageRange?: string;
+  weightRange?: string;
+}
 
 const API_BASE_URL = 'http://localhost:3001';
 
@@ -32,7 +47,7 @@ const getUserInfo = () => {
       console.log('Set user name to:', userName.value);
     }
   } catch (err) {
-    console.error('Error getting user info:', err);
+    handleError(err);
   }
 };
 
@@ -63,7 +78,7 @@ const fetchEstablishmentInfo = async () => {
     const data = await response.json();
     const establishmentName = data.establishment_name || data.first_name + ' ' + data.last_name;
   } catch (err) {
-    console.error('Error fetching establishment info:', err);
+    handleError(err);
     error.value = err.message;
   }
 };
@@ -140,7 +155,7 @@ const removeCustomer = async (customerId: string) => {
       };
     }
   } catch (err) {
-    console.error('Error removing customer:', err);
+    handleError(err);
     error.value = err instanceof Error ? err.message : 'Failed to remove customer';
   }
 };
@@ -188,7 +203,7 @@ onMounted(async () => {
       
       // Check if the user has paid
       if (user && (user.paid !== true && user.paid !== 1)) {
-        console.log('User has not paid, redirecting to order page');
+        console.log('User has not paid, redirecting to payment page');
         
         // Determine price based on plan
         let price = '';
@@ -209,16 +224,16 @@ onMounted(async () => {
           }
         }
         
-        // Construct the order URL with user information
-        const orderUrl = `/order?first_name=${encodeURIComponent(user.first_name || '')}&name=${encodeURIComponent(user.name || '')}&email=${encodeURIComponent(user.email)}&userType=${encodeURIComponent(user.type)}&plan=${encodeURIComponent(user.plan ? (typeof user.plan === 'string' ? JSON.parse(user.plan).title || '' : user.plan.title || '') : '')}&price=${encodeURIComponent(price)}`;
+        // Construct the payment URL with user information
+        const paymentUrl = `/payment?first_name=${encodeURIComponent(user.first_name || '')}&name=${encodeURIComponent(user.name || '')}&email=${encodeURIComponent(user.email)}&userType=${encodeURIComponent(user.type)}&plan=${encodeURIComponent(user.plan ? (typeof user.plan === 'string' ? JSON.parse(user.plan).title || '' : user.plan.title || '') : '')}&price=${encodeURIComponent(price)}`;
         
-        // Redirect to order page
-        window.location.href = orderUrl;
+        // Redirect to payment page
+        window.location.href = paymentUrl;
         return;
       }
     }
   } catch (error) {
-    console.error('Error checking payment status:', error);
+    handleError(error);
   }
   
   // Continue with normal page loading if user has paid
@@ -265,26 +280,26 @@ const fetchCustomers = async () => {
       if (typeof customer === 'string') {
         return {
           id: customer,
-          first_name: '',
-          last_name: '',
+          firstName: '',
+          lastName: '',
           email: '',
-          age_range: '',
-          weight_range: '',
+          ageRange: '',
+          weightRange: '',
           video: 0,
-          burned_calories: { 'Day 1': 0 }
+          burnedCalories: { 'Day 1': 0 }
         };
       }
       
       // Ensure all required properties exist
-      const processedCustomer = {
+      const processedCustomer: Customer = {
         id: customer.id || customer._id || customer.et_customer_id,
-        first_name: customer.first_name || customer.firstName || '',
-        last_name: customer.last_name || customer.lastName || '',
+        firstName: customer.first_name || customer.firstName || '',
+        lastName: customer.last_name || customer.lastName || '',
         email: customer.email || '',
-        age_range: customer.age_range || customer.ageRange || '',
-        weight_range: customer.weight_range || customer.weightRange || '',
+        ageRange: customer.age_range || customer.ageRange || '',
+        weightRange: customer.weight_range || customer.weightRange || '',
         video: customer.video || 0,
-        burned_calories: customer.burned_calories || customer.burnedCalories || { 'Day 1': 0 }
+        burnedCalories: customer.burned_calories || customer.burnedCalories || { 'Day 1': 0 }
       };
       
       console.log('Processed customer:', processedCustomer);
@@ -293,7 +308,7 @@ const fetchCustomers = async () => {
 
     console.log('Final customers array:', customers.value);
   } catch (err) {
-    console.error('Error fetching customers:', err);
+    handleError(err);
     error.value = err.message || 'An error occurred while fetching customers';
   } finally {
     loading.value = false;
@@ -330,6 +345,10 @@ const generateRandomColor = (): string => {
 };
 
 let usedColors: string[] = [];
+
+const handleError = (err: unknown) => {
+  console.error('Error:', err instanceof Error ? err.message : String(err));
+};
 </script>
 
 <template>
@@ -366,10 +385,10 @@ let usedColors: string[] = [];
           <div class="p-4">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold">
-                {{ (customer.first_name?.[0] || '') }}{{ (customer.last_name?.[0] || '') }}
+                {{ (customer.firstName?.[0] || '') }}{{ (customer.lastName?.[0] || '') }}
               </div>
               <div>
-                <h3 class="text-lg font-semibold">{{ customer.first_name || '' }} {{ customer.last_name || '' }}</h3>
+                <h3 class="text-lg font-semibold">{{ customer.firstName || '' }} {{ customer.lastName || '' }}</h3>
                 <p class="text-gray-600 text-sm">{{ customer.email }}</p>
               </div>
             </div>
@@ -382,7 +401,7 @@ let usedColors: string[] = [];
               </div>
               <div class="text-sm text-gray-600">
                 <span class="block font-medium">Age Range</span>
-                {{ customer.age_range || 'Not specified' }}
+                {{ customer.ageRange || 'Not specified' }}
               </div>
             </div>
           </div>
@@ -399,10 +418,10 @@ let usedColors: string[] = [];
             <div class="flex justify-between items-start mb-6">
               <div class="flex items-center gap-4">
                 <div class="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-2xl">
-                  {{ (selectedCustomer?.first_name?.[0] || '') }}{{ (selectedCustomer?.last_name?.[0] || '') }}
+                  {{ (selectedCustomer?.firstName?.[0] || '') }}{{ (selectedCustomer?.lastName?.[0] || '') }}
                 </div>
                 <div>
-                  <h2 class="text-2xl font-bold">{{ selectedCustomer?.first_name }} {{ selectedCustomer?.last_name }}</h2>
+                  <h2 class="text-2xl font-bold">{{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}</h2>
                   <p class="text-gray-600">{{ selectedCustomer?.email }}</p>
                 </div>
               </div>
@@ -419,11 +438,11 @@ let usedColors: string[] = [];
               <div class="grid grid-cols-2 gap-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                   <h3 class="text-sm font-medium text-gray-500">Age Range</h3>
-                  <p class="text-lg font-semibold mt-1">{{ selectedCustomer?.age_range || 'Not specified' }}</p>
+                  <p class="text-lg font-semibold mt-1">{{ selectedCustomer?.ageRange || 'Not specified' }}</p>
                 </div>
                 <div class="bg-gray-50 p-4 rounded-lg">
                   <h3 class="text-sm font-medium text-gray-500">Weight Range</h3>
-                  <p class="text-lg font-semibold mt-1">{{ selectedCustomer?.weight_range || 'Not specified' }}</p>
+                  <p class="text-lg font-semibold mt-1">{{ selectedCustomer?.weightRange || 'Not specified' }}</p>
                 </div>
                 <div class="bg-gray-50 p-4 rounded-lg">
                   <h3 class="text-sm font-medium text-gray-500">Videos Completed</h3>
@@ -441,11 +460,11 @@ let usedColors: string[] = [];
               </div>
 
               <!-- Calories Burned History -->
-              <div v-if="selectedCustomer?.burned_calories && Object.keys(selectedCustomer.burned_calories).length > 0"
+              <div v-if="selectedCustomer?.burnedCalories && Object.keys(selectedCustomer.burnedCalories).length > 0"
                    class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Calories Burned History</h3>
                 <div class="space-y-3">
-                  <div v-for="(calories, day) in selectedCustomer.burned_calories" 
+                  <div v-for="(calories, day) in selectedCustomer.burnedCalories" 
                        :key="day" 
                        class="flex items-center justify-between">
                     <span class="text-gray-600">{{ day }}</span>
@@ -496,7 +515,7 @@ let usedColors: string[] = [];
             </div>
             <h3 class="text-lg font-medium text-gray-900 mb-2">Remove Customer</h3>
             <p class="text-sm text-gray-500 mb-6">
-              Are you sure you want to remove {{ selectedCustomer?.first_name }} {{ selectedCustomer?.last_name }}? 
+              Are you sure you want to remove {{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}? 
               This action cannot be undone.
             </p>
             <div class="flex justify-center gap-3">

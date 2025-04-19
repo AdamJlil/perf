@@ -70,7 +70,6 @@
               <th class="py-3 px-4 text-left">Gender</th>
               <th class="py-3 px-4 text-left">Allergies</th>
               <th class="py-3 px-4 text-left">Medical Conditions</th>
-              <th class="py-3 px-4 text-left">Details</th>
               <th class="py-3 px-4 text-left">Created At</th>
               <th class="py-3 px-4 text-left">Plan</th>
               <th class="py-3 px-4 text-left">Paid</th>
@@ -110,12 +109,6 @@
                 </span>
                 <span v-else>None</span>
               </td>
-              <td class="py-3 px-4">
-                <span v-if="customer.details" class="cursor-pointer" @click="showDetails(customer.details)">
-                  View
-                </span>
-                <span v-else>None</span>
-              </td>
               <td class="py-3 px-4">{{ formatDate(customer.createdAt) }}</td>
               <td class="py-3 px-4">{{ formatPlan(customer.plan) }}</td>
               <td class="py-3 px-4">
@@ -146,7 +139,7 @@
             </tr>
             <!-- Empty state when no customers -->
             <tr v-if="displayedCustomers.length === 0">
-              <td colspan="15" class="py-8 text-center text-gray-500">No customers found</td>
+              <td colspan="14" class="py-8 text-center text-gray-500">No customers found</td>
             </tr>
           </tbody>
         </table>
@@ -496,6 +489,8 @@ async function fetchCustomers() {
         Authorization: `Bearer ${token}`
       }
     });
+    
+    console.log(response.data);
     
     // Map the response data to match our component's expected format
     customers.value = response.data.map((customer: any) => ({

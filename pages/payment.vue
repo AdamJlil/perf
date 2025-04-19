@@ -1,198 +1,183 @@
 <template>
-<div
-    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center relative p-4 pt-[100px] bg-[#EFEFEC] my-0"
+  <div
+    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center relative p-4 md:pt-[100px] bg-[#EFEFEC] my-0"
   >
 
-  <div class="w-full max-w-6xl flex max-md:flex-col justify-between items-start gap-8 mt-[160px] h-fit">
-    <!-- Payment Form -->
-    <div class="w-full  lg:w-1/2 flex flex-col items-center">
-      
-      <div class="w-full flex max-md:justify-center md:justify-between h-full">
-        <h2 class="text-lg uppercase font-medium tracking-1 mb-8 underline text-underline-offset-4">DELIVERY INFOS : </h2>
-      </div>
-      
-      <div class="w-full mt-10 ">
-        <!-- Name -->
-        <div class="w-full flex  sm:flex-row items-start justify-end">
-          <label class="text-base font-medium text-black  py-0 mr-1 text-nowrap">NAME :</label>
-          <input
-            v-model="form.name"
-            type="text"
-            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 "
-            required
-          />
-        </div>
-
-        <!-- Address -->
-        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
-          <label class="text-base font-medium text-black  py-0 sm:mr-1 text-nowrap">ADRESSE:</label>
-          <input
-            v-model="form.address"
-            type="text"
-            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-            required
-          />
-        </div>
-
-        <!-- City -->
-        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
-          <label class="text-base  font-medium text-black  py-0 sm:mr-1 text-nowrap">CITY :</label>
-          <input
-            v-model="form.city"
-            type="text"
-            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-            required
-          />
-        </div>
-
-        <!-- Phone -->
-        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
-          <label class="text-base font-medium text-black  py-0 sm:mr-1 text-nowrap">PHONE:</label>
-          <input
-            v-model="form.phone"
-            type="tel"
-            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-            required
-          />
-        </div>
-
-        <!-- Shipping -->
-        <div class="w-full flex flex-col sm:flex-row items-start justify-end">
-          <label class="text-base font-medium text-black  py-0 sm:mr-1 text-nowrap">SHIPPING:</label>
-          <input
-            v-model="form.shipping"
-            type="text"
-            class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-          />
-        </div>
-      </div>
-
-      <!-- Payment Method Section -->
-      <div class="w-full flex flex-col items-start mt-8">
-        <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">PAYMENT METHOD:</label>
+    <div class="w-full max-w-6xl flex flex-col md:flex-row justify-between items-start gap-8 mt-[160px] h-fit">
+      <!-- Payment Form -->
+      <div class="w-full lg:w-1/2 flex flex-col items-center">
         
-        <div class="w-full flex flex-row justify-start mt-5">
-          <button 
-            @click="form.paymentMethod = 'bank'" 
-            class="w-auto px-4 py-2 text-black uppercase tracking-wider transition-all duration-300"
-            :class="form.paymentMethod === 'bank' ? 'bg-orange text-white' : 'hover:bg-orange hover:text-white'"
-          >
-            Bank deposit
-          </button>
-          <div id="gapper" class="w-4 bg-[#EFEFEC]" :class="{ 'scale-y-105': form.paymentMethod === 'bank' }"></div>
-          <div id="divider" class="w-[1px] bg-gray-700"></div>
-          <div id="gapper" class="w-4 bg-[#EFEFEC]" :class="{ 'scale-y-110': form.paymentMethod === 'cash' }"></div>
-          <button 
-            @click="form.paymentMethod = 'cash'" 
-            class="w-auto px-4 py-2 text-black uppercase tracking-wider transition-all duration-300"
-            :class="form.paymentMethod === 'cash' ? 'bg-orange text-white' : 'hover:bg-orange hover:text-white'"
-          >
-            Cash on delivery
-          </button>
+        <div class="w-full flex max-md:justify-center md:justify-between h-full">
+          <h2 class="text-lg uppercase font-medium tracking-1 mb-8 underline text-underline-offset-4">
+            DELIVERY INFOS :
+          </h2>
+        </div>
+        
+        <div class="w-full mt-10 space-y-4">
+          <!-- Pre-filled Data Alert -->
+          <div v-if="dataPreFilled || updateSuccessful" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4 max-md:text-sm md:text-base">
+            Your Payment Informations Have Been Received, an email confirmation has been sent to you.
+          </div>
+          
+          <!-- Error Alert -->
+          <div v-if="form.error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 max-md:text-sm md:text-base">
+            {{ form.error }}
+          </div>
+
+          <!-- Address -->
+          <div class="w-full flex flex-col sm:flex-row items-center">
+            <label class="sm:w-[88px] text-base font-medium text-black text-nowrap mb-1 sm:mb-0 sm:mr-2">ADRESSE :</label>
+            <div class="flex-1 flex flex-col w-full">
+              <input
+                v-model="form.address"
+                type="text"
+                class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 border-b border-black"
+                :class="{'border-red-500': form.errors.address, 'bg-green-100': dataPreFilled && form.address}"
+                required
+              />
+              <span v-if="form.errors.address" class="text-sm text-red-500 mt-1">{{ form.errors.address }}</span>
+            </div>
+          </div>
+
+          <!-- City -->
+          <div class="w-full flex flex-col sm:flex-row items-center">
+            <label class="sm:w-[88px] text-base font-medium text-black text-nowrap mb-1 sm:mb-0 sm:mr-2">CITY :</label>
+            <div class="flex-1 flex flex-col w-full">
+              <input
+                v-model="form.city"
+                type="text"
+                class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 border-b border-black"
+                :class="{'border-red-500': form.errors.city, 'bg-green-100': dataPreFilled && form.city}"
+                required
+              />
+              <span v-if="form.errors.city" class="text-sm text-red-500 mt-1">{{ form.errors.city }}</span>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="w-full flex flex-col sm:flex-row items-center">
+            <label class="sm:w-[88px] text-base font-medium text-black text-nowrap mb-1 sm:mb-0 sm:mr-2">PHONE :</label>
+            <div class="flex-1 flex flex-col w-full">
+              <input
+                v-model="form.phone"
+                type="tel"
+                class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0 border-b border-black"
+                :class="{'border-red-500': form.errors.phone, 'bg-green-100': dataPreFilled && form.phone}"
+                required
+              />
+              <span v-if="form.errors.phone" class="text-sm text-red-500 mt-1">{{ form.errors.phone }}</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Payment Details -->
-        <div class="w-full ">
-          <!-- Bank Information -->
-          <div v-if="form.paymentMethod === 'bank'" class="w-full flex flex-col border border-gray-700 p-4">
-            <!-- Bank of Africa -->
-            <div class="">
-              <label class="text-base font-medium italic text-black mb-2">Bank of Africa </label>
-              <div class="">
-                <div class="w-full flex sm:flex-row items-stert">
-                  <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">Account number :</label>
-                  <input
-                    v-model="form.BanqAfricaAccountNumber"
-                    type="text"
-                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-                    required
-                  />
+
+        <!-- Payment Method Section -->
+        <div class="w-full flex flex-col items-start mt-8">
+          <label class="text-base font-medium text-black py-0 sm:mr-1">
+            PAYMENT METHOD:
+          </label>
+          
+          <div class="w-full flex flex-row justify-start mt-5">
+            <button 
+              @click="form.paymentMethod = 'bank'" 
+              class="w-auto px-4 py-2 text-black uppercase tracking-wider transition-all duration-300"
+              :class="form.paymentMethod === 'bank' ? 'bg-orange text-white' : 'hover:bg-orange hover:text-white'"
+            >
+              Bank deposit
+            </button>
+            <div id="gapper" class="w-4 bg-[#EFEFEC]" :class="{ 'scale-y-105': form.paymentMethod === 'bank' }"></div>
+            <div id="divider" class="w-[1px] bg-gray-700"></div>
+            <div id="gapper" class="w-4 bg-[#EFEFEC]" :class="{ 'scale-y-110': form.paymentMethod === 'cash' }"></div>
+            <button 
+              @click="form.paymentMethod = 'cash'" 
+              class="w-auto px-4 py-2 text-black uppercase tracking-wider transition-all duration-300"
+              :class="form.paymentMethod === 'cash' ? 'bg-orange text-white' : 'hover:bg-orange hover:text-white'"
+            >
+              Cash on delivery
+            </button>
+          </div>
+          <span v-if="form.errors.paymentMethod" class="text-sm text-red-500 mt-1">{{ form.errors.paymentMethod }}</span>
+
+          <!-- Payment Details -->
+          <div class="w-full ">
+            <!-- Bank Information -->
+            <div v-if="form.paymentMethod === 'bank'" class="w-full flex flex-col border border-gray-700 p-4">
+              <!-- Bank of Africa -->
+              <div class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                  <div class="text-base">
+                    <span class="font-semibold">Compte Chèque Particulier:</span> M AMJAD ARKHIS
+                  </div>
+                  <div class="text-base">
+                    <span class="font-semibold">Banking details:</span> 011 590 0000112000002178 72
+                  </div>
+                  <div class="text-base">
+                    <span class="font-semibold">IBAN:</span> MA64 0115 9000 0011 2000 0021 7872
+                  </div>
+                  <div class="text-base">
+                    <span class="font-semibold">BIC:</span> BMCEMAMC
+                  </div>
                 </div>
-                <div class="w-full flex sm:flex-row items-start">
-                  <label class="text-base font-medium  text-black py-0 sm:mr-1 text-nowrap">RIB :</label>
-                  <input
-                    v-model="form.BanqAfricaRIB"
-                    type="text"
-                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-                    required
-                  />
+                <div class="mt-3 text-sm italic text-gray-700">
+                  Please include your name and subscription plan in the transfer description
                 </div>
               </div>
             </div>
 
-            <!-- CIH -->
-            <div>
-              <label class="text-base font-medium italic text-black mb-2">CIH </label>
-              <div class="">
-                <div class="w-full flex sm:flex-row items-start">
-                  <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">Account number :</label>
-                  <input
-                    v-model="form.CIHAccountNumber"
-                    type="text"
-                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-                    required
-                  />
-                </div>
-                <div class="w-full flex sm:flex-row items-start">
-                  <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">RIB :</label>
-                  <input
-                    v-model="form.Cihrib"
-                    type="text"
-                    class="w-full p-0 text-base font-medium bg-transparent text-black placeholder-gray-300 focus:outline-none focus:ring-0  "
-                    required
-                  />
-                </div>
-              </div>
+            <!-- Cash Payment Information -->
+            <div v-if="form.paymentMethod === 'cash'" class="w-full flex flex-col border border-gray-700 p-5">
+              <label class="text-sm font-medium text-black py-0 sm:mr-1">
+                Pay directly when you receive your order at the mentioned address above
+              </label>
             </div>
           </div>
-
-          <!-- Cash Payment Information -->
-          <div v-if="form.paymentMethod === 'cash'" class="w-full flex flex-col border border-gray-700 p-5">
-            <label class="text-sm font-medium text-black py-0 sm:mr-1">
-              Pay directly when you receive your order at the mentioned address above
-            </label>
-          </div>
         </div>
-      </div>
 
-      <!-- Complete Order Button -->
-      <button 
-        @click="handlePayment"
-        class="w-full mt-8 border border-black text-black py-3 px-6 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300"
-      >
-        COMPLETE ORDER
-      </button>
-    </div>
-    
+        <!-- General Error Message (if any) -->
+        <div v-if="form.error" class="w-full mt-4 p-3 bg-red-100 text-red-700 text-sm rounded">
+          {{ form.error }}
+        </div>
 
-    <!-- Plan Card -->
-    <div 
-      v-if="selectedPlan"
-      class="w-full lg:w-1/3 relative h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 transition-transform duration-300 hover:scale-105"
-    >
-      <img v-if="selectedPlan.title === 'PLATINUM'" src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
-
-      <h2 class="text-xl uppercase tracking-2">{{ selectedPlan.title }}</h2>
-      <h5 class="pt-1 -tracking-0.3 opacity-80">{{ selectedPlan.duration }}</h5>
-
-      <ul class="list-disc p-5 lg:w-50 sm:w-90 pt-5">
-        <li
-          v-for="(feature, i) in selectedPlan.features"
-          :key="i"
-          class="text-center lowercase tracking-1 py-3"
-          :class="{ 'opacity-50': feature.isDisabled }"
+        <!-- Complete Order Button -->
+        <button 
+          @click="handlePayment"
+          class="w-full mt-8 border border-black text-black py-3 px-6 uppercase tracking-wider hover:bg-black hover:text-white transition-all duration-300"
+          :disabled="form.submitting"
         >
-          {{ feature.text }}
-        </li>
-      </ul>
+          <span v-if="form.submitting">PROCESSING...</span>
+          <span v-else>COMPLETE ORDER</span>
+        </button>
+      </div>
+      
+      <!-- Plan Card -->
+      <div 
+        v-if="selectedPlan"
+        class="w-full lg:w-1/3 relative h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 transition-transform duration-300 hover:scale-105"
+      >
+        <img v-if="selectedPlan.title === 'PLATINUM'" src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
 
-      <h2 class="pt-5 text-lg tracking-1">{{ selectedPlan.price }}</h2>
-      <h2 class="text-[#D05E33] text-md uppercase line-through">{{ selectedPlan.discount }}</h2>
+        <h2 class="text-xl uppercase tracking-2">{{ selectedPlan.title }}</h2>
+        <h5 class="pt-1 -tracking-0.3 opacity-80">{{ selectedPlan.duration }}</h5>
+
+        <ul class="list-disc p-5 lg:w-50 sm:w-90 pt-5">
+          <li
+            v-for="(feature, i) in selectedPlan.features"
+            :key="i"
+            class="text-center lowercase tracking-1 py-3"
+            :class="{ 'opacity-50': feature.isDisabled }"
+          >
+            {{ feature.text }}
+          </li>
+        </ul>
+
+        <h2 class="pt-5 text-lg tracking-1">{{ selectedPlan.price }}</h2>
+        <h2 class="text-[#D05E33] text-md uppercase line-through">{{ selectedPlan.discount }}</h2>
+      </div>
     </div>
   </div>
-</div>
 
 </template>
+
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
@@ -211,21 +196,26 @@ interface Plan {
 const route = useRoute()
 
 const form = reactive({
-  name: '',
   address: '',
   city: '',
   phone: '',
-  shipping: '',
   paymentMethod: '',
-  BanqAfricaAccountNumber: '',
-  BanqAfricaRIB: '',
-  CIHAccountNumber: '',
-  Cihrib: ''
+  submitting: false,
+  error: '',
+  errors: {
+    address: '',
+    city: '',
+    phone: '',
+    paymentMethod: ''
+  }
 })
 
 const selectedPlan = ref<Plan | null>(null)
 
-onMounted(() => {
+const dataPreFilled = ref(false);
+const updateSuccessful = ref(false);
+
+onMounted(async () => {
   try {
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -238,23 +228,32 @@ onMounted(() => {
     
     console.log('URL Parameters:', { firstName, name, email, userType, planName, price });
     
-    // Pre-fill form with data from URL
-    if (name) {
-      form.name = name;
-    }
-    
     // Set default payment method
     form.paymentMethod = 'bank';
     
-    // If we don't have all the necessary parameters, try to fetch them from the API
-    if (!firstName || !name || !email || !userType || !planName || !price) {
-      console.log('Missing parameters, will try to fetch from API');
-      fetchUserData();
+    // Always try to fetch user data to get the latest values
+    if (email) {
+      console.log('Fetching user data with email:', email);
+      await fetchUserData();
     } else {
-      // Create a plan object based on URL parameters
+      console.log('No email parameter, cannot fetch user data');
       createPlanObject(planName, userType, price);
     }
-  } catch (error: any) {
+    
+    // Check localStorage for token and user ID
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const userData = JSON.parse(userStr);
+        if (userData && userData.user && userData.user.id) {
+          // Try a direct API call to get user data
+          await fetchUserDataById(userData.user.id, userData.token);
+        }
+      } catch (e) {
+        console.error('Error parsing user data from localStorage:', e);
+      }
+    }
+  } catch (error) {
     console.error('Error in onMounted:', error);
   }
 });
@@ -271,6 +270,8 @@ const fetchUserData = async () => {
       return;
     }
     
+    console.log('Fetching user data for email:', email);
+    
     // Call the API to get user data
     const response = await fetch(`http://localhost:3001/api/users/by-email?email=${encodeURIComponent(email)}`);
     
@@ -279,42 +280,157 @@ const fetchUserData = async () => {
     }
     
     const userData = await response.json();
-    console.log('Fetched user data:', userData);
+    console.log('Fetched user data (FULL RESPONSE):', JSON.stringify(userData, null, 2));
     
     if (userData && userData.user) {
-      // Update form with user data
-      form.name = userData.user.name || '';
+      const user = userData.user;
+      console.log('User object structure:', Object.keys(user));
+      console.log('Address field value:', user.address);
+      console.log('City field value:', user.city);
+      console.log('Phone field value:', user.phone);
+      console.log('Payment type field value:', user.payment_type);
       
-      // Determine price based on plan
-      let price = '';
-      if (userData.user.plan) {
-        const planTitle = typeof userData.user.plan === 'string' ? 
-          (JSON.parse(userData.user.plan).title || '') : 
-          (userData.user.plan.title || '');
-        
-        if (userData.user.type === 'ESTABLISHEMENT') {
-          if (planTitle === 'BRONZE') price = '2999';
-          else if (planTitle === 'PLATINUM') price = '4999';
-          else if (planTitle === 'GOLD') price = '8999';
-        } else {
-          // PARTICULIER prices
-          if (planTitle === 'BRONZE') price = '999';
-          else if (planTitle === 'PLATINUM') price = '1582';
-          else if (planTitle === 'GOLD') price = '999';
-        }
+      // Check if we have any data to pre-fill
+      let hasPreFilledData = false;
+      
+      // Pre-fill form with existing data if available
+      if (user.address) {
+        form.address = user.address;
+        console.log('Pre-filled address:', user.address);
+        hasPreFilledData = true;
+      }
+      
+      if (user.city) {
+        form.city = user.city;
+        console.log('Pre-filled city:', user.city);
+        hasPreFilledData = true;
+      }
+      
+      if (user.phone) {
+        form.phone = user.phone;
+        console.log('Pre-filled phone:', user.phone);
+        hasPreFilledData = true;
+      }
+      
+      if (user.payment_type) {
+        form.paymentMethod = user.payment_type;
+        console.log('Pre-filled payment method:', user.payment_type);
+        hasPreFilledData = true;
+      } else {
+        // Set default payment method if not available
+        form.paymentMethod = 'bank';
+      }
+      
+      // Force reactivity update
+      form.address = user.address || '';
+      form.city = user.city || '';
+      form.phone = user.phone || '';
+      form.paymentMethod = user.payment_type || 'bank';
+      
+      // Update the pre-filled status
+      dataPreFilled.value = hasPreFilledData;
+      
+      // Also check if user has access to localStorage data
+      const userStr = localStorage.getItem('user');
+      if (!userStr) {
+        // If user data is not in localStorage, store it
+        localStorage.setItem('userId', user.id);
+        // Store minimal user data to avoid localStorage size limits
+        localStorage.setItem('user', JSON.stringify({
+          token: userData.token || '',
+          user: {
+            id: user.id,
+            email: user.email
+          }
+        }));
       }
       
       // Create plan object
-      if (userData.user.plan) {
-        const planTitle = typeof userData.user.plan === 'string' ? 
-          (JSON.parse(userData.user.plan).title || '') : 
-          (userData.user.plan.title || '');
-        
-        createPlanObject(planTitle, userData.user.type, price);
+      if (user.plan) {
+        try {
+          const planData = typeof user.plan === 'string' ? JSON.parse(user.plan) : user.plan;
+          createPlanObject(planData.title, user.type, planData.price);
+        } catch (e) {
+          console.error('Error parsing plan data:', e);
+        }
       }
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching user data:', error);
+  }
+};
+
+// Function to directly fetch user data by ID
+const fetchUserDataById = async (userId: string, token: string) => {
+  try {
+    if (!userId || !token) {
+      console.error('Missing userId or token for direct fetch');
+      return;
+    }
+    
+    console.log('Directly fetching user data by ID:', userId);
+    
+    // Direct API call to get user by ID
+    const response = await fetch(`http://localhost:3001/api/users/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user data: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log('Direct user data fetch result:', JSON.stringify(result, null, 2));
+    
+    if (result && result.user) {
+      const user = result.user;
+      
+      // Log all relevant fields
+      console.log('DIRECT FETCH - All user fields:', Object.keys(user));
+      console.log('DIRECT FETCH - Address:', user.address);
+      console.log('DIRECT FETCH - City:', user.city);
+      console.log('DIRECT FETCH - Phone:', user.phone);
+      console.log('DIRECT FETCH - Payment type:', user.payment_type);
+      
+      // Force update form values regardless of whether they were set before
+      if (user.address) {
+        form.address = user.address;
+        console.log('Pre-filled address from direct fetch:', user.address);
+      }
+      
+      if (user.city) {
+        form.city = user.city;
+        console.log('Pre-filled city from direct fetch:', user.city);
+      }
+      
+      if (user.phone) {
+        form.phone = user.phone;
+        console.log('Pre-filled phone from direct fetch:', user.phone);
+      }
+      
+      if (user.payment_type) {
+        form.paymentMethod = user.payment_type;
+        console.log('Pre-filled payment method from direct fetch:', user.payment_type);
+      }
+      
+      // Update pre-filled status if we found any data
+      const hasPreFilledData = !!(user.address || user.city || user.phone || user.payment_type);
+      dataPreFilled.value = hasPreFilledData;
+      
+      // Add a small delay to ensure Vue reactivity has updated
+      setTimeout(() => {
+        console.log('Form values after delay:', {
+          address: form.address,
+          city: form.city,
+          phone: form.phone,
+          paymentMethod: form.paymentMethod
+        });
+      }, 100);
+    }
+  } catch (error) {
+    console.error('Error in direct user data fetch:', error);
   }
 };
 
@@ -346,71 +462,216 @@ const createPlanObject = (planName: string, userType: string, price: string) => 
   }
 };
 
+// Clear all form errors
+const clearErrors = () => {
+  form.errors.address = '';
+  form.errors.city = '';
+  form.errors.phone = '';
+  form.errors.paymentMethod = '';
+  form.error = '';
+};
+
 const handlePayment = async () => {
   try {
+    // Clear all previous errors
+    clearErrors();
+    
     // Validate form fields
-    if (!form.name) {
-      alert('Please enter your name');
+    let isValid = true;
+    
+    if (!form.address) {
+      form.errors.address = 'Please enter your address';
+      isValid = false;
+    }
+    
+    if (!form.city) {
+      form.errors.city = 'Please enter your city';
+      isValid = false;
+    }
+    
+    if (!form.phone) {
+      form.errors.phone = 'Please enter your phone number';
+      isValid = false;
+    }
+    
+    if (!form.paymentMethod) {
+      form.errors.paymentMethod = 'Please select a payment method';
+      isValid = false;
+    }
+    
+    // If validation fails, stop here
+    if (!isValid) {
       return;
     }
     
-    // Get URL parameters for payment information
-    const urlParams = new URLSearchParams(window.location.search);
-    const first_name = urlParams.get('first_name') || '';
-    const email = urlParams.get('email') || '';
-    const userType = urlParams.get('userType') || '';
-    const plan = urlParams.get('plan') || '';
-    const price = urlParams.get('price') || '';
+    form.submitting = true;
+    form.error = '';
     
-    // Prepare payment data for email notification
-    const paymentData = {
-      first_name,
-      name: form.name,
-      email,
-      userType,
-      plan,
-      price,
+    // STEP 1: Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailFromUrl = urlParams.get('email');
+    
+    // STEP 2: Get user data from localStorage
+    let token = '';
+    let userId = '';
+    const userStr = localStorage.getItem('user');
+    
+    console.log('User data from localStorage:', userStr ? 'Found' : 'Not found');
+    
+    if (userStr) {
+      try {
+        const userData = JSON.parse(userStr);
+        // Check if we have a token in the parsed data
+        if (userData.token) {
+          token = userData.token;
+          console.log('Token found in localStorage');
+        }
+        
+        // Check if we have user ID in the parsed data
+        if (userData.user && userData.user.id) {
+          userId = userData.user.id;
+          console.log('User ID found in localStorage:', userId);
+        }
+      } catch (e) {
+        console.error('Error parsing user data from localStorage:', e);
+      }
+    }
+    
+    // If we couldn't get a token or userId from localStorage, check for a token directly
+    if (!token) {
+      const directToken = localStorage.getItem('token');
+      if (directToken) {
+        token = directToken;
+        console.log('Token found directly in localStorage');
+      }
+    }
+    
+    if (!userId) {
+      const directUserId = localStorage.getItem('userId');
+      if (directUserId) {
+        userId = directUserId;
+        console.log('User ID found directly in localStorage:', userId);
+      }
+    }
+    
+    // STEP 3: If we don't have a user ID but have an email, try to get the user ID from the API
+    if (!userId && emailFromUrl) {
+      console.log('No user ID found, trying to get it from the API using email:', emailFromUrl);
+      
+      try {
+        if (!token) {
+          throw new Error('No authentication token available');
+        }
+        
+        const userResponse = await fetch(`http://localhost:3001/api/users/by-email?email=${encodeURIComponent(emailFromUrl)}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!userResponse.ok) {
+          throw new Error(`Failed to get user: ${userResponse.status}`);
+        }
+        
+        const userData = await userResponse.json();
+        console.log('User data from API:', userData);
+        
+        if (userData && userData.user && userData.user.id) {
+          userId = userData.user.id;
+          console.log('User ID found from API:', userId);
+        } else {
+          throw new Error('User not found in API response');
+        }
+      } catch (error) {
+        console.error('Error fetching user ID from API:', error);
+        form.error = 'Could not find user information. Please log in again.';
+        form.submitting = false;
+        return;
+      }
+    }
+    
+    // Final check: Make sure we have a token and userId
+    if (!token) {
+      form.error = 'Authentication required. Please log in again.';
+      form.submitting = false;
+      return;
+    }
+    
+    if (!userId) {
+      form.error = 'User ID not found. Please try logging in again.';
+      form.submitting = false;
+      return;
+    }
+    
+    // Prepare data for API update
+    const updateData = {
       address: form.address,
       city: form.city,
       phone: form.phone,
-      shipping: form.shipping,
-      paymentMethod: form.paymentMethod,
-      orderDate: new Date().toISOString()
+      payment_type: form.paymentMethod
     };
     
-    console.log('Sending payment notification with data:', paymentData);
+    console.log('Updating user data:', updateData);
+    console.log('User ID:', userId);
     
-    // Send email notification directly to the server
-    // Make sure the server is running on port 3001
+    // Send update to API
     try {
-      const response = await fetch('http://localhost:3001/api/payment/notify', {
-        method: 'POST',
+      console.log('About to send payment update request with data:', JSON.stringify(updateData));
+      
+      // Use our brand new direct payment update route
+      const response = await fetch(`http://localhost:3001/api/users/${userId}/update-payment`, {
+        method: 'POST',  // Note: using POST as specified in the new route
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(paymentData)
+        body: JSON.stringify(updateData)
+      });
+      
+      console.log('Update request sent with:', {
+        url: `http://localhost:3001/api/users/${userId}/update-payment`,
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer [TOKEN]',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
       });
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Error response from API:', errorText);
+        throw new Error(`Failed to update user: ${response.status}`);
       }
       
-      const data = await response.json();
+      const result = await response.json();
+      console.log('API update response:', result);
       
-      if (data.success) {
-        alert('Your payment has been processed successfully!');
-        // Redirect to home page or dashboard
-        window.location.href = '/';
-      } else {
-        alert(`Error: ${data.message || 'Unknown error'}`);
+      // Check the updated data to verify it's been saved correctly
+      const verifyResponse = await fetch(`http://localhost:3001/api/users/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (verifyResponse.ok) {
+        const updatedUserData = await verifyResponse.json();
+        console.log('User data after update:', updatedUserData);
       }
-    } catch (error: any) {
-      console.error('Error sending payment notification:', error);
-      alert(`Error: ${error.message || 'Failed to process payment'}`);
+      
+      console.log('Payment process completed successfully');
+      updateSuccessful.value = true;
+      
+    } catch (error) {
+      console.error('Error updating user:', error);
+      form.error = 'Failed to update payment information. Please try again.';
     }
-  } catch (error: any) {
-    console.error('Error in handlePayment:', error);
-    alert(`Error: ${error.message || 'An unexpected error occurred'}`);
+  } catch (error) {
+    console.error('Payment error:', error);
+    form.error = error instanceof Error ? error.message : 'An error occurred during payment processing. Please try again.';
+  } finally {
+    form.submitting = false;
   }
 };
 </script>

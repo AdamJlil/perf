@@ -21,14 +21,19 @@ const config = {
         database: process.env.DB_NAME || 'perf_db',
         waitForConnections: true,
         connectionLimit: 10,
-        queueLimit: 0
+        queueLimit: 0,
+        // Add connection timeout to prevent hanging indefinitely
+        connectTimeout: 10000, // 10 seconds
+        // Add retry strategy
+        acquireTimeout: 10000
     }
 };
 
 console.log('Database configuration:', {
     host: config.database.host,
     user: config.database.user,
-    database: config.database.database
+    database: config.database.database,
+    connectTimeout: config.database.connectTimeout
 });
 
 module.exports = config;

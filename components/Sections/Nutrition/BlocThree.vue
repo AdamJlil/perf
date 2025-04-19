@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#EFEFEC] dark:bg-black w-full overflow-hidden pt-[100px]">
+  <div class="bg-[#EFEFEC] dark:bg-black w-full overflow-hidden ">
     <div class="carousel-container relative w-full p-2">
       <div class="marquee flex w-fit gap-[70px]">
         <div v-for="(review, index) in duplicatedReviews" :key="index" class="flex-shrink-0 w-[300px] px-2 pt-10">

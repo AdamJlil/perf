@@ -83,7 +83,7 @@ onMounted(() => {
     <div class="p-3 w-full flex items-center justify-between pr-[30px] max-md:pt-[30px]">
       <!-- v-if="currentUser" -->
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center justify-between w-full px-8 md:mr-[10px]">
+      <nav class="hidden lg:flex items-center justify-between w-full px-8 md:mr-[10px]">
         <!-- Logo - Not clickable when logged in as establishment -->
         <div v-if="isLoggedIn" class="flex items-center gap-4">
           <NuxtImg src="/images/pepe.png" alt="Logo" class="w-[120px] h-auto" />
@@ -289,7 +289,7 @@ onMounted(() => {
               MANAGE USERS
             </NuxtLink>
             <NuxtLink
-              v-if="isLoggedIn && !isActive('/quizEstablishement') && !isActive('/establishementProgram')"
+              v-if="isLoggedIn && !isAdmin && !isActive('/quizEstablishement') && !isActive('/establishementProgram')"
               :to="{
                 path: '/myPlan',
                 query: { userId: userId },
@@ -312,6 +312,7 @@ onMounted(() => {
               LOGOUT
             </button>
           </template>
+          <!-- Language dropdown - temporarily disabled
           <div class="flex items-center gap-2 cursor-pointer" @click="toggleDropdown">
             <img
               :src="currentLanguage === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
@@ -346,18 +347,19 @@ onMounted(() => {
               />
             </div>
           </div>
+          -->
         </div>
       </nav>
 
       <!-- Mobile Menu Button -->
-      <button @click="toggleMenu" class="md:hidden z-20 order-1" aria-label="Toggle Menu">
+      <button @click="toggleMenu" class="lg:hidden z-20 order-1" aria-label="Toggle Menu">
         <span class="block w-6 h-0.5 bg-current mb-1"></span>
         <span class="block w-6 h-0.5 bg-current mb-1"></span>
         <span class="block w-6 h-0.5 bg-current"></span>
       </button>
 
       <!-- Logo -->
-      <NuxtLink to="/" class="order-2 mx-auto md:hidden">
+      <NuxtLink to="/" class="order-2 mx-auto lg:hidden">
         <NuxtImg
           :src="
             !isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'
@@ -368,7 +370,7 @@ onMounted(() => {
       </NuxtLink>
 
       <!-- Language Selector en Mobile -->
-      <div class="relative hidden max-md:flex items-center gap-2 cursor-pointer order-3" @click.stop="toggleDropdown">
+      <!-- <div class="relative hidden max-lg:flex items-center gap-2 cursor-pointer order-3" @click.stop="toggleDropdown">
         <img
           :src="currentLanguage === 'EN' ? '/images/usa-flag.png' : '/images/france-flag.png'"
           alt="Current Language"
@@ -401,7 +403,7 @@ onMounted(() => {
             />
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Mobile Overlay -->
       <div
@@ -499,10 +501,10 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
-  .md\:hidden {
+  .lg\:hidden {
     display: block;
   }
-  .md\:flex {
+  .lg\:flex {
     display: none;
   }
 }

@@ -8,7 +8,7 @@
     <div class="w-full flex flex-col content-around bg-[#EFEFEC] dark:bg-black">
       <!-- Title -->
       <h1
-        class="text-2xl lg:text-4xl md:text-2xl leading-loose font-normal text-center mb-0 py-15 uppercase text-black dark:text-white"
+        class="text-2xl lg:text-4xl md:text-2xl leading-loose font-normal text-center mb-0 uppercase text-black dark:text-white"
       >
         <span v-html="headingText" />
       </h1>
@@ -16,7 +16,7 @@
       <!-- Buttons -->
       <div
         v-if="isbuttons"
-        class="flex flex-col md:flex-row gap-4 md:gap-8 w-full md:max-w-none justify-center items-center z-10 pb-10 md:pb-5"
+        class="flex flex-col md:flex-row gap-4 md:gap-8 w-full md:max-w-none justify-center items-center z-10 pb-10 md:pb-5 mt-[40px]"
       >
         <NuxtLink
           to="/login"

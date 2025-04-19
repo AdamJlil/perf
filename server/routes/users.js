@@ -284,6 +284,9 @@ router.put("/:id", verifyToken, async (req, res) => {
       userData: userData
     });
 
+    console.log("Updating user in database... AAAAAAAAAAa");
+    console.log(userData);
+    
     // Update the user in the database
     const updatedUser = await User.updateUser(id, userData);
 
@@ -294,6 +297,95 @@ router.put("/:id", verifyToken, async (req, res) => {
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({ error: "Failed to update user", details: error.message });
+  }
+});
+
+// Direct payment update route - completely standalone
+router.post("/:id/update-payment", verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { address, city, phone, payment_type } = req.body;
+    
+    // Verify that the user has permission to update
+    if (req.user.id !== id && req.user.type !== "ADMIN") {
+      return res.status(403).json({ error: "You do not have permission to update this user" });
+    }
+    
+    console.log("Direct payment update request received:", {
+      userId: id,
+      paymentData: { address, city, phone, payment_type }
+    });
+    
+    // Use the User model's getConnection method to get a connection properly
+    let connection;
+    
+    try {
+      // Get a connection using the proper method
+      connection = await User.getConnection();
+      
+      // Build SQL query directly
+      const fields = [];
+      const values = [];
+      
+      if (address !== undefined) {
+        fields.push('address = ?');
+        values.push(address);
+      }
+      
+      if (city !== undefined) {
+        fields.push('city = ?');
+        values.push(city);
+      }
+      
+      if (phone !== undefined) {
+        fields.push('phone = ?');
+        values.push(phone);
+      }
+      
+      if (payment_type !== undefined) {
+        fields.push('payment_type = ?');
+        values.push(payment_type);
+      }
+      
+      if (fields.length === 0) {
+        return res.status(400).json({ error: "No payment fields provided to update" });
+      }
+      
+      // Add WHERE clause parameter
+      values.push(id);
+      
+      // Construct and execute direct SQL query
+      const query = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+      console.log("DIRECT PAYMENT UPDATE QUERY:", query);
+      console.log("VALUES:", values);
+      
+      const [result] = await connection.execute(query, values);
+      console.log("DIRECT UPDATE RESULT:", result);
+      
+      // Get updated user data
+      const [rows] = await connection.execute(
+        'SELECT * FROM users WHERE id = ?',
+        [id]
+      );
+      
+      const updatedUser = rows[0] || null;
+      
+      res.json({
+        message: "Payment information updated successfully via direct update",
+        user: updatedUser
+      });
+    } catch (dbError) {
+      console.error("Database error in direct payment update:", dbError);
+      throw dbError;
+    } finally {
+      if (connection) connection.release();
+    }
+  } catch (error) {
+    console.error("Error in direct payment update:", error);
+    res.status(500).json({ 
+      error: "Failed to update payment information", 
+      details: error.message 
+    });
   }
 });
 

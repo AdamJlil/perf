@@ -73,32 +73,23 @@
             <!-- Bank Information -->
             <div v-if="form.paymentMethod === 'bank'" class="w-full flex flex-col border border-gray-700 p-4">
               <!-- Bank of Africa -->
-              <div class="">
-                <label class="text-base font-medium italic text-black mb-2">Bank of Africa </label>
-                <div class="">
-                  <div class="w-full flex sm:flex-row items-stert">
-                    <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">Account number :</label>
-                    <div class="w-full p-0 text-base font-medium bg-transparent text-black">123456789012345678901234</div>
+              <div class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                  <div class="text-base">
+                    <span class="font-semibold">Compte Chèque Particulier:</span> M AMJAD ARKHIS
                   </div>
-                  <div class="w-full flex sm:flex-row items-start">
-                    <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">RIB :</label>
-                    <div class="w-full p-0 text-base font-medium bg-transparent text-black">000 780 00012345678901234 56</div>
+                  <div class="text-base">
+                    <span class="font-semibold">Banking details:</span> 011 590 0000112000002178 72
+                  </div>
+                  <div class="text-base">
+                    <span class="font-semibold">IBAN:</span> MA64 0115 9000 0011 2000 0021 7872
+                  </div>
+                  <div class="text-base">
+                    <span class="font-semibold">BIC:</span> BMCEMAMC
                   </div>
                 </div>
-              </div>
-
-              <!-- CIH -->
-              <div>
-                <label class="text-base font-medium italic text-black mb-2">CIH </label>
-                <div class="">
-                  <div class="w-full flex sm:flex-row items-start">
-                    <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">Account number :</label>
-                    <div class="w-full p-0 text-base font-medium bg-transparent text-black">987654321098765432109876</div>
-                  </div>
-                  <div class="w-full flex sm:flex-row items-start">
-                    <label class="text-base font-medium text-black py-0 sm:mr-1 text-nowrap">RIB :</label>
-                    <div class="w-full p-0 text-base font-medium bg-transparent text-black">230 450 00098765432109876 32</div>
-                  </div>
+                <div class="mt-3 text-sm italic text-gray-700">
+                  Please include your name and order number in the transfer description
                 </div>
               </div>
             </div>

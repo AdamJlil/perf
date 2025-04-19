@@ -88,6 +88,7 @@
     <!-- <HomeFour  image1="/images/work1.png" link="" buttonText="TRANSFORM NOW" image2="/images/work2.png" headingText="TESTED, GUARENTEED,</br> ACHIEVABLE." :isLogoutButton="true"/>
  -->
 
+
   </div>
 </template>
 
@@ -107,8 +108,8 @@ import { useRoute } from 'vue-router'
 import HomeFour from '~/components/home/HomeFour.vue';
 import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
 import FlipCardBloc from "~/components/Sections/Establishement/FlipCardBloc.vue";
-import { establishmentUserVideos } from '../establishment_user_videos';
-import { videoCalorieData } from '~/establishment_user_videos_calories'
+import { establishmentUserVideos } from '../services/establishment_user_videos';
+import { videoCalorieData } from '../services/establishment_user_videos_calories';
 
 const API_BASE_URL = 'http://localhost:3001';
 

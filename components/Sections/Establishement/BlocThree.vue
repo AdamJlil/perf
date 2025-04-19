@@ -1,45 +1,89 @@
 <template>
-    <div class="w-full flex max-md:flex-col justify-center items-center relative"  style="font-family: Montserrat;">
-      <!-- Left Image Section with Text -->
-      <div class="md:w-1/2 max-md:w-full h-full relative">
-        <img :src="image1" alt="Workout Image 1" class="w-full h-full md:max-h-[510px] max-md:object-contain md:object-cover" :style="image1Style" />
-        
-      </div>
+  <div style="font-family: Montserrat;">
+    <!-- DESKTOP VERSION - hide on small screens -->
+    <div class="hidden md:block w-full">
+      <div class="w-full flex justify-center items-center relative">
+        <!-- Left Image Section with Text - Original design for desktop -->
+        <div class="w-1/2 h-full relative">
+          <img :src="image1" alt="Workout Image 1" class="w-full h-full max-h-[510px] object-cover" :style="image1Style" />
+        </div>
 
-      <div class="max-md:flex max-md:flex-col max-md:items-center max-md:justify-center md:absolute md:top-[10px] md:left-[50%] px-2 text-left max-md:text-center text-white max-md:text-black max-md:mt-[70px]">
-        <p class="text-lg md:text-2xl lg:text-3xl mb-[20px]" :style="[{ fontWeight: 500 }, TitleStyle]">
+        <!-- Center Text Section - Original positioning for desktop -->
+        <div class="absolute top-[10px] left-[50%] px-2 text-left text-white">
+          <p class="text-xl md:text-2xl lg:text-3xl mb-4 md:mb-[20px] font-medium" :style="[{ fontWeight: 500 }, TitleStyle]">
             <span v-html="TitleText" />
           </p>
 
-          <p class="text-lg md:text-2xl lg:text-2xl mb-[20px]" :style="[ DescStyle]">
+          <p class="text-lg md:text-xl lg:text-2xl mb-4 md:mb-[20px]" :style="[ DescStyle]">
             <span v-html="DescText" />
           </p>
 
-          <p class="text-lg md:text-2xl lg:text-2xl mb-[20px]" :style="[{ fontWeight: 500 }, EndStyle]">
+          <p class="text-lg md:text-xl lg:text-2xl mb-4 md:mb-[20px] font-medium" :style="[{ fontWeight: 500 }, EndStyle]">
+            <span v-html="EndText" />
+          </p>
+        </div>
+
+        <!-- Right Image Section - Original design for desktop -->
+        <div class="w-1/2 h-full">
+          <img v-if="image2" :src="image2" alt="Workout Image 2" class="w-full h-full max-h-[510px] object-cover" :style="image2Style" />
+        </div>
+
+        <!-- Bottom Text Section - Original positioning for desktop -->
+        <div class="absolute bottom-[50px] left-[35px] text-left text-white">
+
+          <p class="text-xl md:text-2xl lg:text-3xl mb-4 md:mb-[20px] font-bold text-white" style="color: white !important; font-weight: 800 !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">
+            <span v-html="headingText" style="color: white !important; font-weight: 800 !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);" />
+          </p>
+          
+          <nuxt-link v-if="link.length > 0 && !isLogoutButton" :to="link" class="text-white px-6 md:px-10 py-2 md:py-3 uppercase text-md md:text-lg tracking-[6px] md:tracking-[10px] border-white border-2 hover:bg-gray-800/20 transition-colors cursor-pointer font-bold inline-block w-auto" style="font-weight: 800 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            {{ buttonText }}
+          </nuxt-link>
+          <div v-else @click.prevent="handleButtonClick" class="text-white px-6 md:px-10 py-2 md:py-3 uppercase text-md md:text-lg tracking-[6px] md:tracking-[10px] border-white border-2 hover:bg-gray-800/20 transition-colors cursor-pointer font-bold inline-block w-auto" style="font-weight: 800 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            {{ buttonText }}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- MOBILE VERSION - only show on small screens -->
+    <div class="md:hidden w-full">
+      <div class="flex flex-col">
+        <!-- Single image container -->
+        <div class="w-full h-[600px] flex items-center justify-center">
+          <img :src="image1" alt="Workout Image 1" class="w-full h-full object-contain" :style="image1Style" />
+        </div>
+        
+        <!-- All text combined in one section on mobile -->
+        <div class="py-8 px-5 w-full max-w-md mx-auto text-center flex flex-col">
+          <!-- Title section -->
+          <p class="text-gray-700 text-xl md:text-2xl font-semibold mb-6" :style="TitleStyle">
+            <span v-html="TitleText" />
+          </p>
+          <p class="text-gray-800 text-lg md:text-xl mb-6" :style="DescStyle">
+            <span v-html="DescText" />
+          </p>
+          <p class="text-gray-700 text-lg md:text-xl font-medium mb-8 uppercase" :style="[{ color: '#545454', fontWeight: 600, padding: '10px' }, EndStyle]">
             <span v-html="EndText" />
           </p>
           
-      </div>
-
-      <!-- Right Image Section -->
-      <div class="md:w-1/2 max-md:w-full h-full">
-        <img v-if="image2" :src="image2" alt="Workout Image 2" class="w-full h-full md:max-h-[510px] max-md:object-contain md:object-cover" :style="image2Style" />
-      </div>
-
-      <div class="max-md:flex max-md:flex-col max-md:items-center max-md:justify-center md:absolute md:bottom-[50px] md:left-[35px] text-left max-md:text-center text-white max-md:text-black max-md:mt-[70px]">
-          <p class="text-lg md:text-2xl lg:text-3xl mb-[20px]" :style="[{ fontWeight: 500 }, headingStyle]">
+          <!-- Heading & button section -->
+          <p class="text-xl md:text-2xl lg:text-3xl mb-4 md:mb-[20px] font-medium" :style="[{ fontWeight: 500 }, TitleStyle]">
             <span v-html="headingText" />
           </p>
           
-          <nuxt-link v-if="link.length > 0 && !isLogoutButton" :to="link" class="tracking-normal text-nowrap text-center flex justify-center border border-[#ffffff38] max-md:border-black py-[10px] px-[70px] text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" :style="[{ fontWeight: 300 }, buttonStyle]">
-            {{ buttonText }}
-          </nuxt-link>
-          <div v-else @click.prevent="handleButtonClick" class="cursor-pointer text-nowrap text-center flex justify-center tracking-normal border border-[#ffffff38] max-md:border-black py-[10px] px-[70px] text-center text-sm md:text-base lg:text-lg w-[150px] md:w-[200px] lg:w-[250px] z-9" :style="[{ fontWeight: 300 }, buttonStyle]">
-            {{ buttonText }}
+          <div class="flex justify-center">
+            <nuxt-link v-if="link.length > 0 && !isLogoutButton" :to="link" class="text-black px-6 md:px-10 py-2 md:py-3 uppercase text-md md:text-lg tracking-[6px] md:tracking-[10px] border-black border-2 hover:bg-gray-100 transition-colors cursor-pointer">
+              {{ buttonText }}
+            </nuxt-link>
+            <div v-else @click.prevent="handleButtonClick" class="text-black px-6 md:px-10 py-2 md:py-3 uppercase text-md md:text-lg tracking-[6px] md:tracking-[10px] border-black border-2 hover:bg-gray-100 transition-colors cursor-pointer">
+              {{ buttonText }}
+            </div>
           </div>
+        </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
 <script setup lang="ts">
 import { useAuth } from '~/composables/useAuth'
