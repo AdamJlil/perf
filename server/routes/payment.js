@@ -25,8 +25,14 @@ router.post('/notify', async (req, res) => {
       phone: paymentData.phone || '',
       shipping: paymentData.shipping || '',
       paymentMethod: paymentData.paymentMethod || 'unknown',
-      orderDate: paymentData.orderDate || new Date().toISOString()
+      orderDate: paymentData.orderDate || new Date().toISOString(),
+      // Include custom payment message and bank info if available
+      paymentMessage: paymentData.paymentMessage || '',
+      bankInfo: paymentData.bankInfo || null
     };
+    
+    // Log the full sanitized data for debugging
+    console.log('Sending sanitized data to email service:', JSON.stringify(sanitizedData, null, 2));
     
     // Send email notification
     const emailResult = await emailService.sendPaymentNotification(sanitizedData);
@@ -72,6 +78,45 @@ router.get('/debug', (req, res) => {
     message: 'Debug route accessed successfully',
     params: req.query
   });
+});
+
+// Route to handle payment status update notifications (when admin changes user's paid status)
+router.post('/payment-status-update', async (req, res) => {
+  try {
+    const userData = req.body;
+    console.log('Received payment status update notification request:', userData);
+    
+    // Validate required fields
+    if (!userData || !userData.email) {
+      return res.status(400).json({ success: false, message: 'Missing user data or email' });
+    }
+    
+    // Send email notification for payment status update
+    const emailResult = await emailService.sendPaymentStatusUpdateNotification(userData);
+    
+    if (emailResult && emailResult.success) {
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Payment status update notification emails sent successfully',
+        adminMessageId: emailResult.adminMessageId,
+        userMessageId: emailResult.userMessageId
+      });
+    } else {
+      console.error('Failed to send payment status update emails:', emailResult.error || 'Unknown error');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Failed to send payment status update notification emails',
+        error: emailResult.error || 'Unknown error'
+      });
+    }
+  } catch (error) {
+    console.error('Error in payment status update notification route:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error', 
+      error: error.message || 'Unknown error' 
+    });
+  }
 });
 
 module.exports = router;

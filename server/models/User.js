@@ -578,7 +578,11 @@ class User {
         has_allergies: 'has_allergies',
         has_medical_conditions: 'has_medical_conditions',
         plan: 'plan',
-        paid: 'paid'
+        paid: 'paid',
+        address: 'address',
+        city: 'city',
+        phone: 'phone',
+        payment_type: 'payment_type'
       };
       
       // Process each field in userData
@@ -594,7 +598,33 @@ class User {
             updateFields.push(`${fieldMappings[key]} = ?`);
             updateValues.push(boolValue);
             console.log(`Setting paid value to: ${boolValue} (${typeof boolValue})`);
-          } else {
+          } 
+          // Special handling for numeric fields
+          else if (['age', 'height', 'weight'].includes(key)) {
+            updateFields.push(`${fieldMappings[key]} = ?`);
+            
+            // Convert empty strings or invalid values to NULL
+            // Convert valid values to integers
+            if (value === '' || value === null || value === undefined) {
+              updateValues.push(null);
+              console.log(`Setting ${key} value to NULL`);
+            } else {
+              const numValue = Number(value);
+              updateValues.push(isNaN(numValue) ? null : numValue);
+              console.log(`Setting ${key} value to: ${isNaN(numValue) ? null : numValue}`);
+            }
+          }
+          // Special handling for boolean fields like has_allergies and has_medical_conditions
+          else if (['has_allergies', 'has_medical_conditions'].includes(key)) {
+            let boolValue = value;
+            if (value === 'true') boolValue = true;
+            if (value === 'false') boolValue = false;
+            
+            updateFields.push(`${fieldMappings[key]} = ?`);
+            updateValues.push(boolValue);
+          }
+          // Default handling for other fields
+          else {
             updateFields.push(`${fieldMappings[key]} = ?`);
             updateValues.push(value);
           }
@@ -624,6 +654,7 @@ class User {
         errno: error.errno,
         sqlState: error.sqlState,
         sqlMessage: error.sqlMessage,
+        sql: error.sql
       });
       throw error;
     } finally {

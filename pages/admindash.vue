@@ -359,6 +359,11 @@
                 {{ updatePending ? 'Updating...' : 'Save Changes' }}
               </button>
             </div>
+            
+            <!-- Email Status Message -->
+            <div v-if="emailSendingStatus" class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mt-4">
+              {{ emailSendingStatus }}
+            </div>
           </form>
         </div>
       </div>
@@ -395,6 +400,7 @@ const loading = ref(true);
 const error = ref('');
 const searchQuery = ref('');
 const filterType = ref('');
+const emailSendingStatus = ref('');
 
 // Pagination
 const currentPage = ref(1);
@@ -663,22 +669,28 @@ function closeEditModal() {
 async function updateCustomer() {
   if (!customerToEdit.value) return;
   updatePending.value = true;
+  emailSendingStatus.value = ''; // Reset email status
   
   try {
     // Get the auth token from localStorage
-    const userStr = localStorage.getItem('user');
-    let token = '';
-    
-    if (userStr) {
-      const userData = JSON.parse(userStr);
-      token = userData.token;
-    }
-    
-    if (!token) {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
       error.value = 'Authentication required. Please log in again.';
       updatePending.value = false;
       return;
     }
+    
+    const { token } = JSON.parse(storedUser);
+    if (!token) {
+      error.value = 'Invalid authentication. Please log in again.';
+      updatePending.value = false;
+      return;
+    }
+    
+    // Check if payment status is changing from unpaid to paid
+    const isPaidStatusChangingToTrue = 
+      (customerToEdit.value.paid === false || customerToEdit.value.paid === 0 || customerToEdit.value.paid === '0') && 
+      editForm.paid === true;
     
     // Prepare the update data
     const updateData = {
@@ -691,7 +703,6 @@ async function updateCustomer() {
       gender: editForm.gender,
       allergies_details: editForm.allergies,
       medical_conditions_details: editForm.medicalConditions,
-      // Handle plan update - create a plan object with the title
       plan: JSON.stringify({
         title: editForm.plan,
         status: 'Active'
@@ -710,12 +721,46 @@ async function updateCustomer() {
       }
     });
     
-    // Close the modal
-    editModalVisible.value = false;
-    customerToEdit.value = null;
-    
-    // Reload the page after successful update
-    window.location.reload();
+    // If payment status is changing to paid, send notification emails
+    if (isPaidStatusChangingToTrue) {
+      emailSendingStatus.value = 'Sending email notifications...';
+      
+      try {
+        // Call the email notification API with the user data
+        const emailResponse = await axios.post(`http://localhost:3001/api/payment/payment-status-update`, updateData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (emailResponse.data.success) {
+          emailSendingStatus.value = 'Payment confirmation emails sent successfully!';
+        } else {
+          emailSendingStatus.value = 'Customer updated, but there was an issue sending notification emails.';
+        }
+      } catch (emailError) {
+        console.error('Error sending payment status notification emails:', emailError);
+        emailSendingStatus.value = 'Customer updated, but there was an error sending notification emails.';
+      }
+      
+      // Add a delay before reload for paid status changes so the admin can see the email status
+      setTimeout(() => {
+        // Close the modal
+        editModalVisible.value = false;
+        customerToEdit.value = null;
+        
+        // Reload the page after successful update
+        window.location.reload();
+      }, 3000);
+    } else {
+      // Close the modal immediately for other updates
+      editModalVisible.value = false;
+      customerToEdit.value = null;
+      
+      // Reload the page after successful update
+      window.location.reload();
+    }
   } catch (err: any) {
     console.error('Error updating customer:', err);
     error.value = err.response?.data?.error || 'Failed to update customer. Please try again.';

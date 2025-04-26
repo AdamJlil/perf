@@ -3,7 +3,8 @@ export const useAdmin = () => {
 
   return computed(() => {
     if (!authUser.value) return false;
-
-    return authUser.value.roles.includes("ADMIN");
+    
+    // Check if roles exists before trying to use includes
+    return authUser.value.roles ? authUser.value.roles.includes("ADMIN") : false;
   });
 };

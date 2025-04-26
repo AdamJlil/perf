@@ -21,16 +21,55 @@ async function onLoginClick() {
     form.error = "";
     form.pending = true;
 
-    const isEtablissement = ref(false);
-    const isParticulier = ref(false);
-    const isFinishedOnboarding = ref(false);
     const user = await login(form.data.email, form.data.password, form.data.rememberMe);
     
-    // Check if the user needs to make a payment
-    if (user.value?.needsPayment && user.value?.redirectUrl) {
-      console.log("User needs to make a payment, redirecting to payment page");
-      await navigateTo(user.value.redirectUrl);
-      return;
+    // Set user type variables based on the returned user data - do this first for all users
+    const isEtablissement = user.value?.type === "ESTABLISHEMENT";
+    const isParticulier = user.value?.type === "PARTICULIER";
+    const isFinishedOnboarding = user.value?.is_finished_onboarding;
+    console.log(user.value);
+    
+    // IMPORTANT: Check payment needs first by looking at paid status (0 = unpaid, 1 = paid)
+    // This is the highest priority redirect and should happen regardless of user type
+    if (user.value?.paid === 0) {
+      console.log("User has not paid, redirecting to payment page");
+      
+      // Build payment URL parameters from user data
+      const firstName = user.value?.first_name || '';
+      const name = user.value?.name || '';
+      const email = user.value?.email || '';
+      const userType = user.value?.type || '';
+      
+      // Extract plan information from the plan JSON string
+      let plan = '';
+      let price = user.value?.price || '';
+      
+      if (user.value?.plan) {
+        try {
+          const planObj = typeof user.value.plan === 'string' ? 
+            JSON.parse(user.value.plan) : user.value.plan;
+          plan = planObj.title || '';
+          if (!price && planObj.price) {
+            price = planObj.price;
+          }
+        } catch (e) {
+          console.error('Error parsing plan data:', e);
+        }
+      }
+      
+      // Navigate directly to payment page with the query parameters
+      await navigateTo({
+        path: "/payment",
+        query: {
+          first_name: firstName,
+          name: name,
+          email: email,
+          userType: userType,
+          plan: plan,
+          price: price
+        }
+      });
+      return; // Important: exit the function after redirecting
     }
     
     // Check if user is admin - being in the Admins table automatically makes them an admin
@@ -43,40 +82,30 @@ async function onLoginClick() {
       return;
     }
     
-    // Set user type based on the returned user data
-    if (user.value?.type === "ESTABLISHEMENT") {
-      isEtablissement.value = true;
-    } else if (user.value?.type === "PARTICULIER") {
-      isParticulier.value = true;
-    }
-    console.log(user.value);
-    isFinishedOnboarding.value = user.value?.is_finished_onboarding;
-
+    // Handle regular user navigation based on their type
     if (isAdmin.value) {
       await navigateTo({
         path: "/admin",
         query: { userId: user.value?.id },
       });
-    } else {
-      if (isEtablissement.value) {
+    } else if (isEtablissement) {
+      await navigateTo({
+        path: "/establishementCRUDCostumer",
+        query: { userId: user.value?.id },
+      });
+    } else if (isParticulier) {
+      // For PARTICULIER users, check if quiz is already filled
+      const isQuizFilled = user.value?.age && user.value?.height && user.value?.weight;
+      if (!isQuizFilled) {
         await navigateTo({
-          path: "/establishementCRUDCostumer",
+          path: "/quizParticulier",
           query: { userId: user.value?.id },
         });
       } else {
-        // For PARTICULIER users, check if quiz is already filled
-        const isQuizFilled = user.value?.age && user.value?.height && user.value?.weight;
-        if (!isQuizFilled) {
-          await navigateTo({
-            path: "/quizParticulier",
-            query: { userId: user.value?.id },
-          });
-        } else {
-          await navigateTo({
-            path: "/particulierProgram",
-            query: { userId: user.value?.id },
-          });
-        }
+        await navigateTo({
+          path: "/particulierProgram",
+          query: { userId: user.value?.id },
+        });
       }
     }
   } catch (error: any) {

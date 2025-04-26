@@ -15,9 +15,22 @@
         
         <div class="w-full mt-10 space-y-4">
           <!-- Pre-filled Data Alert -->
-          <div v-if="dataPreFilled || updateSuccessful" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4 max-md:text-sm md:text-base">
-            Your Payment Informations Have Been Received, an email confirmation has been sent to you.
-          </div>
+          <Transition name="fade">
+            <div v-if="showConfirmationMessage" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4 max-md:text-sm md:text-base">
+              Your Payment Informations Have Been Received, an email confirmation has been sent to you.
+            </div>
+          </Transition>
+
+          <!-- Sending Information Alert -->
+          <Transition name="fade">
+            <div v-if="sendingInformation" class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mb-4 max-md:text-sm md:text-base flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Sending Payment Information...
+            </div>
+          </Transition>
           
           <!-- Error Alert -->
           <div v-if="form.error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 max-md:text-sm md:text-base">
@@ -214,6 +227,16 @@ const selectedPlan = ref<Plan | null>(null)
 
 const dataPreFilled = ref(false);
 const updateSuccessful = ref(false);
+const showConfirmationMessage = ref(false);
+const sendingInformation = ref(false);
+
+// Function to display confirmation message with timer
+const showTimedConfirmationMessage = () => {
+  showConfirmationMessage.value = true;
+  setTimeout(() => {
+    showConfirmationMessage.value = false;
+  }, 7000);
+};
 
 onMounted(async () => {
   try {
@@ -252,6 +275,11 @@ onMounted(async () => {
       } catch (e) {
         console.error('Error parsing user data from localStorage:', e);
       }
+    }
+    
+    // Show confirmation message for 7 seconds if data is pre-filled
+    if (dataPreFilled.value) {
+      showTimedConfirmationMessage();
     }
   } catch (error) {
     console.error('Error in onMounted:', error);
@@ -378,7 +406,7 @@ const fetchUserDataById = async (userId: string, token: string) => {
     });
     
     if (!response.ok) {
-      throw new Error(`Failed to fetch user data: ${response.status}`);
+      throw new Error(`Failed to fetch user: ${response.status}`);
     }
     
     const result = await response.json();
@@ -663,6 +691,146 @@ const handlePayment = async () => {
       console.log('Payment process completed successfully');
       updateSuccessful.value = true;
       
+      // Show sending information message
+      sendingInformation.value = true;
+      
+      // Send payment notification email
+      try {
+        // Get necessary data for notification
+        const urlParams = new URLSearchParams(window.location.search);
+        const planName = urlParams.get('plan') || '';
+        const userType = urlParams.get('userType') || '';
+        const price = urlParams.get('price') || '';
+        const email = urlParams.get('email') || '';
+        const firstName = urlParams.get('first_name') || '';
+        const name = urlParams.get('name') || '';
+        
+        // Create notification data with extended type
+        interface NotificationData {
+          email: string;
+          name: string;
+          first_name: string;
+          plan: string;
+          price: string;
+          address: string;
+          city: string;
+          phone: string;
+          shipping: string;
+          paymentMethod: string;
+          orderDate: string;
+          bankInfo?: {
+            bankName: string;
+            accountHolder: string;
+            accountNumber: string;
+            iban: string;
+            swift: string;
+          };
+          paymentMessage?: string;
+        }
+        
+        const notificationData: NotificationData = {
+          email: email,
+          name: name,
+          first_name: firstName,
+          plan: planName,
+          price: price,
+          address: form.address,
+          city: form.city,
+          phone: form.phone,
+          shipping: 'Standard',
+          paymentMethod: form.paymentMethod,
+          orderDate: new Date().toISOString()
+        };
+        
+        // Add specific payment instructions based on payment method
+        if (form.paymentMethod === 'bank') {
+          // Bank transfer details and formal message for establishments
+          notificationData.bankInfo = {
+            bankName: 'Bank of Africa',
+            accountHolder: 'M AMJAD ARKHIS',
+            accountNumber: '011 590 0000112000002178 72',
+            iban: 'MA64 0115 9000 0011 2000 0021 7872',
+            swift: 'BMCEMAMC'
+          };
+          
+          notificationData.paymentMessage = `
+Dear ${name},
+
+Thank you for choosing PERF for your establishment's fitness journey. We are delighted to welcome you to our distinguished network of partners.
+
+To finalize your subscription to our ${planName} plan, please complete a bank transfer using the following details:
+
+Bank: Bank of Africa
+Account Holder: M AMJAD ARKHIS
+Banking details: 011 590 0000112000002178 72
+IBAN: MA64 0115 9000 0011 2000 0021 7872
+BIC: BMCEMAMC
+Reference: PERF-${planName}-${email}
+
+Upon confirmation of your payment, our dedicated account manager will personally contact you within 24 hours to activate your access and provide a comprehensive onboarding to maximize the benefits of your new partnership.
+
+We look forward to a successful collaboration in elevating the fitness experience at your establishment.
+
+Warm regards,
+The PERF Management Team
+          `;
+        } else if (form.paymentMethod === 'cash') {
+          // Pay on delivery message
+          notificationData.paymentMessage = `
+Dear ${name},
+
+Thank you for choosing PERF as your fitness partner. We are pleased to confirm your order for the ${planName} plan.
+
+Your PERF training box has been prepared and will be delivered to:
+${form.address}
+${form.city}
+Phone: ${form.phone}
+
+Upon delivery to this address, our representative will present your complete PERF training equipment and materials. You will have the opportunity to inspect your order before making your payment of ${price} dh directly to our delivery agent.
+
+Once payment is confirmed, your full access to PERF services will be immediately activated, and you can begin your fitness journey with us.
+
+We are committed to providing you with an exceptional training experience and look forward to supporting you in achieving your fitness goals.
+
+Should you have any questions regarding your delivery, please do not hesitate to contact our customer support team.
+
+Warm regards,
+The PERF Team
+          `;
+        }
+        
+        console.log('Sending payment notification with data:', notificationData);
+        
+        // Send notification to API
+        const notifyResponse = await fetch('http://localhost:3001/api/payment/notify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(notificationData)
+        });
+        
+        console.log('Notification request sent to:', 'http://localhost:3001/api/payment/notify');
+        
+        if (!notifyResponse.ok) {
+          const errorText = await notifyResponse.text();
+          console.error('Error sending notification:', errorText);
+          throw new Error(`Failed to send notification: ${notifyResponse.status}`);
+        }
+        
+        const notifyResult = await notifyResponse.json();
+        console.log('Notification result:', notifyResult);
+        
+      } catch (notifyError) {
+        console.error('Error sending payment notification:', notifyError);
+        // Don't fail the whole process if notification fails
+      } finally {
+        // Hide sending indicator and show confirmation message regardless of email success/failure
+        sendingInformation.value = false;
+        showTimedConfirmationMessage();
+      }
+      
     } catch (error) {
       console.error('Error updating user:', error);
       form.error = 'Failed to update payment information. Please try again.';
@@ -704,5 +872,17 @@ select {
 
 .bg-orange {
   background-color: #D05E33;
+}
+
+/* Animation classes for fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>
