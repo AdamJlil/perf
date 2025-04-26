@@ -3,12 +3,63 @@
 import ThemeToggle from "~/components/ThemeToggle.vue";
 
 const currentUser = useAuthUser();
-const isAdmin = useAdmin();
+const isAdmin = computed(() => {
+  // First check Vue state
+  if (currentUser.value?.role && ['founder', 'moderator', 'support'].includes(currentUser.value.role)) {
+    return true;
+  }
+  
+  // If not in Vue state, check localStorage directly
+  if (typeof window !== 'undefined') {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const userData = JSON.parse(userStr);
+        if (userData?.user?.role && ['founder', 'moderator', 'support'].includes(userData.user.role)) {
+          // Update the currentUser with the role information if needed
+          if (!currentUser.value) {
+            currentUser.value = userData.user;
+          }
+          return true;
+        }
+      } catch (e) {
+        console.error('Error parsing user data for admin check:', e);
+      }
+    }
+  }
+  
+  return false;
+});
 const route = useRoute();
+
 
 const { logout } = useAuth();
 
-const isLoggedIn = computed(() => !!currentUser.value);
+const isLoggedIn = computed(() => {
+  // First check Vue state
+  if (!!currentUser.value) return true;
+  
+  // If not in Vue state, check localStorage directly
+  if (typeof window !== 'undefined') {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const userData = JSON.parse(userStr);
+        // If we have valid user data in localStorage, consider logged in
+        if (userData && userData.user && userData.token) {
+          // Optionally restore the user to the Vue state
+          currentUser.value = userData.user;
+          return true;
+        }
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+      }
+    }
+  }
+  
+  return false;
+});
+
 const isEtablissement = computed(() => currentUser.value?.type === "ESTABLISHEMENT");
 const userId = computed(() => currentUser.value?.id || route.query.userId);
 const userFirstName = computed(() => currentUser.value?.first_name || "");
@@ -31,6 +82,15 @@ async function onLogoutClick() {
   try {
     form.pending = true;
     await logout();
+    
+    // Manually clear any lingering user data in localStorage to ensure proper logout
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('user');
+      
+      // Make sure current user is null
+      currentUser.value = null;
+    }
+    
     await navigateTo("/");
     closeMenu();
   } catch (error) {

@@ -5,6 +5,6 @@ export const useAdmin = () => {
     if (!authUser.value) return false;
     
     // Check if roles exists before trying to use includes
-    return authUser.value.roles ? authUser.value.roles.includes("ADMIN") : false;
+    return authUser.value.roles ? authUser.value.roles.includes("founder") : false;
   });
 };

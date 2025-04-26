@@ -9,9 +9,18 @@
         <!-- BRONZE -->
         <div 
           id="Bronze" 
-          class="w-full lg:w-1/3 h-auto font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-105"
-          @click="$emit('planSelected', 'BRONZE')"
+          class="w-full lg:w-1/3 h-auto font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8"
+          :class="{ 
+            'cursor-pointer transition-transform duration-300 hover:scale-105': currentPlan !== 'BRONZE',
+            'relative': currentPlan === 'BRONZE'
+          }"
+          @click="currentPlan !== 'BRONZE' && $emit('planSelected', 'BRONZE')"
         >
+          <!-- Active badge -->
+          <div v-if="currentPlan === 'BRONZE'" class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
+            Active
+          </div>
+          
           <h2 class="text-xl uppercase tracking-2">{{ plan_1.title }}</h2>  
           <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_1.duration }}</h5>
 
@@ -33,9 +42,18 @@
         <!-- Platinium -->
         <div 
           id="Platinum" 
-          class="md:pt-[80px] relative w-full scale-y-105 mb-5 lg:w-1/3 h-auto font-medium border border-black rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-110"
-          @click="$emit('planSelected', 'PLATINUM')"
+          class="md:pt-[80px] relative w-full scale-y-105 mb-5 lg:w-1/3 h-auto font-medium border border-black rounded-10 flex flex-col items-center p-6 lg:p-8"
+          :class="{ 
+            'cursor-pointer transition-transform duration-300 hover:scale-110': currentPlan !== 'PLATINUM',
+            'relative': currentPlan === 'PLATINUM'
+          }"
+          @click="currentPlan !== 'PLATINUM' && $emit('planSelected', 'PLATINUM')"
         >
+          <!-- Active badge -->
+          <div v-if="currentPlan === 'PLATINUM'" class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
+            Active
+          </div>
+          
           <img src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
 
           <h2 class="text-xl uppercase tracking-2">{{ plan_2.title }}</h2>
@@ -59,9 +77,18 @@
         <!-- GOLD -->
         <div 
           id="Gold" 
-          class="w-full lg:w-1/3 h-auto font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 cursor-pointer transition-transform duration-300 hover:scale-105"
-          @click="$emit('planSelected', 'GOLD')"
+          class="w-full lg:w-1/3 h-auto font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8"
+          :class="{ 
+            'cursor-pointer transition-transform duration-300 hover:scale-105': currentPlan !== 'GOLD',
+            'relative': currentPlan === 'GOLD'
+          }"
+          @click="currentPlan !== 'GOLD' && $emit('planSelected', 'GOLD')"
         >
+          <!-- Active badge -->
+          <div v-if="currentPlan === 'GOLD'" class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
+            Active
+          </div>
+          
           <h2 class="text-xl uppercase tracking-2">{{ plan_3.title }}</h2>
           <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_3.duration }}</h5>
 
@@ -102,10 +129,14 @@ const props = defineProps({
   plan_3: {
     type: Object,
     default: {}
+  },
+  currentPlan: {
+    type: String,
+    default: ''
   }
 })
 
-const { title,plan_1,plan_2,plan_3 } = toRefs(props)
+const { title, plan_1, plan_2, plan_3, currentPlan } = toRefs(props)
 </script>
 
 <style scoped>

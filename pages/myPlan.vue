@@ -88,6 +88,7 @@
             :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
             :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
             :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
+            :currentPlan="getCurrentPlanType()"
           />
         </div>
       </div>
@@ -279,8 +280,6 @@ const confirmUpgrade = async () => {
     // Update local user state
     user.value = updatedUser;
     
-    // Show success message
-    alert('Plan upgraded successfully!');
   } catch (error) {
     console.error('Error upgrading plan:', error);
     alert(error.message || 'Failed to upgrade plan. Please try again.');
@@ -288,5 +287,30 @@ const confirmUpgrade = async () => {
     isUpgrading.value = false;
     showUpgradeModal.value = false;
   }
+};
+
+const getCurrentPlanType = () => {
+  if (!user.value || !user.value.plan) return '';
+  
+  try {
+    // Try to parse the plan data if it's a string
+    const planData = typeof user.value.plan === 'string' ? 
+      JSON.parse(user.value.plan) : user.value.plan;
+    
+    // Check for plan title that matches one of our plan types
+    if (planData && planData.title) {
+      // The title might be already uppercase or might need conversion
+      const planTitle = planData.title.toUpperCase();
+      
+      // Return the plan type if it matches one of our known types
+      if (['BRONZE', 'PLATINUM', 'GOLD'].includes(planTitle)) {
+        return planTitle;
+      }
+    }
+  } catch (e) {
+    console.error('Error parsing plan type:', e);
+  }
+  
+  return '';
 };
 </script>
