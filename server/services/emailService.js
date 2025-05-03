@@ -295,6 +295,8 @@ class EmailService {
       // Parse plan information if it exists
       let planTitle = 'your subscription plan';
       let planDetails = '';
+      let startDate = '';
+      let endDate = '';
       
       if (userData.plan) {
         try {
@@ -309,7 +311,36 @@ class EmailService {
           else if (planTitle === 'PLATINUM') duration = '6 months';
           else if (planTitle === 'GOLD') duration = '1 year';
           
-          planDetails = duration ? `${planTitle} (${duration})` : planTitle;
+          // Extract start and end dates from plan data
+          startDate = planData.start_date || '';
+          endDate = planData.end_date || '';
+          
+          // Format the dates if they exist
+          const formatDate = (dateStr) => {
+            if (!dateStr) return '';
+            try {
+              return new Date(dateStr).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            } catch (e) {
+              console.error('Error formatting date:', e);
+              return dateStr;
+            }
+          };
+          
+          const formattedStartDate = formatDate(startDate);
+          const formattedEndDate = formatDate(endDate);
+          
+          // Add dates to plan details if available
+          if (formattedStartDate && formattedEndDate) {
+            planDetails = duration ? 
+              `${planTitle} (${duration}) - From ${formattedStartDate} to ${formattedEndDate}` : 
+              `${planTitle} - From ${formattedStartDate} to ${formattedEndDate}`;
+          } else {
+            planDetails = duration ? `${planTitle} (${duration})` : planTitle;
+          }
         } catch (e) {
           console.error('Error parsing plan data:', e);
         }
@@ -376,7 +407,6 @@ class EmailService {
           <p style="margin-bottom: 25px;">The PERF Fitness Team</p>
           
           <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #777;">
-            <p>If you have any questions, please contact us at <a href="mailto:contact@perf.ma" style="color: #e86c02;">contact@perf.ma</a></p>
             <p>&copy; ${new Date().getFullYear()} PERF Fitness. All rights reserved.</p>
           </div>
         </div>
@@ -402,6 +432,198 @@ class EmailService {
       };
     } catch (error) {
       console.error('Error sending payment status update notification:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Send a plan cancellation request notification to admin
+   * @param {Object} requestData - The cancellation request data
+   * @returns {Promise} - Promise that resolves when email is sent
+   */
+  async sendPlanCancellationRequest(requestData) {
+    try {
+      if (!requestData || !requestData.userEmail || !requestData.userName || !requestData.userPlan) {
+        throw new Error('Cancellation request data is incomplete');
+      }
+
+      console.log('Plan cancellation request received from:', requestData.userEmail);
+      
+      // Extract information
+      const userEmail = requestData.userEmail;
+      const userName = requestData.userName;
+      let planDetails = 'Unknown Plan';
+      
+      // Parse plan information if it exists
+      if (requestData.userPlan) {
+        try {
+          const planData = typeof requestData.userPlan === 'string' ? 
+            JSON.parse(requestData.userPlan) : requestData.userPlan;
+            
+          // Format plan details
+          const title = planData.title || 'Unknown';
+          const price = planData.price ? `${planData.price} MAD` : 'N/A';
+          const startDate = planData.start_date ? new Date(planData.start_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }) : 'Unknown';
+          const endDate = planData.end_date ? new Date(planData.end_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }) : 'Unknown';
+          
+          planDetails = `${title} (${price}) - From ${startDate} to ${endDate}`;
+        } catch (e) {
+          console.error('Error parsing plan data:', e);
+        }
+      }
+      
+      // Current date for the email
+      const currentDate = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      // Create admin notification email
+      const adminSubject = requestData.subject || `Plan Cancellation Request: ${userName}`;
+      const adminContent = `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #e86c02;">Plan Cancellation Request</h2>
+          <p>A user has requested to cancel their subscription plan:</p>
+          
+          <div style="background-color: #f8f8f8; padding: 20px; border-left: 4px solid #e86c02; margin: 15px 0;">
+            <p style="margin: 5px 0;"><strong>User:</strong> ${userName}</p>
+            <p style="margin: 5px 0;"><strong>Email:</strong> ${userEmail}</p>
+            <p style="margin: 5px 0;"><strong>Plan:</strong> ${planDetails}</p>
+            <p style="margin: 5px 0;"><strong>Request Date:</strong> ${currentDate}</p>
+          </div>
+          
+          <p>${requestData.message || 'The user has requested to cancel their subscription plan.'}</p>
+          
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p><strong>Action Required:</strong> Please contact the user to discuss their cancellation request and take appropriate action.</p>
+          </div>
+        </div>
+      `;
+      
+      // Send email to admin
+      const result = await this.sendEmail('contact@perf.ma', adminSubject, adminContent);
+      
+      return result;
+    } catch (error) {
+      console.error('Error sending plan cancellation request:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Send an order confirmation email to both user and admin
+   * @param {Object} orderData - The order data
+   * @returns {Promise} - Promise that resolves when emails are sent
+   */
+  async sendOrderConfirmation(orderData) {
+    try {
+      if (!orderData || !orderData.userEmail || !orderData.userName || !orderData.orderDetails) {
+        throw new Error('Order data is incomplete');
+      }
+
+      console.log('Order confirmation received from:', orderData.userEmail);
+      
+      // Extract information
+      const userEmail = orderData.userEmail;
+      const userName = orderData.userName;
+      let orderDetails = 'Unknown Order';
+      
+      // Parse order information if it exists
+      if (orderData.orderDetails) {
+        try {
+          const orderInfo = typeof orderData.orderDetails === 'string' ? 
+            JSON.parse(orderData.orderDetails) : orderData.orderDetails;
+            
+          // Format order details
+          const orderNumber = orderInfo.order_number || 'Unknown';
+          const orderDate = orderInfo.order_date ? new Date(orderInfo.order_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }) : 'Unknown';
+          const totalPrice = orderInfo.total_price ? `${orderInfo.total_price} MAD` : 'N/A';
+          const paymentMethod = orderInfo.payment_method || 'Unknown';
+          
+          orderDetails = `Order #${orderNumber} - ${orderDate} - ${totalPrice} - ${paymentMethod}`;
+        } catch (e) {
+          console.error('Error parsing order data:', e);
+        }
+      }
+      
+      // Current date for the email
+      const currentDate = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      // Create admin notification email
+      const adminSubject = orderData.subject || `Order Confirmation: ${userName}`;
+      const adminContent = `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #e86c02;">Order Confirmation</h2>
+          <p>A new order has been placed:</p>
+          
+          <div style="background-color: #f8f8f8; padding: 20px; border-left: 4px solid #e86c02; margin: 15px 0;">
+            <p style="margin: 5px 0;"><strong>User:</strong> ${userName}</p>
+            <p style="margin: 5px 0;"><strong>Email:</strong> ${userEmail}</p>
+            <p style="margin: 5px 0;"><strong>Order:</strong> ${orderDetails}</p>
+            <p style="margin: 5px 0;"><strong>Order Date:</strong> ${currentDate}</p>
+          </div>
+          
+          <p>${orderData.message || 'A new order has been placed.'}</p>
+        </div>
+      `;
+      
+      // Create user notification email
+      const userSubject = `Your Order Confirmation: ${orderNumber}`;
+      const userContent = `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #e86c02;">Your Order Confirmation</h2>
+          <p>Dear ${userName},</p>
+          <p>Thank you for your order!</p>
+          <p>Your order details are as follows:</p>
+          <div style="background-color: #f8f8f8; padding: 20px; border-left: 4px solid #e86c02; margin: 15px 0;">
+            <p style="margin: 5px 0;"><strong>Order Number:</strong> ${orderNumber}</p>
+            <p style="margin: 5px 0;"><strong>Order Date:</strong> ${orderDate}</p>
+            <p style="margin: 5px 0;"><strong>Total Price:</strong> ${totalPrice}</p>
+            <p style="margin: 5px 0;"><strong>Payment Method:</strong> ${paymentMethod}</p>
+          </div>
+          <p>If you have any questions or concerns, please don't hesitate to contact us.</p>
+          <p>Thank you for your business!</p>
+          <p>Best regards,<br>PERF Fitness Team</p>
+        </div>
+      `;
+      
+      // Send emails using the generic sendEmail method
+      const adminResult = await this.sendEmail(
+        'contact@perf.ma', 
+        adminSubject, 
+        adminContent
+      );
+      
+      const userResult = await this.sendEmail(
+        userEmail, 
+        userSubject, 
+        userContent
+      );
+      
+      return { 
+        success: adminResult.success && userResult.success, 
+        adminMessageId: adminResult.messageId,
+        userMessageId: userResult.messageId
+      };
+    } catch (error) {
+      console.error('Error sending order confirmation:', error);
       return { success: false, error: error.message };
     }
   }
