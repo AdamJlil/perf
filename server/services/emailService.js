@@ -19,6 +19,40 @@ class EmailService {
    * @param {Object} contactData - The contact form data
    * @returns {Promise} - Promise that resolves when email is sent
    */
+  /**
+   * Send an email for contact us form
+   * @param {Object} contactData - The contact form data
+   * @returns {Promise}
+   */
+  async sendContactUsNotification(contactData) {
+    try {
+      if (!contactData || !contactData.name || !contactData.email || !contactData.message) {
+        throw new Error('Missing contact form fields');
+      }
+
+      const submissionDate = new Date().toLocaleString();
+      const mailOptions = {
+        from: 'contact@perf.ma',
+        to: 'contact@perf.ma',
+        subject: `New Contact Form Submission from ${contactData.name}`,
+        html: `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${contactData.name}</p>
+          <p><strong>Email:</strong> ${contactData.email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${contactData.message}</p>
+          <p><strong>Submission Date:</strong> ${submissionDate}</p>
+        `
+      };
+
+      const result = await this.transporter.sendMail(mailOptions);
+      return { success: true, messageId: result.messageId };
+    } catch (error) {
+      console.error('Error sending contact form email:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
   async sendContactFormEmail(contactData) {
     try {
       if (!contactData) {

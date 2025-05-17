@@ -16,29 +16,14 @@ router.post('/submit', async (req, res) => {
       });
     }
     
-    // Format contact data to match payment notification structure
-    const formattedData = {
-      email: contactData.email,
-      name: contactData.name,
-      first_name: '',  // Not available in contact form
-      userType: 'CONTACT_FORM',
-      plan: 'N/A',
-      price: '0',
-      paymentMethod: 'N/A',
-      orderDate: new Date().toISOString(),
-      // Add the message as a special field
-      contactMessage: contactData.message
-    };
-    
-    // Send email notification using the payment notification service
-    const emailResult = await emailService.sendPaymentNotification(formattedData);
+    // Send email notification using the dedicated contact form function
+    const emailResult = await emailService.sendContactUsNotification(contactData);
     
     if (emailResult && emailResult.success) {
       return res.status(200).json({ 
         success: true, 
         message: 'Contact form submitted successfully',
-        adminMessageId: emailResult.adminMessageId,
-        userMessageId: emailResult.userMessageId
+        messageId: emailResult.messageId
       });
     } else {
       console.error('Failed to send contact form email:', emailResult.error || 'Unknown error');
