@@ -227,23 +227,20 @@ const handlePlanSelection = (plan: string) => {
     </div>
     <Bloc2Establishment />
 
-    <div class="relative w-full h-[50vh] max-md:h-[15vh] overflow-hidden mt-[40px]">
-      <!-- Background Image -->
-      <div class="absolute inset-0 bg-black/20">
+    <div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
+      <div class="relative w-full mx-[15px] mt-8 rounded-[40px] overflow-hidden shadow-lg" style="height:600px;">
         <img 
           src="/images/123.png" 
           alt="Background Image" 
-          class="absolute top-0 left-0 w-full h-full object-cover"
+          class="absolute inset-0 w-full h-full object-cover z-0 scale-[1.2]" 
         />
-      </div>
-      
-      <!-- Content -->
-      <div class="relative h-full w-full flex justify-end max-md:justify-center items-center px-[90px] max-md:px-[10px]">
-        <div class="hidden md:block text-white z-10 text-right max-w-[80%] text-[3vw] font-bold tracking-wide" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
-          ANY SPACE, ANY TIME
-        </div>
-        <div class="md:hidden text-white z-10 text-center max-w-[100%] text-[7vw] font-black tracking-wider" style="text-shadow: 2px 2px 6px rgba(0,0,0,1); line-height: 1;">
-          ANY SPACE, ANY TIME
+        <!-- Overlayed content -->
+        <div class="absolute z-20 top-0 left-0 w-full h-full flex flex-col justify-center items-start px-8 md:px-16 gap-4 max-w-[600px]">
+          <h2 class="text-white text-left text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide uppercase mb-2" style="letter-spacing: 1px; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">ANY SPACE, ANY TIME</h2>
+          <div class="w-[90%] h-[2px] bg-white opacity-40 mb-2"></div>
+          <p class="text-white text-left text-base sm:text-lg md:text-xl font-normal mb-2" style="font-weight: 400; line-height: 1.4; text-shadow: 2px 2px 8px rgba(0,0,0,0.85);">
+            Your guests can work out anywhere, anytime. Modern fitness for modern travelers.
+          </p>
         </div>
       </div>
     </div>

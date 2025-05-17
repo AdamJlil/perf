@@ -160,6 +160,7 @@ const submitForm = async () => {
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13332.31580057437!2d-9.250000000000002!3d32.300000000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb1cd1f7d2e1e6f%3A0x7f7c7c7c7c7c7c7c!2sSafi%2C%20Morocco!5e0!3m2!1sen!2sma!4v1715976000000!5m2!1sen!2sma"
         height="100%"
+        width="100%"
         style="border: 0; border-radius: 40px; filter: saturate(0.3)"
         allowfullscreen
         loading="lazy"
