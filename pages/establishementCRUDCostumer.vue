@@ -349,6 +349,51 @@ let usedColors: string[] = [];
 const handleError = (err: unknown) => {
   console.error('Error:', err instanceof Error ? err.message : String(err));
 };
+
+// Computed property for calories to display
+const calorieEntriesToDisplay = computed(() => {
+  if (!selectedCustomer.value?.burnedCalories) return {};
+  
+  // If only "Day 1" exists, return just that
+  if (Object.keys(selectedCustomer.value.burnedCalories).length === 1 && 
+      selectedCustomer.value.burnedCalories['Day 1']) {
+    return { 'Day 1': selectedCustomer.value.burnedCalories['Day 1'] };
+  }
+  
+  // Otherwise return all days except "Day 1" and adjust numbering
+  const filteredEntries: Record<string, number> = {};
+  const entries = Object.entries(selectedCustomer.value.burnedCalories)
+    .filter(([day]) => day !== 'Day 1');
+    
+  // Sort by day number to ensure proper renumbering
+  entries.sort((a, b) => {
+    const numA = parseInt(a[0].replace('Day ', ''));
+    const numB = parseInt(b[0].replace('Day ', ''));
+    return numA - numB;
+  });
+  
+  // Renumber days (Day 2 becomes Day 1, Day 3 becomes Day 2, etc.)
+  entries.forEach(([day, calories], index) => {
+    filteredEntries[`Day ${index + 1}`] = Number(calories);
+  });
+  
+  return filteredEntries;
+});
+
+// Check if we should show calorie history (hide if only Day 0 exists)
+const shouldShowCalorieHistory = computed(() => {
+  if (!selectedCustomer.value?.burnedCalories) return false;
+  
+  // If there's only Day 0, don't show the section
+  if (Object.keys(selectedCustomer.value.burnedCalories).length === 1 && 
+      selectedCustomer.value.burnedCalories['Day 0']) {
+    return false;
+  }
+  
+  // If there are any entries after filtering, show the section
+  return Object.keys(calorieEntriesToDisplay.value).length > 0;
+});
+
 </script>
 
 <template>
@@ -460,21 +505,15 @@ const handleError = (err: unknown) => {
               </div>
 
               <!-- Calories Burned History -->
-              <div v-if="selectedCustomer?.burnedCalories && Object.keys(selectedCustomer.burnedCalories).length > 0"
+              <div v-if="shouldShowCalorieHistory"
                    class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Calories Burned History</h3>
                 <div class="space-y-3">
-                  <div v-for="(calories, day) in selectedCustomer.burnedCalories" 
-                       :key="day" 
+                  <div v-for="(calories, day) in calorieEntriesToDisplay" 
+                       :key="day"
                        class="flex items-center justify-between">
                     <span class="text-gray-600">{{ day }}</span>
-                    <div class="flex items-center gap-3">
-                      <div class="w-32 bg-gray-200 rounded-full h-2">
-                        <div class="bg-green-500 h-2 rounded-full transition-all duration-500"
-                             :style="{ width: (calories / 500 * 100) + '%' }"></div>
-                      </div>
-                      <span class="font-medium min-w-[60px] text-right">{{ calories }} cal</span>
-                    </div>
+                    <span class="font-medium">{{ calories }} kcal</span>
                   </div>
                 </div>
               </div>

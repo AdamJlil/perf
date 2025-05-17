@@ -33,19 +33,29 @@
       <FlipCardBloc
         outsideTitle="infos"
         style="font-family: Montserrat"
-        backText="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Blanditiis officiis quae error praesentium hic!"
+        :backText="videoCalorieData[costumerVideo]?.description || 'Loading video information...'"
         frontImage="/images/arrow4.jpg"
       />
     </div>
 
-    <!-- Video Section (Commented Out) -->
+    <!-- Video Section -->
     <div class="w-full mt-30" id="video">
-      <video class="w-full h-auto block" controls v-if="!isLoading">
-        <source :src="videoSource" type="video/mp4" />
-        {{ console.log(videoSource) }}
-        Your browser does not support the video tag.
-      </video>
-      <div v-else>Loading...</div>
+      <div class="relative w-full" style="padding-top: 56.25%;" v-if="!isLoading">
+        <div v-if="isVideoLoading" class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 bg-opacity-80 z-10">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D05E33]"></div>
+        </div>
+        <iframe
+          :src="videoSource"
+          loading="lazy"
+          class="border-none absolute top-0 left-0 h-full w-full"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true"
+          @load="isVideoLoading = false"
+        ></iframe>
+      </div>
+      <div v-else class="w-full h-[300px] flex items-center justify-center bg-gray-100">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D05E33]"></div>
+      </div>
     </div> 
 
     <div class="w-full h-[50px] flex justify-end items-center pr-[40px]">
@@ -130,6 +140,7 @@ const costumerVideo = ref(0);
 const isLoading = ref(true);
 const selectedElement = ref(1);
 const caloriesResult = ref('');
+const isVideoLoading = ref(true);
 
 const ageRange = ref("");
 const weightRange = ref("");
@@ -138,13 +149,23 @@ const calorieData = ref(videoCalorieData);
 
 // Fonction de calcul des calories
 const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: number, calorieData: any) => {
+  console.log("ageRange", ageRange);
+  console.log("weight", weight);
+  console.log("dumbbellWeight", dumbbellWeight);
+  
   try {
-    if (!calorieData || !calorieData[ageRange] || !calorieData[ageRange][weight]) {
-      return "207-288"; // Return default value if data structure is incomplete
+    // Since we updated the quiz to store data in the correct format,
+    // we only need to handle the ageRanges structure now
+    if (calorieData && calorieData.ageRanges) {
+      // New structure with ageRanges property
+      return calorieData.ageRanges[ageRange][weight][dumbbellWeight] || "900-1100";
+    } else {
+      // Old structure with direct access (shouldn't be needed anymore)
+      return calorieData[ageRange][weight][dumbbellWeight] || "900-1100";
     }
-    return calorieData[ageRange][weight][dumbbellWeight] || "207-288";
   } catch (error) {
-    return "207-288"; 
+    console.error("Error in calculateCalories:", error);
+    return "900-1100"; // Default return a reasonable range instead of an error message
   }
 };
 
@@ -186,7 +207,7 @@ onMounted(async () => {
       }
 
       const customers = await response.json();
-      const customer = customers.find(c => c.id === customerId || c._id === customerId || c.et_customer_id === customerId);
+      const customer = customers.find((c: { id: string; _id: string; et_customer_id: string }) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId);
       
       if (customer) {
         customerName.value = customer.name || `${customer.first_name || ''} ${customer.last_name || ''}`;
@@ -220,7 +241,7 @@ const totalBurnedCalories = computed(() => {
 // Chart data and options
 const chartData = computed(() => {
   // Calculate accumulated values
-  const accumulatedData = [];
+  const accumulatedData: number[] = [];
   let runningTotal = 0;
   
   // Transform the data to show accumulated values
@@ -253,7 +274,7 @@ const chartData = computed(() => {
 const chartOptions = {
   //hover with ease mode further from the point
   hover: {
-    mode: 'nearest',
+    mode: 'nearest' as 'nearest',
     intersect: false,
   },
   responsive: true,
@@ -319,7 +340,7 @@ const nextVideo = async () => {
     }
 
     const customers = await response.json();
-    const customer = customers.find((c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId);
+    const customer = customers.find((c: { id: string; _id: string; et_customer_id: string }) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId);
     
     if (!customer) {
       throw new Error('Customer not found');

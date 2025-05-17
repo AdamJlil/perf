@@ -13,17 +13,20 @@ const establishmentPlans = {
   BRONZE: {
     title: plans.ESTABLISHEMENT.plans.plan_1.title,
     price: plans.ESTABLISHEMENT.plans.plan_1.price.split(' ')[0], // Get numeric value only
-    status: "Active"
+    status: "Pending",
+    duration: plans.ESTABLISHEMENT.plans.plan_1.duration
   },
   PLATINUM: {
     title: plans.ESTABLISHEMENT.plans.plan_2.title,
     price: plans.ESTABLISHEMENT.plans.plan_2.price.split(' ')[0], // Get numeric value only
-    status: "Active"
+    status: "Pending",
+    duration: plans.ESTABLISHEMENT.plans.plan_2.duration
   },
   GOLD: {
     title: plans.ESTABLISHEMENT.plans.plan_3.title,
     price: plans.ESTABLISHEMENT.plans.plan_3.price.split(' ')[0], // Get numeric value only
-    status: "Active"
+    status: "Pending",
+    duration: plans.ESTABLISHEMENT.plans.plan_3.duration
   }
 }
 
@@ -69,6 +72,30 @@ const togglePassword = (field: 'password' | 'confirmPassword') => {
   }
 }
 
+const calculateEndDate = (duration: string) => {
+  const today = new Date();
+  
+  // Parse the duration string
+  if (duration.includes('month')) {
+    // Extract the number of months
+    const months = parseInt(duration.split(' ')[0]);
+    const endDate = new Date(today);
+    endDate.setMonth(endDate.getMonth() + months);
+    return endDate.toISOString().split('T')[0];
+  } else if (duration.includes('year')) {
+    // Extract the number of years
+    const years = parseInt(duration.split(' ')[0]);
+    const endDate = new Date(today);
+    endDate.setFullYear(endDate.getFullYear() + years);
+    return endDate.toISOString().split('T')[0];
+  }
+  
+  // Default fallback to 1 month if duration format is unknown
+  const endDate = new Date(today);
+  endDate.setMonth(endDate.getMonth() + 1);
+  return endDate.toISOString().split('T')[0];
+}
+
 const onSignupClick = async () => {
   try {
     form.error = ''
@@ -94,8 +121,9 @@ const onSignupClick = async () => {
       title: selectedPlan.value.title,
       price: selectedPlan.value.price,
       status: selectedPlan.value.status,
-      startDate: new Date().toISOString().split('T')[0],
-      endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
+      active_customers: 0,
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: calculateEndDate(selectedPlan.value.duration)
     } : null;
 
     // Call the signup API with plan data
@@ -121,8 +149,33 @@ const onSignupClick = async () => {
       }
     })
   } catch (error: any) {
-    console.error('Signup error:', error)
-    form.error = error.message || 'Failed to create account. Please try again.'
+    // Log the entire error object for debugging
+    console.error('Signup error object:', JSON.stringify(error, null, 2))
+    console.error('Error response:', error.response ? JSON.stringify(error.response.data, null, 2) : 'No response data')
+    
+    // Handle different error cases
+    // Check for email already exists scenarios
+    if (
+      (error.message && (
+        error.message.includes('already exists') || 
+        error.message.includes('User found') ||
+        error.message.toLowerCase().includes('email') || 
+        error.message.toLowerCase().includes('duplicate')
+      )) || 
+      (error.response?.data?.message && (
+        error.response.data.message.includes('already exists') ||
+        error.response.data.message.includes('User found') ||
+        error.response.data.message.toLowerCase().includes('email') ||
+        error.response.data.message.toLowerCase().includes('duplicate')
+      )) ||
+      error.statusCode === 409 || 
+      error.response?.status === 409 ||
+      (error.response?.data?.error && error.response.data.error.toLowerCase().includes('exist'))
+    ) {
+      form.error = 'An account with this email already exists. Please try logging in instead.'
+    } else {
+      form.error = error.message || 'Failed to create account. Please try again.'
+    }
   } finally {
     form.pending = false
   }
@@ -139,7 +192,7 @@ const onSignupClick = async () => {
       <!-- Show selected plan info for establishments -->
       <div v-if="selectedPlan" class="mb-8 p-4 bg-white rounded-lg shadow-sm">
         <h2 class="text-lg font-semibold mb-2">Selected Plan: {{ selectedPlan.title }}</h2>
-        <p class="text-gray-600">Price: {{ selectedPlan.price }} dh/month</p>
+        <p class="text-gray-600">Price: {{ selectedPlan.price }} dh</p>
       </div>
 
       <div class="bg-white rounded-lg shadow-md p-6">
@@ -254,7 +307,7 @@ const onSignupClick = async () => {
                 class="rounded border-gray-300 text-[#D05E33] focus:ring-[#D05E33]"
               />
               <span class="text-sm text-gray-700">
-                I accept the <a href="#" class="text-[#D05E33] underline">terms and conditions</a>
+                I accept the <a href="/privacypolicy" class="text-[#D05E33] underline">terms and conditions</a>
               </span>
             </label>
             <label class="flex items-center space-x-2">
@@ -264,7 +317,7 @@ const onSignupClick = async () => {
                 class="rounded border-gray-300 text-[#D05E33] focus:ring-[#D05E33]"
               />
               <span class="text-sm text-gray-700">
-                I accept the <a href="#" class="text-[#D05E33] underline">privacy policy</a>
+                I accept the <a href="/terms" class="text-[#D05E33] underline">privacy policy</a>
               </span>
             </label>
           </div>

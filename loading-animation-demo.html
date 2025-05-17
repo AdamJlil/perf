@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading Animation Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .custom-spinner {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+  <div class="w-full max-w-2xl">
+    <!-- Example 1: Loading overlay on video -->
+    <h2 class="text-xl font-bold mb-4 text-center">Video Loading Animation</h2>
+    <div class="relative w-full" style="padding-top: 56.25%;">
+      <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 bg-opacity-80 z-10">
+        <div class="flex flex-col items-center">
+          <div class="custom-spinner rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D05E33] mb-4"></div>
+          <p class="text-[#D05E33] font-medium">Loading video...</p>
+        </div>
+      </div>
+      <div class="absolute top-0 left-0 w-full h-full bg-gray-200 flex items-center justify-center">
+        <p class="text-gray-500">[Video Placeholder]</p>
+      </div>
+    </div>
+
+    <!-- Example 2: Full loading state -->
+    <h2 class="text-xl font-bold mt-12 mb-4 text-center">Full Page Loading State</h2>
+    <div class="w-full h-[300px] flex items-center justify-center bg-gray-100">
+      <div class="flex flex-col items-center">
+        <div class="custom-spinner rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D05E33] mb-4"></div>
+        <p class="text-[#D05E33] font-medium">Loading video...</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

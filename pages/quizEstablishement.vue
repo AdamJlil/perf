@@ -259,34 +259,22 @@ const validateForm = () => {
 }
 
 const getAgeRange = (age: number) => {
-  if (age < 20) {
-    return '18-20'
-  } else if (age < 30) {
-    return '21-30'
-  } else if (age < 40) {
-    return '31-40'
-  } else if (age < 50) {
-    return '41-50'
+  if (age < 40) {
+    return '20-40'
   } else if (age < 60) {
-    return '51-60'
+    return '40-60'
   } else {
-    return '61+'
+    return 'Over 60'
   }
 }
 
 const getWeightRange = (weight: number) => {
-  if (weight < 40) {
-    return '20-40'
-  } else if (weight < 60) {
-    return '41-60'
-  } else if (weight < 80) {
-    return '61-80'
-  } else if (weight < 100) {
-    return '81-100'
-  } else if (weight < 120) {
-    return '101-120'
+  if (weight < 70) {
+    return '50-70'
+  } else if (weight < 90) {
+    return '70-90'
   } else {
-    return '121+'
+    return '90-120'
   }
 }
 
@@ -344,7 +332,7 @@ const handleSubmit = async () => {
       router.push('/establishementCRUDCostumer')
     } catch (error) {
       console.error('Error adding customer:', error)
-      errors.value.email = error.message || 'Failed to add customer'
+      errors.value.email = error instanceof Error ? error.message : 'Failed to add customer'
     }
   }
 }

@@ -47,7 +47,7 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <div class="w-full h-[40vh] bg-white flex justify-center items-center"></div>
+  <div class="w-full h-[15vh] bg-white flex justify-center items-center"></div>
 
   <div class="w-full p-4 sm:p-6 md:p-10" style="font-family: Montserrat">
     <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 uppercase text-center">
@@ -58,17 +58,17 @@ const submitForm = async () => {
       <div class="w-full md:w-3/5 lg:w-2/5 xl:w-1/4 mb-10 md:mb-0 px-4">
         <div class="w-full flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
           <img src="/images/icon-location.png" alt="Location" class="w-[40px] sm:w-[50px] md:w-[60px] h-auto" />
-          <p class="text-gray-900 text-lg sm:text-xl md:text-2xl">Adress adress adress adres adress</p>
+          <p class="text-gray-900 text-lg sm:text-xl md:text-2xl">Safi, Morocco</p>
         </div>
 
         <div class="w-full flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
           <img src="/images/icon-phone.png" alt="Phone" class="w-[40px] sm:w-[50px] md:w-[60px] h-auto" />
-          <p class="text-gray-900 text-lg sm:text-xl md:text-2xl">02 02 02 02 02</p>
+          <p class="text-gray-900 text-lg sm:text-xl md:text-2xl">+212 693-40429</p>
         </div>
 
         <div class="w-full flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
           <img src="/images/icon-mail.png" alt="Email" class="w-[40px] sm:w-[50px] md:w-[60px] h-auto" />
-          <p class="text-gray-900 text-lg sm:text-xl md:text-2xl">email@email.com</p>
+          <p class="text-gray-900 text-lg sm:text-xl md:text-2xl">contact@perf.ma</p>
         </div>
       </div>
 
@@ -132,7 +132,7 @@ const submitForm = async () => {
     <!-- Map Section -->
     <div class="w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] h-[30vh] sm:h-[35vh] md:h-[40vh] mt-6 sm:mt-8 md:mt-10 mb-10 sm:mb-16 md:mb-20 rounded-xl">
       <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.9916256937595!2d2.292292615509614!3d48.85837007928746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e2964e34e2d%3A0x8ddca9ee380ef7e0!2sEiffel%20Tower!5e0!3m2!1sen!2sfr!4v1651868653115!5m2!1sen!2sfr"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13332.31580057437!2d-9.250000000000002!3d32.300000000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb1cd1f7d2e1e6f%3A0x7f7c7c7c7c7c7c7c!2sSafi%2C%20Morocco!5e0!3m2!1sen!2sma!4v1715976000000!5m2!1sen!2sma"
         width="100%"
         height="100%"
         style="border: 0; border-radius: 40px; filter: saturate(0.3)"

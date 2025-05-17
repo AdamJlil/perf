@@ -60,6 +60,23 @@ export const authService = {
     } catch (error: any) {
       console.error('Signup error:', error.response?.data || error.message);
       console.error('Full error object:', error);
+      
+      // Check if the error message indicates that the user already exists
+      const errorMessage = error.response?.data?.message || error.response?.data?.error || error.message;
+      const errorData = error.response?.data;
+      
+      if (
+        (errorMessage && (
+          errorMessage.includes('User found') || 
+          errorMessage.includes('already exists') || 
+          errorMessage.toLowerCase().includes('duplicate')
+        )) || 
+        (errorData && errorData.error && typeof errorData.error === 'string' && 
+          errorData.error.includes('User found'))
+      ) {
+        throw new Error('An account with this email already exists. Please try logging in instead.');
+      }
+      
       throw error.response?.data?.error || 'Signup failed';
     }
   },

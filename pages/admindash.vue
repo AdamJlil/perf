@@ -70,8 +70,11 @@
               <th class="py-3 px-4 text-left">Gender</th>
               <th class="py-3 px-4 text-left">Allergies</th>
               <th class="py-3 px-4 text-left">Medical Conditions</th>
-              <th class="py-3 px-4 text-left">Created At</th>
+              <th class="py-3 px-4 text-left">Start Date</th>
+              <th class="py-3 px-4 text-left">End Date</th>
+              <th class="py-3 px-4 text-left">Active Customers</th>
               <th class="py-3 px-4 text-left">Plan</th>
+              <!-- <th class="py-3 px-4 text-left">Status</th> -->
               <th class="py-3 px-4 text-left">Paid</th>
               <th class="py-3 px-4 text-left">Actions</th>
             </tr>
@@ -109,8 +112,11 @@
                 </span>
                 <span v-else>None</span>
               </td>
-              <td class="py-3 px-4">{{ formatDate(customer.createdAt) }}</td>
+              <td class="py-3 px-4">{{ getPlanStartDate(customer.plan) }}</td>
+              <td class="py-3 px-4">{{ getPlanEndDate(customer.plan) }}</td>
+              <td class="py-3 px-4">{{ getPlanActiveCustomers(customer.plan) }}</td>
               <td class="py-3 px-4">{{ formatPlan(customer.plan) }}</td>
+              <!-- <td class="py-3 px-4">{{ getPlanStatus(customer.plan) }}</td> -->
               <td class="py-3 px-4">
                 <span 
                   :class="{
@@ -139,7 +145,7 @@
             </tr>
             <!-- Empty state when no customers -->
             <tr v-if="displayedCustomers.length === 0">
-              <td colspan="14" class="py-8 text-center text-gray-500">No customers found</td>
+              <td colspan="16" class="py-8 text-center text-gray-500">No customers found</td>
             </tr>
           </tbody>
         </table>
@@ -316,19 +322,62 @@
             </div>
             
             <!-- Plan Information -->
-            <div>
-              <label class="block text-sm font-medium mb-1">Plan</label>
-              <select 
-                v-model="editForm.plan" 
-                class="w-full p-2 border-[1px] border-black bg-transparent"
-              >
-                <option value="">Select plan</option>
-                <option value="BRONZE">BRONZE</option>
-                <option value="PLATINUM">PLATINUM</option>
-                <option value="GOLD">GOLD</option>
-              </select>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Plan</label>
+                <select 
+                  v-model="editForm.plan" 
+                  class="w-full p-2 border-[1px] border-black bg-transparent"
+                >
+                  <option value="">Select plan</option>
+                  <option value="BRONZE">BRONZE</option>
+                  <option value="PLATINUM">PLATINUM</option>
+                  <option value="GOLD">GOLD</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-1">Active Customers</label>
+                <input 
+                  v-model="editForm.activeCustomers" 
+                  type="number" 
+                  min="0"
+                  class="w-full p-2 border-[1px] border-black bg-transparent"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-1">Start Date</label>
+                <input 
+                  v-model="editForm.startDate" 
+                  type="date" 
+                  class="w-full p-2 border-[1px] border-black bg-transparent"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-1">End Date</label>
+                <input 
+                  v-model="editForm.endDate" 
+                  type="date" 
+                  class="w-full p-2 border-[1px] border-black bg-transparent"
+                />
+              </div>
+              
+              <!-- <div>
+                <label class="block text-sm font-medium mb-1">Status</label>
+                <select 
+                  v-model="editForm.status" 
+                  class="w-full p-2 border-[1px] border-black bg-transparent"
+                >
+                  <option value="">Select status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Suspended">Suspended</option>
+                  <option value="Expired">Expired</option>
+                </select>
+              </div> -->
             </div>
-            
+
             <!-- Payment Information -->
             <div>
               <label class="block text-sm font-medium mb-1">Paid</label>
@@ -432,7 +481,11 @@ const editForm = reactive({
   allergies: '',
   medicalConditions: '',
   plan: '',
-  paid: null as boolean | null
+  paid: null as boolean | null,
+  startDate: '',
+  endDate: '',
+  activeCustomers: 0,
+  status: ''
 });
 
 // Computed properties for pagination
@@ -641,19 +694,40 @@ function openEditModal(customer: Customer) {
   editForm.allergies = safeCustomer.allergies;
   editForm.medicalConditions = safeCustomer.medicalConditions;
   
+  // Initialize plan-related fields
+  let planTitle = '';
+  let planStartDate = '';
+  let planEndDate = '';
+  let planActiveCustomers = 0;
+  let planStatus = '';
+  
   // Handle plan data
   if (typeof safeCustomer.plan === 'string' && (safeCustomer.plan.startsWith('{') || safeCustomer.plan.startsWith('['))) {
     try {
       const planObj = JSON.parse(safeCustomer.plan);
-      editForm.plan = planObj.title || ''; // Return only the title value
+      planTitle = planObj.title || '';
+      planStartDate = planObj.start_date || '';
+      planEndDate = planObj.end_date || '';
+      planActiveCustomers = planObj.active_customers || 0;
+      planStatus = planObj.status || '';
     } catch (e) {
-      editForm.plan = safeCustomer.plan;
+      planTitle = safeCustomer.plan;
     }
   } else if (typeof safeCustomer.plan === 'object' && safeCustomer.plan) {
-    editForm.plan = safeCustomer.plan.title || '';
+    planTitle = safeCustomer.plan.title || '';
+    planStartDate = safeCustomer.plan.start_date || '';
+    planEndDate = safeCustomer.plan.end_date || '';
+    planActiveCustomers = safeCustomer.plan.active_customers || 0;
+    planStatus = safeCustomer.plan.status || '';
   } else {
-    editForm.plan = safeCustomer.plan;
+    planTitle = safeCustomer.plan;
   }
+  
+  editForm.plan = planTitle;
+  editForm.startDate = planStartDate;
+  editForm.endDate = planEndDate;
+  editForm.activeCustomers = planActiveCustomers;
+  editForm.status = planStatus;
   
   // Handle paid status - ensure it's a proper boolean or null
   editForm.paid = safeCustomer.paid === true ? true : safeCustomer.paid === false ? false : null;
@@ -693,28 +767,53 @@ async function updateCustomer() {
       editForm.paid === true;
     
     // Prepare the update data
-    const updateData = {
+    let updatedPlanData = null;
+    
+    // If the customer is an establishment and has plan details
+    if (customerToEdit.value && customerToEdit.value.plan) {
+      // Get the original plan object
+      let originalPlan = {};
+      if (typeof customerToEdit.value.plan === 'string') {
+        try {
+          originalPlan = JSON.parse(customerToEdit.value.plan);
+        } catch (e) {
+          originalPlan = {};
+        }
+      } else if (typeof customerToEdit.value.plan === 'object') {
+        originalPlan = customerToEdit.value.plan;
+      }
+      
+      // Update with the new values from the form
+      updatedPlanData = {
+        ...originalPlan,
+        title: editForm.plan,
+        start_date: editForm.startDate,
+        end_date: editForm.endDate,
+        active_customers: editForm.activeCustomers,
+        status: editForm.status
+      };
+    }
+    
+    // Create the update payload
+    const payload = {
       email: editForm.email,
       name: editForm.name,
-      first_name: editForm.firstName,
-      last_name: editForm.lastName,
+      firstName: editForm.firstName,
+      lastName: editForm.lastName,
       age: editForm.age,
       height: editForm.height,
       gender: editForm.gender,
-      allergies_details: editForm.allergies,
-      medical_conditions_details: editForm.medicalConditions,
-      plan: JSON.stringify({
-        title: editForm.plan,
-        status: 'Active'
-      }),
+      allergies: editForm.allergies,
+      medicalConditions: editForm.medicalConditions,
+      plan: updatedPlanData ? JSON.stringify(updatedPlanData) : null,
       // Ensure paid is explicitly sent as a boolean or null
       paid: editForm.paid
     };
     
-    console.log('Updating user with data:', updateData);
+    console.log('Updating user with data:', payload);
     
     // Call the API to update the customer
-    await axios.put(`http://localhost:3001/api/users/${editForm.id}`, updateData, {
+    await axios.put(`http://localhost:3001/api/users/${editForm.id}`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -727,7 +826,7 @@ async function updateCustomer() {
       
       try {
         // Call the email notification API with the user data
-        const emailResponse = await axios.post(`http://localhost:3001/api/payment/payment-status-update`, updateData, {
+        const emailResponse = await axios.post(`http://localhost:3001/api/payment/payment-status-update`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -802,6 +901,86 @@ function formatPlan(plan: any) {
   }
   
   return plan;
+}
+
+// Get start date from plan
+function getPlanStartDate(plan: any) {
+  if (!plan) return '';
+  
+  try {
+    if (typeof plan === 'string') {
+      const planObj = JSON.parse(plan);
+      return planObj.start_date || '';
+    }
+    
+    if (typeof plan === 'object') {
+      return plan.start_date || '';
+    }
+  } catch (e) {
+    return '';
+  }
+  
+  return '';
+}
+
+// Get end date from plan
+function getPlanEndDate(plan: any) {
+  if (!plan) return '';
+  
+  try {
+    if (typeof plan === 'string') {
+      const planObj = JSON.parse(plan);
+      return planObj.end_date || '';
+    }
+    
+    if (typeof plan === 'object') {
+      return plan.end_date || '';
+    }
+  } catch (e) {
+    return '';
+  }
+  
+  return '';
+}
+
+// Get active customers from plan
+function getPlanActiveCustomers(plan: any) {
+  if (!plan) return 0;
+  
+  try {
+    if (typeof plan === 'string') {
+      const planObj = JSON.parse(plan);
+      return planObj.active_customers || 0;
+    }
+    
+    if (typeof plan === 'object') {
+      return plan.active_customers || 0;
+    }
+  } catch (e) {
+    return 0;
+  }
+  
+  return 0;
+}
+
+// Get status from plan
+function getPlanStatus(plan: any) {
+  if (!plan) return '';
+  
+  try {
+    if (typeof plan === 'string') {
+      const planObj = JSON.parse(plan);
+      return planObj.status || '';
+    }
+    
+    if (typeof plan === 'object') {
+      return plan.status || '';
+    }
+  } catch (e) {
+    return '';
+  }
+  
+  return '';
 }
 
 // Format paid status for display

@@ -11,14 +11,18 @@
           id="Bronze" 
           class="w-full lg:w-1/3 h-auto font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8"
           :class="{ 
-            'cursor-pointer transition-transform duration-300 hover:scale-105': currentPlan !== 'BRONZE',
-            'relative': currentPlan === 'BRONZE'
+            'cursor-pointer transition-transform duration-300 hover:scale-105': currentPlan !== 'BRONZE' && pendingPlan !== 'BRONZE',
+            'relative': currentPlan === 'BRONZE' || pendingPlan === 'BRONZE'
           }"
-          @click="currentPlan !== 'BRONZE' && $emit('planSelected', 'BRONZE')"
+          @click="handlePlanSelected('BRONZE')"
         >
           <!-- Active badge -->
           <div v-if="currentPlan === 'BRONZE'" class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
             Active
+          </div>
+          <!-- Pending badge -->
+          <div v-else-if="pendingPlan === 'BRONZE'" class="absolute top-4 right-4 bg-orange-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
+            Pending
           </div>
           
           <h2 class="text-xl uppercase tracking-2">{{ plan_1.title }}</h2>  
@@ -44,14 +48,18 @@
           id="Platinum" 
           class="md:pt-[80px] relative w-full scale-y-105 mb-5 lg:w-1/3 h-auto font-medium border border-black rounded-10 flex flex-col items-center p-6 lg:p-8"
           :class="{ 
-            'cursor-pointer transition-transform duration-300 hover:scale-110': currentPlan !== 'PLATINUM',
-            'relative': currentPlan === 'PLATINUM'
+            'cursor-pointer transition-transform duration-300 hover:scale-110': currentPlan !== 'PLATINUM' && pendingPlan !== 'PLATINUM',
+            'relative': currentPlan === 'PLATINUM' || pendingPlan === 'PLATINUM'
           }"
-          @click="currentPlan !== 'PLATINUM' && $emit('planSelected', 'PLATINUM')"
+          @click="handlePlanSelected('PLATINUM')"
         >
           <!-- Active badge -->
           <div v-if="currentPlan === 'PLATINUM'" class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
             Active
+          </div>
+          <!-- Pending badge -->
+          <div v-else-if="pendingPlan === 'PLATINUM'" class="absolute top-4 right-4 bg-orange-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
+            Pending
           </div>
           
           <img src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
@@ -79,14 +87,18 @@
           id="Gold" 
           class="w-full lg:w-1/3 h-auto font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8"
           :class="{ 
-            'cursor-pointer transition-transform duration-300 hover:scale-105': currentPlan !== 'GOLD',
-            'relative': currentPlan === 'GOLD'
+            'cursor-pointer transition-transform duration-300 hover:scale-105': currentPlan !== 'GOLD' && pendingPlan !== 'GOLD',
+            'relative': currentPlan === 'GOLD' || pendingPlan === 'GOLD'
           }"
-          @click="currentPlan !== 'GOLD' && $emit('planSelected', 'GOLD')"
+          @click="handlePlanSelected('GOLD')"
         >
           <!-- Active badge -->
           <div v-if="currentPlan === 'GOLD'" class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
             Active
+          </div>
+          <!-- Pending badge -->
+          <div v-else-if="pendingPlan === 'GOLD'" class="absolute top-4 right-4 bg-orange-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
+            Pending
           </div>
           
           <h2 class="text-xl uppercase tracking-2">{{ plan_3.title }}</h2>
@@ -113,6 +125,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
 const props = defineProps({
   title: {
     type: String,
@@ -136,7 +150,16 @@ const props = defineProps({
   }
 })
 
-const { title, plan_1, plan_2, plan_3, currentPlan } = toRefs(props)
+const pendingPlan = ref('')
+
+const handlePlanSelected = (planType: string) => {
+  if (planType !== props.currentPlan) {
+    pendingPlan.value = planType
+    emit('planSelected', planType)
+  }
+}
+
+const emit = defineEmits(['planSelected'])
 </script>
 
 <style scoped>
