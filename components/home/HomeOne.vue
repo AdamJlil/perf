@@ -1,4 +1,5 @@
 <template>
+   
   <div class="banner-container overflow-x-hidden overflow-y-hidden relative w-full bg-blue text-white flex flex-col justify-center items-start gap-8 md:p-[90px] max-md:p-[20px]" style="font-family: Montserrat; height: 80vh;">
     
     <!-- Image as background -->
@@ -6,6 +7,7 @@
       :src="backgroundImage" 
       :alt="imageAlt" 
       class="absolute top-0 left-0 w-full h-full object-cover z-[1]" 
+      :class="{ 'rotate-[-90deg]': backgroundImage === '/images/header.jpg' }"
     />
 
     <!-- Overlay Layer -->

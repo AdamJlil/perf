@@ -73,7 +73,7 @@ const submitForm = async () => {
   <div v-if="isSubmitting" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-50">
     <div class="loader"></div>
   </div>
-  <div class="w-full h-[15vh] bg-white flex justify-center items-center"></div>
+  <div class="w-full h-[15vh] bg-[#EFEFEC] flex justify-center items-center"></div>
 
   <div class="w-full p-4 sm:p-6 md:p-10" style="font-family: Montserrat">
     <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 uppercase text-center">
@@ -100,7 +100,7 @@ const submitForm = async () => {
 
       <div class="w-full md:w-3/5 lg:w-2/5 xl:w-1/4">
         <div
-          class="w-full h-[450px] sm:h-[500px] md:h-[550px] rounded-[40px] bg-white flex flex-col justify-center items-center text-black relative px-4 sm:px-6 md:px-8"
+          class="w-full h-[450px] sm:h-[500px] md:h-[550px] rounded-[40px] bg-[#EFEFEC] flex flex-col justify-center items-center text-black relative px-4 sm:px-6 md:px-8"
         >
           <h1 class="text-xl sm:text-2xl font-bold text-gray-900 uppercase text-center absolute top-5">SEND A MESSAGE</h1>
           <!-- Form with hover effects and validation -->
@@ -110,7 +110,7 @@ const submitForm = async () => {
                 v-model="formData.name"
                 type="text"
                 placeholder="Name"
-                class="w-full text-black text-base sm:text-lg md:text-xl placeholder:text-gray-800 p-2 sm:p-3 border-b-1.5 hover:border-b-3 focus:border-b-3 border-black transition-all duration-300 outline-none"
+                class="w-full text-black text-base sm:text-lg md:text-xl placeholder:text-gray-800 p-2 sm:p-3 border-b-1.5 hover:border-b-3 focus:border-b-3 border-black transition-all duration-300 outline-none bg-[#EFEFEC]"
               />
             </div>
             <div class="w-full mb-4 sm:mb-6">
@@ -118,7 +118,7 @@ const submitForm = async () => {
                 v-model="formData.email"
                 type="email"
                 placeholder="Email"
-                class="w-full text-black text-base sm:text-lg md:text-xl placeholder:text-gray-800 p-2 sm:p-3 border-b-1.5 hover:border-b-3 focus:border-b-3 border-black transition-all duration-300 outline-none"
+                class="w-full text-black text-base sm:text-lg md:text-xl placeholder:text-gray-800 p-2 sm:p-3 border-b-1.5 hover:border-b-3 focus:border-b-3 border-black transition-all duration-300 outline-none bg-[#EFEFEC]"
               />
             </div>
             <div class="mb-4 sm:mb-6 w-full">
@@ -126,14 +126,14 @@ const submitForm = async () => {
                 v-model="formData.message"
                 placeholder="Message"
                 rows="4"
-                class="w-full text-black text-base sm:text-lg md:text-xl placeholder:text-gray-800 p-2 sm:p-3 border-b-1.5 hover:border-b-3 focus:border-b-3 border-black transition-all duration-300 outline-none resize-none"
+                class="w-full text-black text-base sm:text-lg md:text-xl placeholder:text-gray-800 p-2 sm:p-3 border-b-1.5 hover:border-b-3 focus:border-b-3 border-black transition-all duration-300 outline-none resize-none bg-[#EFEFEC]"
               ></textarea>
             </div>
 
             <div class="w-full flex justify-center mt-6 sm:mt-8 mb-6 sm:mb-8">
               <button
                 type="submit"
-                class="py-2 px-6 sm:px-10 border-2 border-black text-black font-normal uppercase hover:cursor-pointer transition-colors duration-300"
+                class="uppercase border border-black text-black bg-transparent font-light tracking-[5px] rounded-md hover:bg-black hover:text-white transition-colors duration-200 py-2 px-6 sm:px-10"
               >
                 Submit
               </button>
@@ -154,12 +154,11 @@ const submitForm = async () => {
     </div>
   </div>
 
-  <div class="w-full flex justify-center items-center bg-white rounded-[40px]">
+  <div class="w-full flex justify-center items-center bg-[#EFEFEC] rounded-[40px]">
     <!-- Map Section -->
     <div class="w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] h-[30vh] sm:h-[35vh] md:h-[40vh] mt-6 sm:mt-8 md:mt-10 mb-10 sm:mb-16 md:mb-20 rounded-xl">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13332.31580057437!2d-9.250000000000002!3d32.300000000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb1cd1f7d2e1e6f%3A0x7f7c7c7c7c7c7c7c!2sSafi%2C%20Morocco!5e0!3m2!1sen!2sma!4v1715976000000!5m2!1sen!2sma"
-        width="100%"
         height="100%"
         style="border: 0; border-radius: 40px; filter: saturate(0.3)"
         allowfullscreen

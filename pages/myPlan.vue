@@ -26,7 +26,7 @@
         <div class="flex flex-col items-center justify-end">
           <button
             @click="scrollToPlans"
-            class="uppercase cursor-pointer tracking-2 border-1 font-semibold border-gray-6 px-5 py-2 text-gray-6 text-xs hover:bg-gray-100"
+            class="uppercase border border-gray-6 text-gray-6 bg-transparent font-light tracking-[5px] rounded-md hover:bg-gray-6 hover:text-white transition-colors duration-200 cursor-pointer px-5 py-2 text-xs"
           >
             upgrade plan
           </button>

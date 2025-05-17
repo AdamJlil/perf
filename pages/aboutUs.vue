@@ -6,7 +6,7 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 
 <div class="w-full h-[90vh] relative" style="background-image: url('/images/123.png'); background-size: cover; filter: saturate(0.2);  background-position: center; background-repeat: no-repeat;" >
   
-  <div class="w-full md:h-[30vh] bg-white flex justify-center absolute bottom-0 left-0 right-0">
+  <div class="w-full md:h-[30vh] bg-[#EFEFEC] flex justify-center absolute bottom-0 left-0 right-0">
 
     <div class="w-full md:w-[90vw] lg:w-[80vw] h-full flex flex-col md:flex-row justify-between items-center p-4 md:p-0">
 
@@ -136,14 +136,82 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
     </div>
 
 
-    <div class="w-full pt-5 md:pt-10 bg-white">
+    <div class="w-full">
+       <!-- Why PERF -->
+    <div class="bg-[#EFEFEC] py-[40px] lg:py-[100px] px-4">
       <h1 class="font-bold text-center text-3xl md:text-4xl lg:text-5xl text-gray-700 uppercase pb-5 md:pb-10 lg:pb-20">OUR PROCESS</h1>
-      <div class="w-full h-[35vh] sm:h-[40vh] md:h-[60vh] lg:h-[80vh] xl:h-[100vh] bg-white relative overflow-hidden">
-        <img src="/images/OurProcess.png" alt="Our Process" class="absolute inset-0 w-full   object-center" />
+
+      <!-- DESKTOP: 10% OVERLAP VENN LAYOUT -->
+      <div class="hidden lg:flex justify-center relative h-[320px] w-full">
+        <div class="relative w-[896px] h-80">
+          <!-- Left Circle -->
+          <div class="absolute top-0 left-0 w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+            DISCOVER
+          </div>
+          <!-- Middle Circle -->
+          <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#d57753]/80 rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">
+            DESIGN
+          </div>
+          <!-- Right Circle -->
+          <div class="absolute top-0 left-[576px] w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+            DELIVER
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE/TABLET: VERTICAL LAYOUT -->
+      <div class="flex flex-col gap-10 lg:hidden mt-10 text-neutral-900 text-sm items-center text-center">
+        <!-- DISCOVER -->
+        <div class="flex flex-col items-center gap-4">
+          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
+            DISCOVER
+          </div>
+          <p class="max-w-xs">
+            Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+          </p>
+        </div>
+        <!-- DESIGN -->
+        <div class="flex flex-col items-center gap-4">
+          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
+            DESIGN
+          </div>
+          <p class="max-w-xs">
+            Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+          </p>
+        </div>
+        <!-- DELIVER -->
+        <div class="flex flex-col items-center gap-4">
+          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
+            DELIVER
+          </div>
+          <p class="max-w-xs">
+            Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+          </p>
+        </div>
+      </div>
+
+      <!-- DESKTOP TEXT BELOW CIRCLES -->
+      <div class="max-w-6xl mx-auto mt-20 hidden lg:grid grid-cols-3 gap-10 text-sm text-center text-neutral-900">
+        <div>
+          <p>
+            Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+          </p>
+        </div>
+        <div>
+          <p>
+            Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+          </p>
+        </div>
+        <div>
+          <p>
+            Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+          </p>
+        </div>
       </div>
     </div>
+    </div>
 
-     <div class="w-full pt-10 md:pt-20 bg-white">
+     <div class="w-full">
 
      <Bloc3Establishment 
       image1="/images/about-us-img1.png" 
@@ -168,8 +236,11 @@ health an achievable goal for all."
     />
 </div>
 
-<div class="w-full h-10 md:h-20 mt-10 md:mt-15 bg-white" style="background-image: url('/images/hotels.png'); background-size: 70%; background-position: center; background-repeat: no-repeat;">
-</div>
+    <div class="w-full py-6 md:py-8 bg-[#EFEFEC] flex flex-wrap items-center justify-center gap-6 md:gap-[80px] mt-[10px] sm:mt-[20px]">
+      <NuxtImg src="/images/forsea.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
+      <NuxtImg src="/images/sofitel.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
+      <NuxtImg src="/images/riuu.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
+    </div>
 
 
 <div class="w-full pt-15 md:pt-30 pb-10 md:pb-20" style="font-family: 'Montserrat'">
@@ -177,32 +248,43 @@ health an achievable goal for all."
     <p class="text-3xl md:text-5xl font-bold text-gray-800 text-center uppercase">Who we are !</p>
   </div>
   <div class="flex justify-center items-center pt-10 md:pt-20">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-4">
-
-      <div class="flex flex-col items-center justify-center">
-        <div class="w-40 h-40 md:w-60 md:h-60 rounded-full" style="background-image: url('/images/er1.jpg'); filter: saturate(0); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-        <p class="text-gray-900 font-semibold text-xl md:text-2xl w-full md:w-60 text-center p-5">JOHN DOE</p>
-        <p class="text-gray-500 uppercase text-lg md:text-2xl w-full md:w-60 text-center">Partner</p>
+    <div class="flex flex-col gap-8 w-full max-w-5xl mx-auto">
+      <!-- First row: 3 members -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-[20px] w-full">
+        <div class="flex flex-col items-center justify-center flex-1">
+          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/mjdAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">AMJAD ARKHIS</p>
+          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Co-founder</p>
+        </div>
+        <div class="flex flex-col items-center justify-center flex-1">
+          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/saad.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">SAAD TANTAOUI</p>
+          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Co-founder</p>
+        </div>
+        <div class="flex flex-col items-center justify-center flex-1">
+          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/mehdiAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">MEHDI ARKHIS</p>
+          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Front-end Developer</p>
+        </div>
       </div>
-
-      <div class="flex flex-col items-center justify-center">
-        <div class="w-40 h-40 md:w-60 md:h-60 rounded-full" style="background-image: url('/images/er1.jpg'); filter: saturate(0); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-        <p class="text-gray-900 font-semibold text-xl md:text-2xl w-full md:w-60 text-center p-5">JANE SMITH</p>
-        <p class="text-gray-500 uppercase text-lg md:text-2xl w-full md:w-60 text-center">Partner</p>
+      <!-- Second row: 2 members, centered under the 3 above -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-[20px] w-full md:w-2/3 mx-auto justify-center">
+        <div class="flex flex-col items-center justify-center flex-1">
+          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/adamAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">ADAM JLIL</p>
+          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Back-end Developer</p>
+        </div>
+        <div class="flex flex-col items-center justify-center flex-1">
+          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/anasAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">ANAS ORKHIS</p>
+          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Back-end Developer</p>
+        </div>
       </div>
-
-
-      <div class="flex flex-col items-center justify-center">
-        <div class="w-40 h-40 md:w-60 md:h-60 rounded-full" style="background-image: url('/images/er1.jpg'); filter: saturate(0); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-        <p class="text-gray-900 font-semibold text-xl md:text-2xl w-full md:w-60 text-center p-5">ALEX JOHNSON</p>
-        <p class="text-gray-500 uppercase text-lg md:text-2xl w-full md:w-60 text-center">Nutritionist</p>
-      </div>
-
+    </div>
     </div>
   </div>
-</div>
 
-<div class="w-full py-10 md:py-20 bg-gray-100">
+<div class="w-full py-10 md:py-20 bg-[#EFEFEC">
   <div class="container mx-auto px-4">
     <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">OUR VALUES</h2>
     

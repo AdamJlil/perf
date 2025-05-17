@@ -160,7 +160,7 @@
       <button 
         @click="handleSubmit" 
         :disabled="submitting"
-        class="border-[1px] border-black text-black py-2 px-4 w-full text-center hover:bg-[#00000008] transition-colors duration-300 max-w-[200px] disabled:opacity-50 disabled:cursor-not-allowed"
+        class="uppercase border border-black text-black bg-transparent font-light tracking-[5px] rounded-md hover:bg-black hover:text-white transition-colors duration-200 py-2 px-4 w-full text-center max-w-[200px] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <span v-if="submitting">Saving...</span>
         <span v-else>START</span>

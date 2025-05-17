@@ -140,7 +140,7 @@ onMounted(() => {
       'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
     }"
   >
-    <div class="p-3 w-full flex items-center justify-between pr-[30px] max-md:pt-[30px]">
+    <div class="w-full flex items-center justify-between max-md:pt-[30px]" :class="{ 'sm:p-[55px] px-[40px] pt-[80px]': route.path === '/' || route.path === '/establishementHomePlan' }">
       <!-- v-if="currentUser" -->
       <!-- Desktop Navigation -->
       <nav class="hidden lg:flex items-center justify-between w-full px-8 md:mr-[10px]">
@@ -161,7 +161,7 @@ onMounted(() => {
         </div>
         <div class="flex gap-5 lg:gap-15 items-center">
           <template v-if="!isLoggedIn">
-            <NuxtLink
+            <!-- <NuxtLink
               v-if="isLoggedIn"
               :to="{
                 path: '/',
@@ -177,7 +177,7 @@ onMounted(() => {
               HOME
             </NuxtLink>
             <NuxtLink
-              v-else
+              v-if="!isLoggedIn"
               to="/"
               class="px-3 text-shadow-white"
               :class="{
@@ -187,7 +187,7 @@ onMounted(() => {
               @click="closeMenu"
             >
               HOME
-            </NuxtLink>
+            </NuxtLink> -->
             <!-- <NuxtLink
               v-if="isLoggedIn"
               :to="{
@@ -317,20 +317,8 @@ onMounted(() => {
           </NuxtLink> -->
         </div>
         <div class="relative flex items-center gap-[15px]">
-          <template v-if="!isLoggedIn">
-            <NuxtLink
-              to="/login"
-              class="px-3 text-shadow-white"
-              :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-                'font-bold': isActive('/login'),
-              }"
-              @click="closeMenu"
-            >
-              LOGIN
-            </NuxtLink>
-          </template>
-          <template v-else>
+
+          <template v-if="isLoggedIn">
             <NuxtLink
               v-if="
                 isLoggedIn && isEtablissement && !isActive('/quizEstablishement') && !isActive('/establishementProgram')
@@ -530,9 +518,9 @@ onMounted(() => {
               <!-- <NuxtLink to="/register" class="py-2 px-4 hover:bg-gray-100 " @click="closeMenu">
                 REGISTER
               </NuxtLink> -->
-              <NuxtLink to="/" class="py-2 px-4 text-black " @click="closeMenu">
-                HOME
-              </NuxtLink>
+              // <NuxtLink to="/" class="py-2 px-4 text-black " @click="closeMenu">
+              //   HOME
+              // </NuxtLink>
               <NuxtLink to="/establishementHomePlan" class="py-2 px-4 text-black " @click="closeMenu">
                 PERF HOSPITALITY
               </NuxtLink>
@@ -542,9 +530,9 @@ onMounted(() => {
               <NuxtLink to="/contact" class="py-2 px-4 text-black " @click="closeMenu">
                 CONTACT
               </NuxtLink>
-              <NuxtLink to="/login" class="py-2 px-4 text-black " @click="closeMenu">
-                LOGIN
-              </NuxtLink>
+              // <NuxtLink to="/login" class="py-2 px-4 text-black " @click="closeMenu">
+              //   LOGIN
+              // </NuxtLink>
             </template>
           </div>
         </nav>

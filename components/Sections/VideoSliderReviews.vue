@@ -46,10 +46,10 @@
 
 <script setup lang="ts">
 const originalVideos: string[] = [
-  '/videos/slider_videos/slider-video_01.mp4',
-  '/videos/slider_videos/slider-video_02.mp4',
-  '/videos/slider_videos/slider-video_03.mp4',
-  '/videos/slider_videos/slider-video_04.mp4',
+  './videos/slider_videos/slider-video_01.mp4',
+  './videos/slider_videos/slider-video_02.mp4',
+  './videos/slider_videos/slider-video_03.mp4',
+  './videos/slider_videos/slider-video_04.mp4',
 ]
 
 // Répétition dynamique des vidéos pour créer l'effet de duplication
