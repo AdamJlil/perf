@@ -4,8 +4,8 @@ const { login } = useAuth();
 const form = reactive({
   data: {
     // email: "particuier1@gmail.com",
-    email: "elmehdi.arkhis@gmail.com",
-    password: "elmehdi@123",
+    email: "",
+    password: "",
     rememberMe: false,
     etablissement: "",
   },

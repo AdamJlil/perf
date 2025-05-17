@@ -39,11 +39,12 @@
     </div>
 
     <!-- Video Section -->
+    <!-- Loading Overlay for Video -->
+    <div v-if="isVideoLoading" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-50">
+      <div class="loader"></div>
+    </div>
     <div class="w-full mt-30" id="video">
       <div class="relative w-full" style="padding-top: 56.25%;" v-if="!isLoading">
-        <div v-if="isVideoLoading" class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 bg-opacity-80 z-10">
-          <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D05E33]"></div>
-        </div>
         <iframe
           :src="videoSource"
           loading="lazy"
@@ -54,9 +55,10 @@
         ></iframe>
       </div>
       <div v-else class="w-full h-[300px] flex items-center justify-center bg-gray-100">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D05E33]"></div>
+        <div class="loader"></div>
       </div>
-    </div> 
+    </div>
+
 
     <div class="w-full h-[50px] flex justify-end items-center pr-[40px]">
       <div class="flex items-center justify-center gap-[10px] p-[10px] hover:bg-[#e7e7e7] cursor-pointer" @click="nextVideo">
@@ -398,3 +400,19 @@ const nextVideo = async () => {
   }
 }
 </script>
+
+<style scoped>
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #d05e33;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+

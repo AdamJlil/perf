@@ -1,4 +1,8 @@
 <template>
+  <!-- Loading Overlay -->
+  <div v-if="loading" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-50">
+    <div class="loader"></div>
+  </div>
   <div
     class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative p-4 pt-[100px] bg-[#EFEFEC]"
     style="font-family: Montserrat"
@@ -419,6 +423,22 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #d05e33;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted, computed } from 'vue';

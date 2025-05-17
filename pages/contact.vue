@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 
+const isSubmitting = ref(false);
+
 const formData = reactive({
   name: "",
   email: "",
@@ -15,7 +17,7 @@ const submitForm = async () => {
     formError.value = true;
     return;
   }
-
+  isSubmitting.value = true;
   try {
     // Send the form data to our API endpoint
     const response = await fetch('http://localhost:3001/api/contact/submit', {
@@ -29,6 +31,7 @@ const submitForm = async () => {
     const result = await response.json();
     
     if (result.success) {
+      isSubmitting.value = false;
       formSubmitted.value = true;
       formError.value = false;
       // Reset form after successful submission
@@ -36,17 +39,40 @@ const submitForm = async () => {
       formData.email = '';
       formData.message = '';
     } else {
+      isSubmitting.value = false;
       formError.value = true;
       console.error('Error submitting form:', result.message);
     }
   } catch (error) {
     formError.value = true;
     console.error('Error submitting form:', error);
+  } finally {
+    isSubmitting.value = false;
   }
 };
 </script>
 
+<style scoped>
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #d05e33;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+
 <template>
+  <!-- Loading Overlay -->
+  <div v-if="isSubmitting" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-50">
+    <div class="loader"></div>
+  </div>
   <div class="w-full h-[15vh] bg-white flex justify-center items-center"></div>
 
   <div class="w-full p-4 sm:p-6 md:p-10" style="font-family: Montserrat">
