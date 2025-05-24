@@ -2,7 +2,7 @@
 <template>
   <div class="bg-[#EFEFEC] dark:bg-black flex flex-col justify-center items-center w-full py-10 gap-8 md:gap-12" :class="reversed ? ' md:flex-row': ' md:flex-row-reverse'">
   <div
-    v-if="showImage"
+    v-if="showImage && route.name !== 'establishementCRUDCostumer'"
     class="w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-full overflow-hidden bg-center bg-cover flex-shrink-0"
     :style="{
       backgroundImage: `url('${image}')`,
@@ -58,6 +58,7 @@ const props = defineProps({
 
 const { image, headingText, showButton, showImage, isLogoutButton } = toRefs(props)
 const { logout } = useAuth()
+const route = useRoute()
 
 const handleButtonClick = async () => {
   if (isLogoutButton.value) {

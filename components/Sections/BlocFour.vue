@@ -1,9 +1,9 @@
 <template>
   <div class="w-full h-[100vh] max-md:h-fit bg-blue text-white flex flex-col justify-center max-md:justify-start items-center gap-8 relative overflow-hidden max-md:py-15" style="font-family: Montserrat;">
     <!-- Video Background -->
-    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover z-10">
+    <!-- <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover z-10">
       <source src="/public/videos/video_04.mp4" type="video/mp4" />
-    </video>
+    </video> -->
   
     <!-- Overlay Layer -->
     <div class="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-20"></div>

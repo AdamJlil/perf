@@ -13,10 +13,10 @@
 
     <!-- Bloc droit avec la vidéo -->
     <div class="w-full mt-[50px] mx-auto max-w-[1500px]">
-      <video class="w-full h-auto" controls>
+      <!-- <video class="w-full h-auto" controls>
         <source src="/videos/video_01.mp4" type="video/mp4">
         Your browser does not support the video tag.
-      </video>
+      </video> -->
     </div>
   </div>
 </template>

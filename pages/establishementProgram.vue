@@ -8,7 +8,7 @@
       class="mt-60"
       :reversed="true"
       :showButton="false"
-      image="/images/coach.png"
+      image="/images/amjadSport2.png"
       :headingText="`HEY ${customerName} 👋,<br/>READY TO BECOME THE BEST VERSION OF YOURSELF`"
     />
 

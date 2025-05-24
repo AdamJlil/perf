@@ -12,9 +12,9 @@
           <a href="/contact" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
             >CONTACT</a
           >
-          <a href="#" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
+          <!-- <a href="#" class="text-black dark:text-white text-base sm:text-lg tracking-wide mb-2 hover:underline"
             >SHOP</a
-          >
+          > -->
         </div>
       </div>
 
