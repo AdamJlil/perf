@@ -1,8 +1,8 @@
-<template>
+<!-- <template>
   <div
     class="w-full min-h-screen bg-[#EFEFEC] dark:bg-black text-black dark:text-white"
   >
-    <!-- Bloc1 Component -->
+
     <Bloc1
       class="mt-60"
       :reversed="true"
@@ -19,7 +19,7 @@
       <div @click="selectedElement = 3" :class="['cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full', selectedElement === 3 ? 'bg-[#D05E33] text-white' : 'hover:bg-gray-100']">ADVANCED 10kg</div>
     </div>
 
-    <!-- FlipCardBloc Components -->
+
     <div
       class="bg-[#EFEFEC] dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] lg:w-full flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-5 lg:mb-[50px] gap-[20%] max-md:gap-[50px] max-md:py-[120px]"
     >
@@ -38,7 +38,7 @@
     </div>
 
 
-     <!-- Video Section (Commented Out) -->
+
      <div class="w-full mt-30" id="video">
       <video class="w-full h-auto block" controls v-if="!isLoading">
         <source :src="videoSource" type="video/mp4" />
@@ -101,7 +101,7 @@
 
     <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-20">let's keep it up - keep pushing</h1>
 
-    <!-- Chart Container -->
+
     <div class=" w-[70%] h-[30vh] md:h-[35vh] lg:h-[40vh] lg:w-[70%] mx-auto p-4 ">
       
       <div class="bg-transparent rounded-lg p-6 h-full">
@@ -141,7 +141,7 @@ import {
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
 
-// Register Chart.js components
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -168,7 +168,7 @@ const toBeBurnedCaloriesNutrition = ref(0)
 
 const mealPlans = ref(null)
 
-// Calculate total burned calories
+
 const totalBurnedCalories = computed(() => {
   return Object.values(burnedCalories.value).reduce((sum, value) => sum + value, 0) + (toBeBurnedCaloriesNutrition.value * Object.keys(burnedCalories.value).length);
 });
@@ -177,7 +177,7 @@ const calculateCalories = (videoId: number, ageRange: string, weightRange: strin
   try {
     const videoData = particulierVideosData.find(video => video.id === videoId);
     if (!videoData || !videoData.data[ageRange] || !videoData.data[ageRange][weightRange]) {
-      return "207-288"; // Default value if data structure is incomplete
+      return "207-288"; 
     }
     return videoData.data[ageRange][weightRange][dumbbellWeight] || "207-288";
   } catch (error) {
@@ -186,7 +186,7 @@ const calculateCalories = (videoId: number, ageRange: string, weightRange: strin
   }
 };
 
-// Watch for weight selection changes
+
 watch(selectedElement, (newValue) => {
   const dumbbellWeight = newValue === 1 ? 2.5 : newValue === 2 ? 5.0 : 10.0;
   caloriesResult.value = calculateCalories(userVideo.value, ageRange.value, weightRange.value, dumbbellWeight);
@@ -211,7 +211,7 @@ onMounted(async () => {
       mealPlans.value = user.mealPlans || {};
       nutritionPerDay.value = user.nutritionPerDay || {};
 
-      // Set video source URL from particulierVideosData
+
       const videoData = particulierVideosData.find(video => video.id === userVideo.value);
       if (videoData) {
         videoSource.value = videoData.url;
@@ -222,9 +222,9 @@ onMounted(async () => {
       data.value = Object.values(user.burnedCalories).map((calorie: number) => calorie + toBeBurnedCaloriesNutrition.value)
 
       
-      // Set initial selection to BEGINNER (2.5kg)
+
       selectedElement.value = 1;
-      // Calculate initial calories with 2.5kg
+
       caloriesResult.value = calculateCalories(userVideo.value, ageRange.value, weightRange.value, 2.5);
     }
   }
@@ -253,57 +253,56 @@ const chartData = computed(() => ({
 }));
 
 const chartOptions = {
-  //hover with ease mode further from the point
   hover: {
     mode: 'nearest',
     intersect: false,
   },
   responsive: true,
-  maintainAspectRatio: false, // Allows the chart to fill the container
+  maintainAspectRatio: false, 
   plugins: {
     legend: {
-      display: false, // Hide legend
+      display: false, 
     },
     title: {
-      display: false, // Hide title
+      display: false,
     },
   },
   scales: {
     y: {
       beginAtZero: true,
       grid: {
-        display: true, // Hide y-axis grid lines
-        color: 'rgba(0, 0, 0, 0.1)', // Optional: Customize grid line color
-        lineWidth: 1, // Optional: Customize grid line width
+        display: true,
+        color: 'rgba(0, 0, 0, 0.1)',
+        lineWidth: 1, 
       },
       ticks: {
-        maxTicksLimit: 10, // Limit the number of x-axis grid lines
-        stepSize: 1,
+        maxTicksLimit: 10, 
       },
     },
     x: {
       grid: {
-        display: false, // Show x-axis grid lines
+        display: false, 
       },
-      offset: true, // Show x-axis grid lines
+      offset: true,
 
     },
   },
 };
 
 const nextVideo = () => {
-  // Increment the video index in DataBase (user.ts)
-  // Incerement Calories Burned in DataBase by (Calories burned today - u canfind it in this file)
-  // Reload the page
+
 }
 
 
 
-// Handle active item change emitted from CardInfo
 const handleActiveItemChange = (itemId: number, mealType: string) => {
   mealPlans.value[mealType].collection = mealPlans.value[mealType].collection.map(item => ({
     ...item,
     isActive: item.id === itemId,
   }));
 };
-</script>
+</script> -->
+
+<template>
+  <div>Holla</div>
+</template>

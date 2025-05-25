@@ -8,7 +8,7 @@ import Bloc2Establishment from "~/components/Sections/Establishement/BlocTwo.vue
 import Bloc3 from "~/components/Sections/Nutrition/BlocThree.vue";
 import Bloc4 from "~/components/Sections/Nutrition/BlocFour.vue";
 import HomeFour from '~/components/home/HomeFour.vue';
-import PricingBloc from '~/components/sections/Join/PricingBloc.vue';
+import PricingBloc from '~/components/Sections/Join/PricingBloc.vue';
 import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.vue';
 import { plans } from '~/types/plans';
 
