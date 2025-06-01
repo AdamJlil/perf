@@ -444,6 +444,17 @@
 import { ref, reactive, onMounted, computed } from 'vue';
 import axios from 'axios';
 
+// Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' && 
+               (window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : 'https://173.249.60.226'
+  
 // Define customer interface to fix TypeScript errors
 interface Customer {
   id: string;
@@ -563,7 +574,7 @@ async function fetchCustomers() {
     }
     
     // Call the API endpoint we created
-    const response = await axios.get('http://localhost:3001/api/admin/customers', {
+    const response = await axios.get(`${baseURL}/api/admin/customers`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -661,7 +672,7 @@ async function deleteCustomer() {
     }
     
     // Call the API to delete the customer
-    await axios.delete(`http://localhost:3001/api/users/${customerToDelete.value.id}`, {
+    await axios.delete(`${baseURL}/api/users/${customerToDelete.value.id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -833,7 +844,7 @@ async function updateCustomer() {
     console.log('Updating user with data:', payload);
     
     // Call the API to update the customer
-    await axios.put(`http://localhost:3001/api/users/${editForm.id}`, payload, {
+    await axios.put(`${baseURL}/api/users/${editForm.id}`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -846,7 +857,7 @@ async function updateCustomer() {
       
       try {
         // Call the email notification API with the user data
-        const emailResponse = await axios.post(`http://localhost:3001/api/payment/payment-status-update`, payload, {
+        const emailResponse = await axios.post(`${baseURL}/api/payment/payment-status-update`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
