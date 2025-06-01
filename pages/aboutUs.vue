@@ -4,7 +4,19 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 
 <template>
 
-<div class="w-full h-[90vh] relative" style="background-image: url('/images/123.png'); background-size: cover; filter: saturate(0.2);  background-position: center; background-repeat: no-repeat;" >
+
+<div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
+        <div class="relative w-full mx-[15px] mt-8 rounded-[40px] overflow-hidden shadow-lg" style="height:600px;">
+          <img 
+            src="/images/123.png" 
+            alt="Background Image" 
+            class="absolute inset-0 w-full h-full object-cover z-0 scale-[1.2]" 
+          />
+          <div class="absolute top-0 left-0 w-full h-full bg-[#8C740712] z-10"></div>
+        </div>
+      </div>
+
+<div class="w-full h-[40vh] relative" >
   
   <div class="w-full md:h-[30vh] bg-[#EFEFEC] flex justify-center absolute bottom-0 left-0 right-0">
 

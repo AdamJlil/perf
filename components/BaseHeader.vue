@@ -136,11 +136,8 @@ onMounted(() => {
   <header
     class="dark:text-slate-500 absolute top-0 left-0 right-0 z-50 md:mt-[30px]"
     style="font-family: Montserrat"
-    :class="{
-      'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
-    }"
   >
-    <div class="w-full flex items-center justify-between max-md:pt-[30px]" :class="{ 'sm:p-[55px] px-[40px] pt-[80px]': route.path === '/' || route.path === '/establishementHomePlan' }">
+    <div class="w-full flex items-center justify-between max-md:pt-[30px]" :class="{ 'sm:p-[55px] px-[40px] pt-[80px]': route.path === '/' || route.path === '/establishementHomePlan' || route.path === '/aboutUs' || route.path === '/contact' }">
       <!-- v-if="currentUser" -->
       <!-- Desktop Navigation -->
       <nav class="hidden lg:flex items-center justify-between w-full px-8 md:mr-[10px]">
@@ -152,7 +149,7 @@ onMounted(() => {
           <NuxtLink to="/">
             <NuxtImg
               :src="
-                !isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'
+                !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs')  ? '/images/pepe.png' : '/images/logoNN-white.png'
               "
               alt="Company Logo"
               class="w-[80px]"
@@ -223,7 +220,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
                 'font-bold': isActive('/establishementHomePlan'),
               }"
               @click="closeMenu"
@@ -235,7 +232,7 @@ onMounted(() => {
               to="/establishementHomePlan"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
                 'font-bold': isActive('/establishementHomePlan'),
               }"
               @click="closeMenu"
@@ -250,7 +247,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
                 'font-bold': isActive('/aboutUs'),
               }"
               @click="closeMenu"
@@ -262,7 +259,7 @@ onMounted(() => {
               to="/aboutUs"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
                 'font-bold': isActive('/aboutUs'),
               }"
               @click="closeMenu"
@@ -279,7 +276,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
                 'font-bold': isActive('/contact'),
               }"
               @click="closeMenu"
@@ -291,7 +288,7 @@ onMounted(() => {
               to="/contact"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
                 'font-bold': isActive('/contact'),
               }"
               @click="closeMenu"
@@ -329,7 +326,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
                 'font-bold': isActive('/establishementCRUDCostumer'),
               }"
               @click="closeMenu"
@@ -344,7 +341,7 @@ onMounted(() => {
               }"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
               }"
               @click="closeMenu"
             >
@@ -354,7 +351,7 @@ onMounted(() => {
               @click="onLogoutClick"
               class="px-3 text-shadow-white"
               :class="{
-                'text-black': !isActive('/') && !isActive('/establishementHomePlan'),
+                'text-black': !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs'),
               }"
             >
               LOGOUT
@@ -369,7 +366,7 @@ onMounted(() => {
             />
             <img
               :src="
-                !isActive('/') && !isActive('/establishementHomePlan')
+                !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs')
                   ? '/images/down-arrow.png'
                   : '/images/arrow-down-white.png'
               "
@@ -400,7 +397,7 @@ onMounted(() => {
       </nav>
 
       <!-- Mobile Menu Button -->
-      <button @click="toggleMenu" class="lg:hidden z-20 order-1" aria-label="Toggle Menu">
+      <button @click="toggleMenu" :class="['lg:hidden z-20 order-1', isActive('/contact') ? 'text-black' : '']" aria-label="Toggle Menu">
         <span class="block w-6 h-0.5 bg-current mb-1"></span>
         <span class="block w-6 h-0.5 bg-current mb-1"></span>
         <span class="block w-6 h-0.5 bg-current"></span>
@@ -410,7 +407,7 @@ onMounted(() => {
       <NuxtLink to="/" class="order-2 mx-auto lg:hidden">
         <NuxtImg
           :src="
-            !isActive('/') && !isActive('/establishementHomePlan') ? '/images/pepe.png' : '/images/logoNN-white.png'
+            !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs') ? '/images/pepe.png' : '/images/logoNN-white.png'
           "
           alt="Company Logo"
           class="w-[50px]"
@@ -426,7 +423,7 @@ onMounted(() => {
         />
         <img
           :src="
-            !isActive('/') && !isActive('/establishementHomePlan')
+            !isActive('/') && !isActive('/establishementHomePlan') && !isActive('/aboutUs')
               ? '/images/down-arrow.png'
               : '/images/arrow-down-white.png'
           "
@@ -514,25 +511,15 @@ onMounted(() => {
               </button>
             </template>
             <template v-else>
-              
-              <!-- <NuxtLink to="/register" class="py-2 px-4 hover:bg-gray-100 " @click="closeMenu">
-                REGISTER
-              </NuxtLink> -->
-              // <NuxtLink to="/" class="py-2 px-4 text-black " @click="closeMenu">
-              //   HOME
-              // </NuxtLink>
               <NuxtLink to="/establishementHomePlan" class="py-2 px-4 text-black " @click="closeMenu">
                 PERF HOSPITALITY
               </NuxtLink>
-              <NuxtLink to="/aboutus" class="py-2 px-4 text-black " @click="closeMenu">
+              <NuxtLink to="/aboutUs" class="py-2 px-4 text-black " @click="closeMenu">
                 ABOUT US
               </NuxtLink>
               <NuxtLink to="/contact" class="py-2 px-4 text-black " @click="closeMenu">
                 CONTACT
               </NuxtLink>
-              // <NuxtLink to="/login" class="py-2 px-4 text-black " @click="closeMenu">
-              //   LOGIN
-              // </NuxtLink>
             </template>
           </div>
         </nav>

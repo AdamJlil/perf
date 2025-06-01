@@ -194,7 +194,7 @@ const handlePlanSelection = (plan: string) => {
       </div>
     </div> -->
 
-    <div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
+      <div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
         <div class="relative w-full mx-[15px] mt-8 rounded-[40px] overflow-hidden shadow-lg" style="height:600px;">
           <img 
             src="/images/headerRotate.jpg" 

@@ -7,7 +7,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start":"node .output/server/index.mjs"
   },
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --fix",
