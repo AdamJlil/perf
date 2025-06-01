@@ -208,8 +208,19 @@ const fetchUserData = async () => {
       return;
     }
 
+    // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
     // Call the API to get user data
-    const response = await fetch(`http://localhost:3001/api/users/by-email?email=${encodeURIComponent(email)}`);
+    const response = await fetch(`${baseURL}/api/users/by-email?email=${encodeURIComponent(email)}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -316,10 +327,21 @@ const handlePayment = async () => {
 
     console.log("Sending payment notification with data:", paymentData);
 
+    // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
     // Send email notification directly to the server
     // Make sure the server is running on port 3001
     try {
-      const response = await fetch("http://localhost:3001/api/payment/notify", {
+      const response = await fetch(`${baseURL}/api/payment/notify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

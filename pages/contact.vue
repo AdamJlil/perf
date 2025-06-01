@@ -18,9 +18,21 @@ const submitForm = async () => {
     return;
   }
   isSubmitting.value = true;
+
+  // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
   try {
     // Send the form data to our API endpoint
-    const response = await fetch('http://localhost:3001/api/contact/submit', {
+    const response = await fetch(`${baseURL}/api/contact/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

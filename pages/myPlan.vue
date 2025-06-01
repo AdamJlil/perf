@@ -226,8 +226,19 @@ const updateUserData = async () => {
     
     const { token } = JSON.parse(userData);
     
+    // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
     // Fetch latest user data
-    const response = await fetch('http://localhost:3001/api/users/customers', {
+    const response = await fetch(`${baseURL}/api/users/customers`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -303,8 +314,19 @@ Action Required: Please process this as a PLAN UPGRADE. The user wants to UPGRAD
       requestType: 'PLAN_UPGRADE'
     };
     
+    // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+  
     // Send upgrade request to API - using the same endpoint as cancellation
-    const response = await fetch('http://localhost:3001/api/contact/plan-cancellation', {
+    const response = await fetch(`${baseURL}/api/contact/plan-cancellation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -398,8 +420,18 @@ const confirmCancelPlan = async () => {
       message: 'The user has requested to cancel their subscription plan.'
     };
     
+    // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
     // Send cancellation request to API
-    const response = await fetch('http://localhost:3001/api/contact/plan-cancellation', {
+    const response = await fetch(`${baseURL}/api/contact/plan-cancellation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -449,11 +449,12 @@ const config = useRuntimeConfig()
 
 // Define API base URL based on environment
 // Use a safe check for detecting localhost that works in both client and server
-const baseURL = (typeof window !== 'undefined' && 
-               (window.location.hostname === 'localhost' || 
-                window.location.hostname === '127.0.0.1'))
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
   ? 'http://localhost:3001'
-  : 'https://173.249.60.226'
+  : ''
+
   
 // Define customer interface to fix TypeScript errors
 interface Customer {

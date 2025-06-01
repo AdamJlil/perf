@@ -300,8 +300,19 @@ const fetchUserData = async () => {
     
     console.log('Fetching user data for email:', email);
     
+    // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
     // Call the API to get user data
-    const response = await fetch(`http://localhost:3001/api/users/by-email?email=${encodeURIComponent(email)}`);
+    const response = await fetch(`${baseURL}/api/users/by-email?email=${encodeURIComponent(email)}`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -398,8 +409,19 @@ const fetchUserDataById = async (userId: string, token: string) => {
     
     console.log('Directly fetching user data by ID:', userId);
     
+    // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
     // Direct API call to get user by ID
-    const response = await fetch(`http://localhost:3001/api/users/${userId}`, {
+    const response = await fetch(`${baseURL}/api/users/${userId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -591,7 +613,18 @@ const handlePayment = async () => {
           throw new Error('No authentication token available');
         }
         
-        const userResponse = await fetch(`http://localhost:3001/api/users/by-email?email=${encodeURIComponent(emailFromUrl)}`, {
+        // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+  
+        const userResponse = await fetch(`${baseURL}/api/users/by-email?email=${encodeURIComponent(emailFromUrl)}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -646,8 +679,19 @@ const handlePayment = async () => {
     try {
       console.log('About to send payment update request with data:', JSON.stringify(updateData));
       
+      // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
       // Use our brand new direct payment update route
-      const response = await fetch(`http://localhost:3001/api/users/${userId}/update-payment`, {
+      const response = await fetch(`${baseURL}/api/users/${userId}/update-payment`, {
         method: 'POST',  // Note: using POST as specified in the new route
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -657,7 +701,7 @@ const handlePayment = async () => {
       });
       
       console.log('Update request sent with:', {
-        url: `http://localhost:3001/api/users/${userId}/update-payment`,
+        url: `${baseURL}/api/users/${userId}/update-payment`,
         method: 'POST',
         headers: {
           'Authorization': 'Bearer [TOKEN]',
@@ -676,7 +720,7 @@ const handlePayment = async () => {
       console.log('API update response:', result);
       
       // Check the updated data to verify it's been saved correctly
-      const verifyResponse = await fetch(`http://localhost:3001/api/users/${userId}`, {
+      const verifyResponse = await fetch(`${baseURL}/api/users/${userId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -801,8 +845,19 @@ The PERF Team
         
         console.log('Sending payment notification with data:', notificationData);
         
+        // Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
+
         // Send notification to API
-        const notifyResponse = await fetch('http://localhost:3001/api/payment/notify', {
+        const notifyResponse = await fetch(`${baseURL}/api/payment/notify`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -811,7 +866,7 @@ The PERF Team
           body: JSON.stringify(notificationData)
         });
         
-        console.log('Notification request sent to:', 'http://localhost:3001/api/payment/notify');
+        console.log('Notification request sent to:', `${baseURL}/api/payment/notify`);
         
         if (!notifyResponse.ok) {
           const errorText = await notifyResponse.text();

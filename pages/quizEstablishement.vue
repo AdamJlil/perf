@@ -138,7 +138,17 @@ import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
-const API_BASE_URL = 'http://localhost:3001'
+
+// Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
 
 const formData = ref({
   firstName: '',
@@ -310,7 +320,7 @@ const handleSubmit = async () => {
       console.log('Customer data being sent:', customerData);
 
       // Add the customer using the API
-      const response = await fetch(`${API_BASE_URL}/api/users/customers/add/${customerId}`, {
+      const response = await fetch(`${baseURL}/api/users/customers/add/${customerId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -122,8 +122,16 @@ import Bloc1 from "~/components/Sections/Nutrition/BlocOne.vue";
 import FlipCardBloc from "~/components/Sections/Establishement/FlipCardBloc.vue";
 import { establishmentUserVideos } from '../services/establishment_user_videos';
 import { videoCalorieData } from '../services/establishment_user_videos_calories';
+// Get runtime config
+const config = useRuntimeConfig()
 
-const API_BASE_URL = 'http://localhost:3001';
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
 
 // Register Chart.js components
 ChartJS.register(
@@ -197,7 +205,7 @@ onMounted(async () => {
       const userData = JSON.parse(userStr);
       const token = userData.token;
 
-      const response = await fetch(`${API_BASE_URL}/api/users/customers`, {
+      const response = await fetch(`${baseURL}/api/users/customers`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -330,7 +338,7 @@ const nextVideo = async () => {
     }
 
     // Get current customer data to update
-    const response = await fetch(`${API_BASE_URL}/api/users/customers`, {
+    const response = await fetch(`${baseURL}/api/users/customers`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -379,7 +387,7 @@ const nextVideo = async () => {
     };
 
     // Update the customer data in the database using the add endpoint
-    const updateResponse = await fetch(`${API_BASE_URL}/api/users/customers/add/${customerId}`, {
+    const updateResponse = await fetch(`${baseURL}/api/users/customers/add/${customerId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

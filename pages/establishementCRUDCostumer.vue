@@ -20,7 +20,16 @@ interface Customer {
   weightRange?: string;
 }
 
-const API_BASE_URL = 'http://localhost:3001';
+// Get runtime config
+const config = useRuntimeConfig()
+
+// Define API base URL based on environment
+// Use a safe check for detecting localhost that works in both client and server
+const baseURL = (typeof window !== 'undefined' &&
+                (window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:3001'
+  : ''
 
 definePageMeta({
   middleware: ["user-only"],
@@ -64,7 +73,7 @@ const fetchEstablishmentInfo = async () => {
       throw new Error('Authentication token not found');
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/users/me`, {
+    const response = await fetch(`${baseURL}/api/users/me`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -118,7 +127,7 @@ const removeCustomer = async (customerId: string) => {
       throw new Error('Authentication token not found');
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/users/customers/remove/${customerId}`, {
+    const response = await fetch(`${baseURL}/api/users/customers/remove/${customerId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -257,7 +266,7 @@ const fetchCustomers = async () => {
     }
 
     console.log('Fetching customers with token:', token);
-    const response = await fetch(`${API_BASE_URL}/api/users/customers`, {
+    const response = await fetch(`${baseURL}/api/users/customers`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
