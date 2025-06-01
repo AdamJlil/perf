@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: perf_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: perf-server
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - DOCKER_ENV=true
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=perf_db
+      - NODE_ENV=development
+      - DEBUG=*
+    command: >
+      sh -c "echo 'Attempting to connect to MySQL...' &&
+             echo 'Initializing database...' &&
+             node scripts/init-db.js &&
+             echo 'Starting server...' &&
+             node --unhandled-rejections=strict index.js"
+    depends_on:
+      - mysql
+
+volumes:
+  db-data: 
