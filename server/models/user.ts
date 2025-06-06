@@ -62,7 +62,7 @@ const users: any[] = [
       }
     ],
     payment:{
-      planType: "BRONZE", //BRONZE PLATINUM GOLD
+      planType: "ESSENTIAL", //ESSENTIAL PREMIUM GROWTH
     }
   },
   {
@@ -112,7 +112,7 @@ const users: any[] = [
       }
     ],
     payment:{
-      planType: "BRONZE", //BRONZE PLATINUM GOLD
+      planType: "ESSENTIAL", //ESSENTIAL PREMIUM GROWTH
     }
   },
   {
@@ -371,7 +371,7 @@ const users: any[] = [
       'Day 7': 355
     },
     payment:{
-      planType: "BRONZE", //BRONZE PLATINUM GOLD
+      planType: "ESSENTIAL", //ESSENTIAL PREMIUM GROWTH
     }
   },
   {
@@ -624,7 +624,7 @@ const users: any[] = [
       'Day 1': 0,
     },
     payment:{
-      planType: "BRONZE", //BRONZE PLATINUM GOLD
+      planType: "ESSENTIAL", //ESSENTIAL PREMIUM GROWTH
     }
   },
 ];

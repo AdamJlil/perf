@@ -341,9 +341,9 @@ class EmailService {
           
           // Get plan duration based on plan title
           let duration = '';
-          if (planTitle === 'BRONZE') duration = '3 months';
-          else if (planTitle === 'PLATINUM') duration = '6 months';
-          else if (planTitle === 'GOLD') duration = '1 year';
+          if (planTitle === 'ESSENTIAL') duration = '3 months';
+          else if (planTitle === 'PREMIUM') duration = '6 months';
+          else if (planTitle === 'GROWTH') duration = '1 year';
           
           // Extract start and end dates from plan data
           startDate = planData.start_date || '';
