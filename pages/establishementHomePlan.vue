@@ -208,8 +208,8 @@ const handlePlanSelection = (plan: string) => {
 
           <!-- Overlayed content -->
           <div class="absolute z-20 top-0 left-0 w-full h-full flex flex-col justify-center items-start px-8 md:px-16 gap-6">
-            <p class="text-white text-left text-base sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-tight max-w-[90%]" style="font-weight: 200;">
-             TAKE YOUR VISITORS SATISFACTION HIGHER
+            <p class="text-white text-left text-base sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[7px] mb-[20px] max-w-[90%]" style="font-weight: 200;">
+             RISE YOUR VISITORS SATISFACTION !
             </p>
             <nuxt-link to="/login" class="uppercase border border-white text-white bg-transparent font-light tracking-[5px] rounded-md hover:bg-white hover:text-black transition-colors duration-200 py-2 px-6 md:px-10 text-center text-sm sm:w-[215px] w-[150px] sm:h-[50px] h-[40px] flex items-center justify-center  whitespace-nowrap" style="font-weight: 300;">
               LOG IN
@@ -220,26 +220,25 @@ const handlePlanSelection = (plan: string) => {
 
     <!-- <div class="w-full h-20 bg-[#EFEFEC]" style="background-image: url('/images/hotels.png'); background-size: 70%; background-position: center; background-repeat: no-repeat;">
     </div> -->
-    <div class="w-full py-6 md:py-8 bg-[#EFEFEC] flex flex-wrap items-center justify-center gap-6 md:gap-[80px] mt-[10px] sm:mt-[20px]">
+    <!-- <div class="w-full py-6 md:py-8 bg-[#EFEFEC] flex flex-wrap items-center justify-center gap-6 md:gap-[80px] mt-[10px] sm:mt-[20px]">
       <NuxtImg src="/images/forsea.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
       <NuxtImg src="/images/sofitel.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
       <NuxtImg src="/images/riuu.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
-    </div>
+    </div> -->
     <Bloc2Establishment />
 
     <div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
       <div class="relative w-full mx-[15px] mt-8 rounded-[40px] overflow-hidden shadow-lg" style="height:600px;">
         <img 
-          src="/images/123.png" 
+          src="/images/home2.jpeg" 
           alt="Background Image" 
           class="absolute inset-0 w-full h-full object-cover z-0 scale-[1.2]" 
         />
+        <div class="absolute top-0 left-0 w-full h-full bg-[#7370624a] z-10"></div>
         <!-- Overlayed content -->
-        <div class="absolute z-20 top-0 left-0 w-full h-full flex flex-col justify-center items-start px-8 md:px-16 gap-4 max-w-[600px]">
-          <h2 class="text-white text-left text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide uppercase mb-2" style="letter-spacing: 1px; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">ANY SPACE, ANY TIME</h2>
-          <div class="w-[90%] h-[2px] bg-white opacity-40 mb-2"></div>
-          <p class="text-white text-left text-base sm:text-lg md:text-xl font-normal mb-2" style="font-weight: 400; line-height: 1.4; text-shadow: 2px 2px 8px rgba(0,0,0,0.85);">
-            Your guests can work out anywhere, anytime. Modern fitness for modern travelers.
+        <div class="absolute z-20 top-0 left-0 w-full h-full flex flex-col justify-center items-center">
+          <p class="text-white text-center text-base sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[7px] max-w-[90%]" style="font-weight: 200; text-shadow: 2px 2px 8px rgba(0,0,0,0.73);">
+            NO GYM ? NO PROBLEM !
           </p>
         </div>
       </div>
@@ -258,39 +257,39 @@ const handlePlanSelection = (plan: string) => {
       <div class="flex justify-center items-center flex-col p-3 md:p-5">
         <!-- First row - stack on mobile, side by side on md+ -->
         <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6 md:mb-0">
-          <div class="flex items-center md:w-auto w-full">
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
             <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
-            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Eco-friendly Fitness Solutions</p>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Mobile training station</p>
           </div>
           
-          <div class="flex items-center md:w-auto w-full">
-            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Training and nutrition Support</p>
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">More bookings</p>
             <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
           </div>
         </div>
 
         <!-- Second row - stack on mobile, side by side on md+ -->
         <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6 md:mb-0">
-          <div class="flex items-center md:w-auto w-full">
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
             <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
-            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Space Optimization</p>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Workout videos</p>
           </div>
           
-          <div class="flex items-center md:w-auto w-full">
-            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Digital Platforms</p>
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Upgraded experience</p>
             <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
           </div>
         </div>
 
         <!-- Third row - stack on mobile, side by side on md+ -->
         <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10">
-          <div class="flex items-center md:w-auto w-full">
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
             <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
-            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Customer Experience</p>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Space optimization</p>
           </div>
           
-          <div class="flex items-center md:w-auto w-full">
-            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Sustainable Practices</p>
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Higher satisfaction</p>
             <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
           </div>
         </div>
@@ -336,16 +335,16 @@ const handlePlanSelection = (plan: string) => {
       <div class="hidden lg:flex justify-center relative h-[320px] w-full">
         <div class="relative w-[896px] h-80">
           <!-- Left Circle -->
-          <div class="absolute top-0 left-0 w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
-            DISCOVER
+          <div class="absolute top-0 left-0 w-80 h-80 bg-[#e66939cc] rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+            UNDERSTAN
           </div>
           <!-- Middle Circle -->
-          <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#d57753]/80 rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">
-            DESIGN
+          <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#e66939cc] rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">
+            CREATE
           </div>
           <!-- Right Circle -->
-          <div class="absolute top-0 left-[576px] w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
-            DELIVER
+          <div class="absolute top-0 left-[576px] w-80 h-80 bg-[#e66939cc] rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+            ELEVATE
           </div>
         </div>
       </div>
@@ -354,48 +353,48 @@ const handlePlanSelection = (plan: string) => {
       <div class="flex flex-col gap-10 lg:hidden mt-10 text-neutral-900 text-sm items-center text-center">
         <!-- DISCOVER -->
         <div class="flex flex-col items-center gap-4">
-          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
-            DISCOVER
+          <div class="w-80 h-80 bg-[#e66939cc] rounded-full flex items-center justify-center font-bold text-lg">
+            UNDERSTAND
           </div>
           <p class="max-w-xs">
-            Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+            We start by understanding your space, your guests, and your vision — to craft a fitness experience that truly fits your establishment.
           </p>
         </div>
         <!-- DESIGN -->
         <div class="flex flex-col items-center gap-4">
-          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
-            DESIGN
+          <div class="w-80 h-80 bg-[#e66939cc] rounded-full flex items-center justify-center font-bold text-lg">
+            CREATE
           </div>
           <p class="max-w-xs">
-            Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+            We design elegant, space-saving equipment and digital training videos that blends seamlessly into your rooms — adding value without requiring renovation.          
           </p>
-        </div>
+          </div>
         <!-- DELIVER -->
         <div class="flex flex-col items-center gap-4">
-          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
-            DELIVER
+          <div class="w-80 h-80 bg-[#e66939cc] rounded-full flex items-center justify-center font-bold text-lg">
+            ELEVATE
           </div>
           <p class="max-w-xs">
-            Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+            From setup to staff training, we handle it all. You offer a new wellness experience, your guests feel the difference — and your reviews reflect it.         
           </p>
-        </div>
+          </div>
       </div>
 
       <!-- DESKTOP TEXT BELOW CIRCLES -->
-      <div class="max-w-6xl mx-auto mt-20 hidden lg:grid grid-cols-3 gap-10 text-sm text-center text-neutral-900">
-        <div>
+      <div class="w-[896px] mx-auto hidden lg:flex flex-row justify-between mt-[-30px] text-sm md:mt-[50px] text-neutral-900">
+        <div class="w-[260px] flex flex-col">
           <p>
-            Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+            We start by understanding your space, your guests, and your vision — to craft a fitness experience that truly fits your establishment.
           </p>
         </div>
-        <div>
+        <div class="w-[260px] flex flex-col">
           <p>
-            Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+            We design elegant, space-saving equipment and digital training videos that blends seamlessly into your rooms — adding value without requiring renovation.
           </p>
         </div>
-        <div>
+        <div class="w-[260px] flex flex-col">
           <p>
-            Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+            From setup to staff training, we handle it all. You offer a new wellness experience, your guests feel the difference — and your reviews reflect it.          
           </p>
         </div>
       </div>

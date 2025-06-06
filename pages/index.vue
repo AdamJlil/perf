@@ -64,7 +64,7 @@ import VideoSliderReviews from '~/components/sections/VideoSliderReviews.vue';
 
           <div class="absolute z-20 top-0 left-0 w-full h-full flex flex-col justify-center items-start px-8 md:px-16 gap-6">
             <p class="text-white text-left text-base sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-tight max-w-[90%]" style="font-weight: 200;">
-              RISE YOUR VISITORS SATISFACTION
+              RISE YOUR VISITORS SATISFACTION !
             </p>
             <nuxt-link to="/login" class="uppercase border border-white text-white bg-transparent font-light tracking-[5px] rounded-md hover:bg-white hover:text-black transition-colors duration-200 py-2 px-6 md:px-10 text-center text-sm sm:w-[215px] w-[150px] sm:h-[50px] h-[40px] flex items-center justify-center  whitespace-nowrap" style="font-weight: 300;">
               LOG IN

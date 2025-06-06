@@ -222,14 +222,14 @@ onMounted(async () => {
             (user.plan.title || '');
           
           if (user.type === 'ESTABLISHEMENT') {
-            if (planTitle === 'BRONZE') price = '2999';
-            else if (planTitle === 'PLATINUM') price = '4999';
-            else if (planTitle === 'GOLD') price = '8999';
+            if (planTitle === 'ESSENTIAL') price = '5500';
+            else if (planTitle === 'PREMIUM') price = '9999';
+            else if (planTitle === 'GROWTH') price = '500';
           } else {
             // PARTICULIER prices
-            if (planTitle === 'BRONZE') price = '999';
-            else if (planTitle === 'PLATINUM') price = '1582';
-            else if (planTitle === 'GOLD') price = '999';
+            if (planTitle === 'ESSENTIAL') price = '5500';
+            else if (planTitle === 'PREMIUM') price = '9999';
+            else if (planTitle === 'GROWTH') price = '500';
           }
         }
         

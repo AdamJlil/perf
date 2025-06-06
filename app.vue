@@ -3,8 +3,8 @@
 <template>
   <Html lang="en">
     <Head>
-      <Title>Simple authentication example using Nuxt3</Title>
-      <Meta name="description" content="Trying to implement a simple authentication system in Nuxt3" />
+      <Title></Title>
+      <Meta name="description" content="" />
     </Head>
 
     <Body class="min-w-[430px] bg-slate-950 antialiased text-white">

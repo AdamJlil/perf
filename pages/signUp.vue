@@ -10,19 +10,19 @@ const router = useRouter()
 
 // Define establishment plan prices based on plans.ts
 const establishmentPlans = {
-  BRONZE: {
+  ESSENTIAL: {
     title: plans.ESTABLISHEMENT.plans.plan_1.title,
     price: plans.ESTABLISHEMENT.plans.plan_1.price.split(' ')[0], // Get numeric value only
     status: "Pending",
     duration: plans.ESTABLISHEMENT.plans.plan_1.duration
   },
-  PLATINUM: {
+  PREMIUM: {
     title: plans.ESTABLISHEMENT.plans.plan_2.title,
     price: plans.ESTABLISHEMENT.plans.plan_2.price.split(' ')[0], // Get numeric value only
     status: "Pending",
     duration: plans.ESTABLISHEMENT.plans.plan_2.duration
   },
-  GOLD: {
+  GROWTH: {
     title: plans.ESTABLISHEMENT.plans.plan_3.title,
     price: plans.ESTABLISHEMENT.plans.plan_3.price.split(' ')[0], // Get numeric value only
     status: "Pending",
@@ -292,9 +292,9 @@ const onSignupClick = async () => {
               required
             >
               <option value="" disabled>Select plan</option>
-              <option value="BRONZE">Bronze</option>
-              <option value="PLATINUM">Platinum</option>
-              <option value="GOLD">Gold</option>
+              <option value="ESSENTIAL">ESSENTIAL</option>
+              <option value="PREMIUM">PREMIUM</option>
+              <option value="GROWTH">GROWTH</option>
             </select>
           </div>
 

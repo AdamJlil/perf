@@ -25,87 +25,81 @@ export const plans: Record<'particular' | 'ESTABLISHEMENT', PlanSet> = {
     title: "Either you join, or get left behind",
     plans: {
       plan_1: {
-        title: 'BRONZE',
+        title: 'ESSENTIAL',
         duration: '3 months',
         features: [
-          { text: 'Monthly one-to-one consultation', isDisabled: false },
-          { text: 'Nutrition plan adjustments: 1 time', isDisabled: false },
-          { text: 'Personalized workout plans', isDisabled: false },
-          { text: '2 free dumbbells', isDisabled: true },
-          { text: 'Priority support', isDisabled: true }
+          { text: 'PERF BOX', isDisabled: false },
+          { text: '1 MONTH ACCESS TO THE PLATFORM', isDisabled: false },
+          { text: 'RENT TO GUESTS FOR 50 DH / SESSION', isDisabled: false },
+          { text: 'KEEP 100% OF RENTAL PROFITS', isDisabled: false },
         ],
-        price: '999 dh',
-        discount: '1300 dh'
+        price: '5500 dh',
+        discount: ''
       },
       plan_2: {
-        title: 'PLATINUM',
+        title: 'PREMIUM',
         duration: '6 months',
         features: [
-          { text: 'Monthly one-to-one consultation', isDisabled: false },
-          { text: 'Nutrition plan adjustments: 1 time', isDisabled: false },
-          { text: 'Personalized workout plans', isDisabled: false },
-          { text: '2 free dumbbells', isDisabled: false },
-          { text: 'Priority support', isDisabled: true }
+          { text: 'PERF BOX', isDisabled: false },
+          { text: '1 YEAR ACCESS TO THE PLATFORM', isDisabled: false },
+          { text: 'RENT TO GUESTS FOR 50 DH / SESSION', isDisabled: false },
+          { text: 'KEEP 100% OF RENTAL PROFITS', isDisabled: false },
         ],
-        price: '1582 dh',
-        discount: 'Save 410 dh'
+        price: '9999 dh',
+        discount: 'Save 1001 dh'
       },
       plan_3: {
-        title: 'GOLD',
+        title: 'GROWTH',
         duration: '1 year',
         features: [
-          { text: 'Monthly one-to-one consultation', isDisabled: false },
-          { text: 'Nutrition plan adjustments: 1 time', isDisabled: false },
-          { text: 'Personalized workout plans', isDisabled: false },
-          { text: '2 free dumbbells', isDisabled: false },
-          { text: 'Priority support', isDisabled: false }
+          { text: 'PERF BOX FOR FREE', isDisabled: false },
+          { text: '1 MONTH ACCESS TO THE PLATFORM', isDisabled: false },
+          { text: 'RENT TO GUESTS FOR 50 DH / SESSION', isDisabled: false },
+          { text: '50% OF RENTAL REVENUE GOES TO PERF', isDisabled: false },
         ],
-        price: '999 dh',
+        price: '500 dh',
         discount: 'Save 1006 dh'
       }
     }
   },
   ESTABLISHEMENT: {
-    title: "Transform Your Establishment's Fitness Experience",
+    title: "Either you join, or get left behind",
     plans: {
       plan_1: {
-        title: 'BRONZE',
+        title: 'ESSENTIAL',
         duration: '3 months',
         features: [
-          { text: 'Up to 50 member accounts', isDisabled: false },
-          { text: 'Basic analytics dashboard', isDisabled: false },
-          { text: 'Email support', isDisabled: false },
-          { text: 'Custom branding', isDisabled: true },
-          { text: 'Priority support', isDisabled: true }
+          { text: 'PERF BOX', isDisabled: false },
+          { text: '1 MONTH ACCESS TO THE PLATFORM', isDisabled: false },
+          { text: 'RENT TO GUESTS FOR 50 DH / SESSION', isDisabled: false },
+          { text: 'KEEP 100% OF RENTAL PROFITS', isDisabled: false },
         ],
-        price: '2999 dh',
-        discount: '3500 dh'
+        price: '5500 dh',
+        discount: ''
       },
       plan_2: {
-        title: 'PLATINUM',
+        title: 'PREMIUM',
         duration: '6 months',
         features: [
-          { text: 'Up to 200 member accounts', isDisabled: false },
-          { text: 'Advanced analytics dashboard', isDisabled: false },
-          { text: 'Email & phone support', isDisabled: false },
-          { text: 'Custom branding', isDisabled: false },
-          { text: 'Priority support', isDisabled: true }
+          { text: 'PERF BOX', isDisabled: false },
+          { text: '1 YEAR ACCESS TO THE PLATFORM', isDisabled: false },
+          { text: 'RENT TO GUESTS FOR 50 DH / SESSION', isDisabled: false },
+          { text: 'KEEP 100% OF RENTAL PROFITS', isDisabled: false },
         ],
-        price: '4999 dh',
-        discount: 'Save 1000 dh'
+        price: '9999 dh',
+        discount: 'Save 1001 dh'
       },
       plan_3: {
-        title: 'GOLD',
+        title: 'GROWTH',
         duration: '1 year',
         features: [
-          { text: 'Unlimited member accounts', isDisabled: false },
-          { text: 'Full analytics suite', isDisabled: false },
-          { text: '24/7 dedicated support', isDisabled: false },
-          { text: 'Custom branding & API access', isDisabled: false },
-          { text: 'Priority support & training', isDisabled: false }
+          { text: 'PERF BOX FOR FREE', isDisabled: false },
+          { text: '1 MONTH ACCESS TO THE PLATFORM', isDisabled: false },
+          { text: 'RENT TO GUESTS FOR 50 DH / SESSION', isDisabled: false },
+          { text: '50% OF RENTAL REVENUE GOES TO PERF', isDisabled: false },
         ],
-        price: '8999 dh',
-        discount: 'Save 2000 dh'
+        price: '500 dh',
+        discount: 'Save 1006 dh'
       }
     }
   }

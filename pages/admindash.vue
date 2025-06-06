@@ -334,9 +334,9 @@
                   class="w-full p-2 border-[1px] border-black bg-transparent"
                 >
                   <option value="">Select plan</option>
-                  <option value="BRONZE">BRONZE</option>
-                  <option value="PLATINUM">PLATINUM</option>
-                  <option value="GOLD">GOLD</option>
+                  <option value="ESSENTIAL">ESSENTIAL</option>
+                  <option value="PREMIUM">PREMIUM</option>
+                  <option value="GROWTH">GROWTH</option>
                 </select>
               </div>
               

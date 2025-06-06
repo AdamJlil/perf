@@ -1,6 +1,6 @@
 <!-- components/Sections/Nutrition/BlocTwo.vue -->
 <template>
-    <div class="bg-[#EFEFEC] dark:bg-black w-full flex flex-col md:flex-row justify-center items-center text-center p-4 md:p-[20px] gap-6 md:gap-[5%] py-8 md:py-[7rem] lg:py-20">
+    <div class="bg-[#EFEFEC] dark:bg-black w-full flex flex-col md:flex-row justify-center items-center text-center p-4 md:p-[20px] gap-6 md:gap-[5%] py-8 md:py-[7rem] lg:py-50">
       
       <!-- First Card -->
       <div class="flip-container relative w-[50%] sm:w-[45%] md:w-[30%] lg:w-[25%] max-w-[300px] aspect-[7/8] mb-8 md:mb-0">

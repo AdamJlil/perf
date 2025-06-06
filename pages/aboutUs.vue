@@ -150,23 +150,21 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 
     <div class="w-full">
        <!-- Why PERF -->
-    <div class="bg-[#EFEFEC] py-[40px] lg:py-[100px] px-4">
-      <h1 class="font-bold text-center text-3xl md:text-4xl lg:text-5xl text-gray-700 uppercase pb-5 md:pb-10 lg:pb-20">OUR PROCESS</h1>
-
+       <div class="bg-[#EFEFEC] py-[40px] lg:py-[100px] px-4">
       <!-- DESKTOP: 10% OVERLAP VENN LAYOUT -->
       <div class="hidden lg:flex justify-center relative h-[320px] w-full">
         <div class="relative w-[896px] h-80">
           <!-- Left Circle -->
-          <div class="absolute top-0 left-0 w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
-            DISCOVER
+          <div class="absolute top-0 left-0 w-80 h-80 bg-[#e66939cc] rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+            UNDERSTAN
           </div>
           <!-- Middle Circle -->
-          <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#d57753]/80 rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">
-            DESIGN
+          <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#e66939cc] rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">
+            CREATE
           </div>
           <!-- Right Circle -->
-          <div class="absolute top-0 left-[576px] w-80 h-80 bg-[#d57753]/80 rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
-            DELIVER
+          <div class="absolute top-0 left-[576px] w-80 h-80 bg-[#e66939cc] rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
+            ELEVATE
           </div>
         </div>
       </div>
@@ -175,48 +173,48 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
       <div class="flex flex-col gap-10 lg:hidden mt-10 text-neutral-900 text-sm items-center text-center">
         <!-- DISCOVER -->
         <div class="flex flex-col items-center gap-4">
-          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
-            DISCOVER
+          <div class="w-80 h-80 bg-[#e66939cc] rounded-full flex items-center justify-center font-bold text-lg">
+            UNDERSTAND
           </div>
           <p class="max-w-xs">
-            Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+            We start by understanding your space, your guests, and your vision — to craft a fitness experience that truly fits your establishment.
           </p>
         </div>
         <!-- DESIGN -->
         <div class="flex flex-col items-center gap-4">
-          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
-            DESIGN
+          <div class="w-80 h-80 bg-[#e66939cc] rounded-full flex items-center justify-center font-bold text-lg">
+            CREATE
           </div>
           <p class="max-w-xs">
-            Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+            We design elegant, space-saving equipment and digital training videos that blends seamlessly into your rooms — adding value without requiring renovation.          
           </p>
-        </div>
+          </div>
         <!-- DELIVER -->
         <div class="flex flex-col items-center gap-4">
-          <div class="w-80 h-80 bg-[#d57753]/80 rounded-full flex items-center justify-center font-bold text-lg">
-            DELIVER
+          <div class="w-80 h-80 bg-[#e66939cc] rounded-full flex items-center justify-center font-bold text-lg">
+            ELEVATE
           </div>
           <p class="max-w-xs">
-            Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+            From setup to staff training, we handle it all. You offer a new wellness experience, your guests feel the difference — and your reviews reflect it.         
           </p>
-        </div>
+          </div>
       </div>
 
       <!-- DESKTOP TEXT BELOW CIRCLES -->
-      <div class="max-w-6xl mx-auto mt-20 hidden lg:grid grid-cols-3 gap-10 text-sm text-center text-neutral-900">
-        <div>
+      <div class="w-[896px] mx-auto hidden lg:flex flex-row justify-between mt-[-30px] text-sm md:mt-[50px] text-neutral-900">
+        <div class="w-[260px] flex flex-col">
           <p>
-            Our journey begins with a deep dive into your establishment's unique needs. We listen, analyze, and collaborate to design a tailored fitness solution that aligns with your goals and values.
+            We start by understanding your space, your guests, and your vision — to craft a fitness experience that truly fits your establishment.
           </p>
         </div>
-        <div>
+        <div class="w-[260px] flex flex-col">
           <p>
-            Using insights gathered during the discovery phase, we create innovative, eco-friendly, and space-saving fitness equipment and digital platforms. Every detail is crafted to elevate your guests' experience.
+            We design elegant, space-saving equipment and digital training videos that blends seamlessly into your rooms — adding value without requiring renovation.
           </p>
         </div>
-        <div>
+        <div class="w-[260px] flex flex-col">
           <p>
-            Once everything is perfected, we deliver a seamless integration of our solutions, ensuring your team is trained, your guests are delighted, and your operations are enhanced for long-term success.
+            From setup to staff training, we handle it all. You offer a new wellness experience, your guests feel the difference — and your reviews reflect it.          
           </p>
         </div>
       </div>
@@ -248,11 +246,11 @@ health an achievable goal for all."
     />
 </div>
 
-    <div class="w-full py-6 md:py-8 bg-[#EFEFEC] flex flex-wrap items-center justify-center gap-6 md:gap-[80px] mt-[10px] sm:mt-[20px]">
+    <!-- <div class="w-full py-6 md:py-8 bg-[#EFEFEC] flex flex-wrap items-center justify-center gap-6 md:gap-[80px] mt-[10px] sm:mt-[20px]">
       <NuxtImg src="/images/forsea.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
       <NuxtImg src="/images/sofitel.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
       <NuxtImg src="/images/riuu.png" alt="Background Image" class="w-[100px] md:w-[150px] h-auto object-contain" />
-    </div>
+    </div> -->
 
 
 <div class="w-full pt-15 md:pt-30 pb-10 md:pb-20" style="font-family: 'Montserrat'">

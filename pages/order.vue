@@ -118,7 +118,7 @@
         class="w-full lg:w-1/3 relative h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 transition-transform duration-300 hover:scale-105"
       >
         <img
-          v-if="selectedPlan.title === 'PLATINUM'"
+          v-if="selectedPlan.title === 'PREMIUM'"
           src="/public/images/pricing-popular.png"
           alt="most popular"
           class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3"
@@ -239,14 +239,14 @@ const baseURL = (typeof window !== 'undefined' &&
             : userData.user.plan.title || "";
 
         if (userData.user.type === "ESTABLISHEMENT") {
-          if (planTitle === "BRONZE") price = "2999";
-          else if (planTitle === "PLATINUM") price = "4999";
-          else if (planTitle === "GOLD") price = "8999";
+          if (planTitle === "ESSENTIAL") price = "5500";
+          else if (planTitle === "PREMIUM") price = "9999";
+          else if (planTitle === "GROWTH") price = "500";
         } else {
           // PARTICULIER prices
-          if (planTitle === "BRONZE") price = "999";
-          else if (planTitle === "PLATINUM") price = "1582";
-          else if (planTitle === "GOLD") price = "999";
+          if (planTitle === "ESSENTIAL") price = "5500";
+          else if (planTitle === "PREMIUM") price = "9999";
+          else if (planTitle === "GROWTH") price = "500";
         }
       }
 
@@ -271,28 +271,28 @@ const createPlanObject = (planName: string, userType: string, price: string) => 
     selectedPlan.value = {
       title: planName,
       price: price ? `${price} dh` : "",
-      duration: planName === "BRONZE" ? "3 months" : planName === "PLATINUM" ? "6 months" : "1 year",
+      duration: planName === "ESSENTIAL" ? "3 months" : planName === "PREMIUM" ? "6 months" : "1 year",
       features: [
         { text: userType === "ESTABLISHEMENT" ? "Member accounts" : "Monthly consultation", isDisabled: false },
         { text: userType === "ESTABLISHEMENT" ? "Analytics dashboard" : "Nutrition plan", isDisabled: false },
         { text: userType === "ESTABLISHEMENT" ? "Email support" : "Workout plans", isDisabled: false },
         {
           text: userType === "ESTABLISHEMENT" ? "Custom branding" : "Free equipment",
-          isDisabled: planName === "BRONZE",
+          isDisabled: planName === "ESSENTIAL",
         },
-        { text: "Priority support", isDisabled: planName !== "GOLD" },
+        { text: "Priority support", isDisabled: planName !== "GROWTH" },
       ],
       discount:
         userType === "ESTABLISHEMENT"
-          ? planName === "BRONZE"
-            ? "3500 dh"
-            : planName === "PLATINUM"
-              ? "Save 1000 dh"
+          ? planName === "ESSENTIAL"
+            ? "5500 dh"
+            : planName === "PREMIUM"
+              ? "Save 1001 dh"
               : "Save 2000 dh"
-          : planName === "BRONZE"
-            ? "1300 dh"
-            : planName === "PLATINUM"
-              ? "Save 410 dh"
+          : planName === "ESSENTIAL"
+            ? "5500 dh"
+            : planName === "PREMIUM"
+              ? "Save 1001 dh"
               : "Save 1006 dh",
     };
 
