@@ -26,18 +26,28 @@ const scrollToPricing = () => {
 
 const reviews = [
   {
-    reviewText: "Our gym members love having access to PERF. It's added so much value to our membership offerings!",
-    reviewerImage: "images/er1.jpg",
+    reviewText: "Perf added real value to our guest experience without taking up any extra space. Our suites feel more premium, and the feedback has been incredible.\n— Lamia A., Owner, Boutique Riad – Fès",
+    reviewerImage: "images/femme1.jpeg",
     filledStars: 5,
   },
   {
-    reviewText: "Implementing PERF in our corporate wellness program has been a game-changer. Employee satisfaction is up 40%!",
-    reviewerImage: "images/er2.jpg",
+    reviewText: "The fact that I didn’t need to go looking for a gym made my stay so much better. I loved being able to work out in total privacy and on my own time.\n— Salma K., Guest – Marrakech",
+    reviewerImage: "images/femme2.jpeg",
     filledStars: 5,
   },
   {
-    reviewText: "The seamless integration and professional support from PERF has made this partnership incredibly valuable.",
-    reviewerImage: "images/er3.jpg",
+    reviewText: "We were hesitant at first, but our guests love the flexibility. Perf helped us offer a high-end wellness solution without building a gym.\n— Youssef B., Manager, Luxury Guesthouse – Essaouira",
+    reviewerImage: "images/homme1.jpeg",
+    filledStars: 5,
+  },
+  {
+    reviewText: "I travel a lot for work, and having Perf in my room was a game changer. I trained, stretched, and even followed a guided breathing session — all without leaving my suite.\n— Marc G., Traveler – Agadir",
+    reviewerImage: "images/homme2.jpeg",
+    filledStars: 5,
+  },
+  {
+    reviewText: "Perf created a whole new revenue stream for us. Guests book rooms with the unit more often, and the in-room usage rate is higher than we expected.\n— Sophie M., General Manager, Urban Suites – Casablanca",
+    reviewerImage: "images/femme3.jpeg",
     filledStars: 5,
   },
 ];
@@ -312,7 +322,7 @@ const handlePlanSelection = (plan: string) => {
           <img 
             src="/images/handsup.jpg" 
             alt="Background Image" 
-            class="absolute inset-0 w-full h-full object-cover z-0 scale-[1.2]" 
+            class="absolute inset-0 w-full h-full object-cover z-0" 
           />
 
           <!-- Overlayed content -->

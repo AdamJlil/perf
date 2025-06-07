@@ -36,14 +36,14 @@
               class="text-left uppercase tracking-1"
               :class="{ 'opacity-50': feature.isDisabled }"
             >
-              {{ feature.text }}
+              <span class="font-bold mr-2">-</span> {{ feature.text }}
             </li>
           </ul>
 
           <h2 class="pt-5 text-lg tracking-1">{{ plan_1.price }}</h2>
           <!-- <h2 class="discount-price text-md uppercase line-through">{{ plan_1.discount }}</h2> -->
         </div>
-          <div class="text-xs italic text-black mt-[30px] text-center w-full">*Monthly subscription is required after first month</div>
+          <div class="text-sm italic text-black mt-[30px] text-center w-full">*Monthly subscription is required after first month</div>
         </div>
         <!-- PREMIUM -->
         <div 
@@ -75,7 +75,7 @@
               class="text-left uppercase tracking-1"
               :class="{ 'opacity-50': feature.isDisabled }"
             >
-              {{ feature.text }}
+              <span class="font-bold mr-2">-</span> {{ feature.text }}
             </li>
           </ul>
 
@@ -113,14 +113,14 @@
               class="text-left uppercase tracking-1"
               :class="{ 'opacity-50': feature.isDisabled }"
             >
-              {{ feature.text }}
+              <span class="font-bold mr-2">-</span> {{ feature.text }}
             </li>
           </ul>
 
           <h2 class="pt-5 text-lg tracking-1">{{ plan_3.price }}</h2>
           <!-- <h2 class="discount-price text-md uppercase line-through">{{ plan_3.discount }}</h2> -->
         </div>
-        <div class="text-xs italic text-black mt-[30px] text-center w-full">*Monthly subscription is required after first month</div>
+        <div class="text-sm italic text-black mt-[30px] text-center w-full">*Monthly subscription is required after first month</div>
       </div>
       </div>
 
