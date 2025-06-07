@@ -53,6 +53,7 @@
             'cursor-pointer transition-transform duration-300 hover:scale-110': currentPlan !== 'PREMIUM' && pendingPlan !== 'PREMIUM',
             'relative': currentPlan === 'PREMIUM' || pendingPlan === 'PREMIUM'
           }"
+          @click="handlePlanSelected('PREMIUM')"
         >
           <!-- Active badge -->
           <div v-if="currentPlan === 'PREMIUM'" class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full">
