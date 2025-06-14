@@ -346,7 +346,7 @@ const handlePlanSelection = (plan: string) => {
         <div class="relative w-[896px] h-80">
           <!-- Left Circle -->
           <div class="absolute top-0 left-0 w-80 h-80 bg-[#e66939cc] rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
-            UNDERSTAN
+            UNDERSTAND
           </div>
           <!-- Middle Circle -->
           <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#e66939cc] rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">

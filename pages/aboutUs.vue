@@ -1,52 +1,117 @@
 <script lang="ts" setup>
 import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.vue';
+import { ref } from 'vue'
+import { onMounted } from 'vue'
+
+const currentIndex = ref(0)
+const goTo = (index: number) => {
+  if (index >= 0 && index < 5) {
+    currentIndex.value = index
+  }
+}
+
+// Swipe logic
+let startX = 0
+let endX = 0
+
+onMounted(() => {
+  const carousel = document.getElementById('carousel')
+  if (!carousel) return
+
+  carousel.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX
+  })
+
+  carousel.addEventListener('touchend', (e) => {
+    endX = e.changedTouches[0].clientX
+    handleSwipe()
+  })
+})
+
+const handleSwipe = () => {
+  const delta = startX - endX
+  if (delta > 50) {
+    // Swipe left
+    goTo(currentIndex.value + 1)
+  } else if (delta < -50) {
+    // Swipe right
+    goTo(currentIndex.value - 1)
+  }
+}
+
 </script>
 
 <template>
 
-
-<div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
-        <div class="relative w-full mx-[15px] mt-8 rounded-[40px] overflow-hidden shadow-lg" style="height:600px;">
-          <img 
-            src="/images/123.png" 
-            alt="Background Image" 
-            class="absolute inset-0 w-full h-full object-cover z-0 scale-[1.2]" 
-          />
+<!-- 
+      <div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
+          <div class="relative w-full mx-[15px] mt-8 rounded-[40px] overflow-hidden shadow-lg" style="height:600px;">
+            <img 
+              src="/images/123.png" 
+              alt="Background Image" 
+              class="absolute inset-0 w-full h-full object-cover z-0 scale-[1.2]" 
+            />
           <div class="absolute top-0 left-0 w-full h-full bg-[#8C740712] z-10"></div>
         </div>
-      </div>
+      </div> -->
 
-<div class="w-full h-[40vh] relative" >
+      <div class="relative flex justify-center items-start mt-[20px]" style="z-index:2;">
+              <div class="relative w-full mx-[15px] mt-8 rounded-[40px] overflow-hidden shadow-lg" style="height:600px;">
+                <img 
+                  src="/images/aboutUsHeader.jpeg" 
+                  alt="Background Image" 
+                  class="absolute inset-0 w-full h-full object-cover z-0 scale-[1.2]" 
+                />
+      
+                <div class="absolute top-0 left-0 w-full h-full bg-[#f5dd9a2e] z-10"></div>
+      
+      
+      
+                <!-- Overlayed content -->
+                <div class="absolute z-20 top-0 left-0 w-full h-full flex flex-col justify-center items-start px-8 md:px-16 gap-6">
+                  <p class="text-white text-left text-base sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[7px] mb-[20px] max-w-[90%]" style="font-weight: 200;">
+                    ELEVATING GUEST EXPERIENCE
+                  </p>
+                </div>
+              </div>
+            </div>
+
+      
+
+<div class="w-full  md:h-[25vh] sm:h-[40vh] h-[45vh] relative" >
   
-  <div class="w-full md:h-[30vh] bg-[#EFEFEC] flex justify-center absolute bottom-0 left-0 right-0">
+  <div class="w-full md:h-[15vh] bg-[#EFEFEC] flex justify-center absolute bottom-0 left-0 right-0">
 
-    <div class="w-full md:w-[90vw] lg:w-[80vw] h-full flex flex-col md:flex-row justify-between items-center p-4 md:p-0">
+    <div class="w-full md:w-[90vw] lg:w-[80vw] h-full flex flex-col md:flex-row justify-between items-center p-4 md:p-0 ">
 
-      <div class="w-full md:w-40 flex justify-between flex-col mb-6 md:mb-0">
-        <div>
-          <h1 class="w-full text-2xl md:text-3xl font-bold text-gray-600 uppercase text-center leading-none">Get in touch with us</h1>
+      <div class="w-full md:w-40 flex justify-between flex-col mb-6 md:mb-0 mr-[40px]">
+        <div class="w-full flex flex-col items-center justify-center">
+          <h1 class="w-full text-2xl font-bold text-gray-600 uppercase text-center leading-none hidden md:block">Get in</h1>
+          <h1 class="w-full text-2xl font-bold text-gray-600 uppercase text-center leading-none hidden md:block">touch</h1>
+          <h1 class="w-full text-2xl font-bold text-gray-600 uppercase text-center leading-none hidden md:block">with us</h1>
+          <h1 class="w-full text-2xl font-bold text-gray-600 uppercase text-center leading-none md:hidden">Get in touch with us</h1>
         </div>
         <div>
-          <div class="flex justify-center items-center gap-6 pt-5">
+          <div class="flex justify-center items-center gap-3 pt-5">
             <a href="#" aria-label="Facebook">
               <img
                 src="/facebook-svgrepo-com.svg"
                 alt="Facebook"
-                class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200 invert dark:invert-0"
+                class="object-cover w-9 hover:scale-110 transition-all duration-200 invert dark:invert-0"
               />
             </a>
             <a href="#" aria-label="Twitter">
               <img
                 src="/x-social-media-round-icon.svg"
                 alt="Twitter"
-                class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200"
+                class="object-cover w-9 hover:scale-110 transition-all duration-200"
               />
             </a>  
             <a href="#" aria-label="Instagram">
               <img
                 src="/instagram-round-svgrepo-com.svg"
                 alt="Instagram"
-                class="object-cover w-6 lg:w-8 hover:scale-110 transition-all duration-200 invert dark:invert-0"
+                class="object-cover w-9 hover:scale-110 transition-all duration-200 invert dark:invert-0"
               />
             </a>
           </div>
@@ -56,20 +121,20 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 
       <div class="w-full md:w-100 h-full flex flex-col p-3 mb-6 md:mb-0">
         <div id="title">
-          <p class="text-xl md:text-2xl font-bold text-gray-800 text-left">Our Mission</p>
+          <p class="text-xl md:text-2xl font-bold text-gray-800 text-left">At Perf</p>
         </div>
 
         <div id="title">
-          <p class="font-normal text-gray-800 text-left">At PERF, we're dedicated to making fitness accessible to everyone. Our innovative solutions help individuals and establishments embrace healthier lifestyles while contributing to a more sustainable planet.</p>
+          <p class="font-normal text-gray-800 text-left">We envision a world where health and fitness are accessible to everyone, everywhere. We believe that fitness shouldn't be confined to a specific space or time, it should seamlessly integrate into your lifestyle, whether you're at home, outdoors, or on the move.</p>
         </div>
       </div>
 
-      <div class="w-full md:w-100 h-full flex flex-col bg-gray-200 p-3">
+      <div class="w-full md:w-100 flex flex-col bg-[#00000014] p-3 h-[100px] md:!h-[140px]">
         <div id="title">
-          <p class="text-xl md:text-2xl font-bold text-gray-600 text-left">Upcoming events</p>
+          <p class="text-xl font-bold text-gray-600 text-left">upcoming events</p>
         </div>
         <div id="title">
-          <p class="text-base md:text-xl font-normal text-gray-800 text-left">Join us for our monthly fitness workshops and eco-friendly product launches. Check back regularly for updates on our exciting events.</p>
+          <p class="text-base md:text-xl font-normal text-gray-800 text-left">Soon, Perf Launch @ Riad Amir - Marrakech.</p>
         </div>
       </div>
 
@@ -80,9 +145,9 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
 </div>
 
 
-<div class="w-full py-10 md:py-20 px-5 md:px-20 text-gray-800 font-medium" style="font-family: 'Montserrat'">
+<div class="w-full py-10 md:py-15 px-5 md:px-20 text-gray-800 font-medium" style="font-family: 'Montserrat'">
   
-  <div class="w-full flex flex-col md:flex-row gap-10 md:gap-20">
+  <!-- <div class="w-full flex flex-col md:flex-row gap-10 md:gap-20">
     <div class="w-full md:w-4/7">
       <p class="text-left text-base md:text-[1.2rem]">
         <span class="uppercase text-[80px] md:text-[165px] font-bold text-gray-800 leading-none float-left mr-5 align-top">WE</span>
@@ -108,42 +173,57 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
       </p>
     </div>
 
-  </div>
+  </div> -->
 
 </div>
 
-<div class="w-full pb-10 md:pb-16 lg:pb-20">
-      <div class="w-full p-4 sm:p-6 md:p-10 flex justify-center items-center flex-col gap-4 sm:gap-6 md:gap-10" style="font-family: Montserrat;">
-      <h1 class="font-bold text-center text-2xl sm:text-3xl md:text-4xl text-gray-700 uppercase pb-6 sm:pb-10 md:pb-16 lg:pb-20">STUFF WE ARE GOOD AT</h1>
-      <div class="w-32 sm:w-40 md:w-60 lg:w-80 h-1 sm:h-2 md:h-3 lg:h-4 bg-gray-400"></div>
+  <!-- What do you get -->
+  <div class="w-full pb-10 md:pb-20">
+      <div class="w-full p-4 md:p-10 flex justify-center items-center flex-col gap-6 md:gap-10" style="font-family: Montserrat;">
+      <h1 class="font-bold text-center text-3xl text-gray-700 uppercase pb-10 md:pb-20">Stuff we are good at</h1>
+      <div class="w-64 md:w-80 h-3 md:h-4 bg-gray-400"></div>
 
-      <div class="flex justify-center items-center flex-col p-3 sm:p-4 md:p-5 w-full max-w-4xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 mb-6 sm:mb-8 w-full">
-          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-left">Eco-friendly Fitness Solutions</p>
-          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-right">Training and nutrition Support</p>
-          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
+      <div class="flex justify-center items-center flex-col p-3 md:p-5">
+        <!-- First row - stack on mobile, side by side on md+ -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6 md:mb-0">
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Mobile training station</p>
+          </div>
+          
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">More bookings</p>
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+          </div>
         </div>
 
-        <div class="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 mb-6 sm:mb-8 w-full">
-          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-left">Space Optimization</p>
-          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-right">Digital Platforms</p>
-          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
+        <!-- Second row - stack on mobile, side by side on md+ -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mb-6 md:mb-0">
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Workout videos</p>
+          </div>
+          
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Upgraded experience</p>
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+          </div>
         </div>
 
-        <div class="flex flex-col md:flex-row justify-center items-center gap-4 sm:gap-5 md:gap-8 lg:gap-10 w-full">
-          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-right-svgrepo-com.png" alt=""></div>
-          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-left">Customer Experience</p>
-          <p class="text-gray-800 text-base sm:text-lg md:text-xl w-full md:w-60 lg:w-72 text-center md:text-right">Sustainable Practices</p>
-          <div class="hidden md:block"><img class="w-6 sm:w-7 md:w-8 lg:w-10" src="/images/angle-left-svgrepo-com.png" alt=""></div>
+        <!-- Third row - stack on mobile, side by side on md+ -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10">
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-right-svgrepo-com.png" alt=""></div>
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-left">Space optimization</p>
+          </div>
+          
+          <div class="flex items-center md:w-auto w-full gap-[30px]">
+            <p class="text-gray-800 text-lg md:text-xl w-full md:w-60 text-center md:text-right">Higher satisfaction</p>
+            <div class="md:block hidden"><img class="w-8 md:w-10" src="public\images\angle-left-svgrepo-com.png" alt=""></div>
+          </div>
         </div>
         
       </div>
-
-      <div class="w-32 sm:w-40 md:w-60 lg:w-80 h-1 sm:h-2 md:h-3 lg:h-4 bg-gray-400 mt-4 sm:mt-5 md:mt-6 lg:mt-8"></div>
-
-     
     </div>
     </div>
 
@@ -156,7 +236,7 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
         <div class="relative w-[896px] h-80">
           <!-- Left Circle -->
           <div class="absolute top-0 left-0 w-80 h-80 bg-[#e66939cc] rounded-full z-10 flex items-center justify-center font-bold text-lg text-neutral-900">
-            UNDERSTAN
+            UNDERSTAND
           </div>
           <!-- Middle Circle -->
           <div class="absolute top-0 left-[288px] w-80 h-80 bg-[#e66939cc] rounded-full z-20 flex items-center justify-center font-bold text-lg text-neutral-900">
@@ -221,7 +301,43 @@ import Bloc3Establishment from '~/components/Sections/Establishement/BlocThree.v
     </div>
     </div>
 
-     <div class="w-full">
+    <h1 class="font-bold text-center text-xl md:text-2xl text-gray-700 uppercase pb-10 md:pb-20 mt-[30px] md:mt-[150px]">A STATEMENT OF WELLNESS IN EVERY SPACE.</h1>
+
+    <div class="w-full max-w-[2000px] flex justify-center items-center">
+      <div class="w-full mx-[20px] relative overflow-hidden rounded-[40px] mb-[70px] md:mb-[150px]">
+        <div id="carousel" class="flex transition-transform duration-500" :style="`transform: translateX(-${currentIndex * 100}%);`">
+       
+          <div :key="1" class="min-w-full">
+            <img src="/images/swipe4.jpeg" alt="Slide" class="w-full h-[650px] object-cover" />
+          </div>
+          <div :key="2" class="min-w-full">
+            <img src="/images/swipe2.jpeg" alt="Slide" class="w-full h-[650px] object-cover" />
+          </div>
+          <div :key="3" class="min-w-full">
+            <img src="/images/swipe5.jpeg" alt="Slide" class="w-full h-[650px] object-cover" />
+          </div>
+          <div :key="4" class="min-w-full">
+            <img src="/images/swipe3.jpeg" alt="Slide" class="w-full h-[650px] object-cover" />
+          </div>
+          <div :key="5" class="min-w-full">
+            <img src="/images/swipe1.jpeg" alt="Slide" class="w-full h-[650px] object-cover" />
+          </div>
+        </div>
+  
+        <!-- Dots -->
+        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+          <button
+            v-for="i in 5"
+            :key="'dot-'+i"
+            class="w-5 h-5 rounded-full"
+            :class="i - 1 === currentIndex ? 'bg-[#fff]' : 'bg-[#ffffff9c]'"
+            @click="goTo(i - 1)"
+          />
+        </div>
+      </div>
+    </div>
+  
+    <div class="w-full px-5 rounded-[40px]">
 
      <Bloc3Establishment 
       image1="/images/about-us-img1.png" 
@@ -253,48 +369,49 @@ health an achievable goal for all."
     </div> -->
 
 
-<div class="w-full pt-15 md:pt-30 pb-10 md:pb-20" style="font-family: 'Montserrat'">
+    <div class="w-full pt-10 md:pt-16 pb-6 md:pb-10" style="font-family: 'Montserrat'">
   <div id="title">
-    <p class="text-3xl md:text-5xl font-bold text-gray-800 text-center uppercase">Who we are !</p>
+    <p class="text-2xl md:text-4xl font-bold text-gray-800 text-center uppercase md:mt-[150px]">Who we are !</p>
   </div>
-  <div class="flex justify-center items-center pt-10 md:pt-20">
-    <div class="flex flex-col gap-8 w-full max-w-5xl mx-auto">
+  <div class="flex justify-center items-center pt-6 md:pt-12">
+    <div class="flex flex-col gap-6 w-full max-w-[650px] mx-auto">
       <!-- First row: 3 members -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-[20px] w-full">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 w-full">
         <div class="flex flex-col items-center justify-center flex-1">
-          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/mjdAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">AMJAD ARKHIS</p>
-          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Co-founder</p>
+          <div class="w-24 h-24 md:w-32 md:h-32 rounded-full" style="background-image: url('./images/mjdAbout.png'); background-size: cover; background-position: center;"></div>
+          <p class="text-gray-900 font-semibold text-base md:text-lg text-center pt-2 whitespace-nowrap mx-auto">AMJAD ARKHIS</p>
+          <p class="text-gray-500 uppercase text-sm md:text-base text-center whitespace-nowrap mx-auto">Co-founder</p>
         </div>
         <div class="flex flex-col items-center justify-center flex-1">
-          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/saad.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">SAAD TANTAOUI</p>
-          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Co-founder</p>
+          <div class="w-24 h-24 md:w-32 md:h-32 rounded-full" style="background-image: url('./images/saad.png'); background-size: cover; background-position: center;"></div>
+          <p class="text-gray-900 font-semibold text-base md:text-lg text-center pt-2 whitespace-nowrap mx-auto">SAAD TANTAOUI</p>
+          <p class="text-gray-500 uppercase text-sm md:text-base text-center whitespace-nowrap mx-auto">Co-founder</p>
         </div>
         <div class="flex flex-col items-center justify-center flex-1">
-          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/mehdiAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">MEHDI ARKHIS</p>
-          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Front-end Developer</p>
+          <div class="w-24 h-24 md:w-32 md:h-32 rounded-full" style="background-image: url('./images/mehdiAbout.png'); background-size: cover; background-position: center;"></div>
+          <p class="text-gray-900 font-semibold text-base md:text-lg text-center pt-2 whitespace-nowrap mx-auto">MEHDI ARKHIS</p>
+          <p class="text-gray-500 uppercase text-sm md:text-base text-center whitespace-nowrap mx-auto">Front-end Developer</p>
         </div>
       </div>
       <!-- Second row: 2 members, centered under the 3 above -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-[20px] w-full md:w-2/3 mx-auto justify-center">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 w-full md:w-2/3 mx-auto justify-center">
         <div class="flex flex-col items-center justify-center flex-1">
-          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/adamAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">ADAM JLIL</p>
-          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Back-end Developer</p>
+          <div class="w-24 h-24 md:w-32 md:h-32 rounded-full" style="background-image: url('./images/adamAbout.png'); background-size: cover; background-position: center;"></div>
+          <p class="text-gray-900 font-semibold text-base md:text-lg text-center pt-2 whitespace-nowrap mx-auto">ADAM JLIL</p>
+          <p class="text-gray-500 uppercase text-sm md:text-base text-center whitespace-nowrap mx-auto">Back-end Developer</p>
         </div>
         <div class="flex flex-col items-center justify-center flex-1">
-          <div class="w-32 h-32 md:w-44 md:h-44 rounded-full" style="background-image: url('./images/anasAbout.png'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
-          <p class="text-gray-900 font-semibold text-lg md:text-xl text-center p-4 whitespace-nowrap mx-auto">ANAS ORKHIS</p>
-          <p class="text-gray-500 uppercase text-base md:text-lg text-center whitespace-nowrap mx-auto">Back-end Developer</p>
+          <div class="w-24 h-24 md:w-32 md:h-32 rounded-full" style="background-image: url('./images/anasAbout.png'); background-size: cover; background-position: center;"></div>
+          <p class="text-gray-900 font-semibold text-base md:text-lg text-center pt-2 whitespace-nowrap mx-auto">ANAS ORKHIS</p>
+          <p class="text-gray-500 uppercase text-sm md:text-base text-center whitespace-nowrap mx-auto">Back-end Developer</p>
         </div>
       </div>
     </div>
-    </div>
   </div>
+</div>
 
-<div class="w-full py-10 md:py-20 bg-[#EFEFEC">
+
+<!-- <div class="w-full py-10 md:py-20 bg-[#EFEFEC">
   <div class="container mx-auto px-4">
     <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">OUR VALUES</h2>
     
@@ -320,6 +437,6 @@ health an achievable goal for all."
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 </template>

@@ -65,11 +65,11 @@
 
     <!-- Copyright and Sponsor Section -->
     <div class="flex flex-col justify-center p-4 w-full text-center text-gray-700 dark:text-gray-300 text-sm">
-      <p class="mb-4">&copy; 2024 Perf. All rights reserved.</p>
+      <p class="m4">&copy; 2024 Perf. All rights reserved.</p>
 
-      <div class="w-full h-[1px] bg-gray-300 dark:bg-gray-600 mb-4"></div>
+      <div class="w-full h-[1px] bg-gray-300 dark:bg-gray-600"></div>
 
-      <p class="mb-4">POWERED BY</p>
+      <!-- <p class="mb-4">POWERED BY</p>
 
       <div class="flex flex-col md:flex-row justify-center items-center p-4 gap-6">
         <div class="flex flex-col justify-center items-center">
@@ -91,7 +91,7 @@
           />
           <p class="text-sm lg:text-xl font-semibold text-black dark:text-white">BOOKING</p>
         </div>
-      </div>
+      </div> -->
     </div>
   </footer>
 </template>
