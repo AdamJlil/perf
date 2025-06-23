@@ -381,7 +381,7 @@ const getCurrentPlanType = () => {
       const planTitle = planData.title.toUpperCase();
       
       // Return the plan type if it matches one of our known types
-      if (['ESSENTIAL', 'PREMIUM', 'GROWTH'].includes(planTitle)) {
+      if (['EXPLORER', 'EXPERIENCE', 'SIGNATURE'].includes(planTitle)) {
         return planTitle;
       }
     }

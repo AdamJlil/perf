@@ -339,11 +339,11 @@ class EmailService {
             
           planTitle = planData.title || 'your subscription plan';
           
-          // Get plan duration based on plan title
-          let duration = '';
-          if (planTitle === 'ESSENTIAL') duration = '3 months';
-          else if (planTitle === 'PREMIUM') duration = '6 months';
-          else if (planTitle === 'GROWTH') duration = '1 year';
+          // Get plan rooms based on plan title
+          let rooms = '';
+          if (planTitle === 'EXPLORER') rooms = 'Less than 10 rooms';
+          else if (planTitle === 'EXPERIENCE') rooms = 'Between 10-20 rooms';
+          else if (planTitle === 'SIGNATURE') rooms = 'More than 20 rooms';
           
           // Extract start and end dates from plan data
           startDate = planData.start_date || '';
@@ -364,17 +364,6 @@ class EmailService {
             }
           };
           
-          const formattedStartDate = formatDate(startDate);
-          const formattedEndDate = formatDate(endDate);
-          
-          // Add dates to plan details if available
-          if (formattedStartDate && formattedEndDate) {
-            planDetails = duration ? 
-              `${planTitle} (${duration}) - From ${formattedStartDate} to ${formattedEndDate}` : 
-              `${planTitle} - From ${formattedStartDate} to ${formattedEndDate}`;
-          } else {
-            planDetails = duration ? `${planTitle} (${duration})` : planTitle;
-          }
         } catch (e) {
           console.error('Error parsing plan data:', e);
         }
@@ -397,7 +386,7 @@ class EmailService {
           <div style="background-color: #f8f8f8; padding: 20px; border-left: 4px solid #e86c02; margin: 15px 0;">
             <p style="margin: 5px 0;"><strong>User:</strong> ${fullName}</p>
             <p style="margin: 5px 0;"><strong>Email:</strong> ${userEmail}</p>
-            <p style="margin: 5px 0;"><strong>Plan:</strong> ${planDetails}</p>
+            <p style="margin: 5px 0;"><strong>Plan:</strong> ${rooms}</p>
             <p style="margin: 5px 0;"><strong>Payment confirmed:</strong> ${currentDate}</p>
           </div>
           

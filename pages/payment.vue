@@ -167,7 +167,7 @@
         v-if="selectedPlan"
         class="w-full lg:w-1/3 relative h-full font-medium border border-gray-500 rounded-10 flex flex-col items-center p-6 lg:p-8 transition-transform duration-300 hover:scale-105"
       >
-        <img v-if="selectedPlan.title === 'PREMIUM'" src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
+        <img v-if="selectedPlan.title === 'SIGNATURE'" src="/public/images/pricing-popular.png" alt="most popular" class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3" />
 
         <h2 class="text-xl uppercase tracking-2">{{ selectedPlan.title }}</h2>
         <h5 class="pt-1 -tracking-0.3 opacity-80">{{ selectedPlan.duration }}</h5>
@@ -490,20 +490,20 @@ const createPlanObject = (planName: string, userType: string, price: string) => 
     selectedPlan.value = {
       title: planName,
       price: price ? `${price} dh` : '',
-      duration: planName === 'ESSENTIAL' ? '3 months' : 
-               planName === 'PREMIUM' ? '6 months' : '1 year',
+      duration: planName === 'EXPLORER' ? 'Less than 10 rooms' : 
+               planName === 'EXPERIENCE' ? 'Between 10-20 rooms' : 'More than 20 rooms',
       features: [
         { text: userType === 'ESTABLISHEMENT' ? 'Member accounts' : 'Monthly consultation', isDisabled: false },
         { text: userType === 'ESTABLISHEMENT' ? 'Analytics dashboard' : 'Nutrition plan', isDisabled: false },
         { text: userType === 'ESTABLISHEMENT' ? 'Email support' : 'Workout plans', isDisabled: false },
-        { text: userType === 'ESTABLISHEMENT' ? 'Custom branding' : 'Free equipment', isDisabled: planName === 'ESSENTIAL' },
-        { text: 'Priority support', isDisabled: planName !== 'GROWTH' }
+        { text: userType === 'ESTABLISHEMENT' ? 'Custom branding' : 'Free equipment', isDisabled: planName === 'EXPLORER' },
+        { text: 'Priority support', isDisabled: planName !== 'SIGNATURE' }
       ],
       discount: userType === 'ESTABLISHEMENT' ? 
-              (planName === 'ESSENTIAL' ? '5500 dh' : 
-               planName === 'PREMIUM' ? 'Save 1001 dh' : 'Save 2000 dh') :
-              (planName === 'ESSENTIAL' ? '5500 dh' : 
-               planName === 'PREMIUM' ? 'Save 1001 dh' : 'Save 1006 dh')
+              (planName === 'EXPLORER' ? '6500 dh' : 
+               planName === 'EXPERIENCE' ? 'Save 7500 dh' : 'Save 8000 dh') :
+              (planName === 'EXPLORER' ? '6500 dh' : 
+               planName === 'EXPERIENCE' ? 'Save 7500 dh' : 'Save 8000 dh')
     };
     
     console.log('Created plan object:', selectedPlan.value);

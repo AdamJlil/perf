@@ -10,19 +10,19 @@ const router = useRouter()
 
 // Define establishment plan prices based on plans.ts
 const establishmentPlans = {
-  ESSENTIAL: {
+  EXPLORER: {
     title: plans.ESTABLISHEMENT.plans.plan_1.title,
     price: plans.ESTABLISHEMENT.plans.plan_1.price.split(' ')[0], // Get numeric value only
     status: "Pending",
     duration: plans.ESTABLISHEMENT.plans.plan_1.duration
   },
-  PREMIUM: {
+  EXPERIENCE: {
     title: plans.ESTABLISHEMENT.plans.plan_2.title,
     price: plans.ESTABLISHEMENT.plans.plan_2.price.split(' ')[0], // Get numeric value only
     status: "Pending",
     duration: plans.ESTABLISHEMENT.plans.plan_2.duration
   },
-  GROWTH: {
+  SIGNATURE: {
     title: plans.ESTABLISHEMENT.plans.plan_3.title,
     price: plans.ESTABLISHEMENT.plans.plan_3.price.split(' ')[0], // Get numeric value only
     status: "Pending",
@@ -292,9 +292,9 @@ const onSignupClick = async () => {
               required
             >
               <option value="" disabled>Select plan</option>
-              <option value="ESSENTIAL">ESSENTIAL</option>
-              <option value="PREMIUM">PREMIUM</option>
-              <option value="GROWTH">GROWTH</option>
+              <option value="EXPLORER">EXPLORER</option>
+              <option value="EXPERIENCE">EXPERIENCE</option>
+              <option value="SIGNATURE">SIGNATURE</option>
             </select>
           </div>
 

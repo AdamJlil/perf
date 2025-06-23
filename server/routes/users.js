@@ -240,14 +240,14 @@ router.get("/by-email", async (req, res) => {
         (user.plan.title || '');
       
       if (user.type === 'ESTABLISHEMENT') {
-        if (planTitle === 'ESSENTIAL') price = '5500';
-        else if (planTitle === 'PREMIUM') price = '9999';
-        else if (planTitle === 'GROWTH') price = '500';
+        if (planTitle === 'EXPLORER') price = '6500';
+        else if (planTitle === 'EXPERIENCE') price = '7500';
+        else if (planTitle === 'SIGNATURE') price = '8000';
       } else {
         // PARTICULIER prices
-        if (planTitle === 'ESSENTIAL') price = '5500';
-        else if (planTitle === 'PREMIUM') price = '9999';
-        else if (planTitle === 'GROWTH') price = '500';
+        if (planTitle === 'EXPLORER') price = '6500';
+        else if (planTitle === 'EXPERIENCE') price = '7500';
+        else if (planTitle === 'SIGNATURE') price = '8000';
       }
     }
     

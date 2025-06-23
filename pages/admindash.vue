@@ -334,9 +334,9 @@
                   class="w-full p-2 border-[1px] border-black bg-transparent"
                 >
                   <option value="">Select plan</option>
-                  <option value="ESSENTIAL">ESSENTIAL</option>
-                  <option value="PREMIUM">PREMIUM</option>
-                  <option value="GROWTH">GROWTH</option>
+                  <option value="EXPLORER">EXPLORER</option>
+                  <option value="EXPERIENCE">EXPERIENCE</option>
+                  <option value="SIGNATURE">SIGNATURE</option>
                 </select>
               </div>
               
