@@ -18,7 +18,10 @@ export default defineEventHandler(async (event) => {
   await connectToDatabase();
 
   try {
-    const customers = await Customer.find({ establishmentId: payload.id }).sort({ createdAt: -1 });
+    // Ensure we have a string ID for the query
+    const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
+    
+    const customers = await Customer.find({ establishmentId }).sort({ createdAt: -1 });
     
     // Convert Map to Object for JSON response
     return customers.map(c => {

@@ -25,7 +25,8 @@ export default defineEventHandler(async (event) => {
   await connectToDatabase();
 
   try {
-    const result = await Customer.deleteOne({ _id: id, establishmentId: payload.id });
+    const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
+    const result = await Customer.deleteOne({ _id: id, establishmentId });
     
     if (result.deletedCount === 0) {
       throw createError({ statusCode: 404, statusMessage: "Customer not found" });

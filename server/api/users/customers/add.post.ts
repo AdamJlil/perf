@@ -25,11 +25,14 @@ export default defineEventHandler(async (event) => {
   await connectToDatabase();
 
   try {
+    // Ensure we have a string ID
+    const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
+
     const updatedCustomer = await Customer.findOneAndUpdate(
       { et_customer_id },
       { 
         $set: {
-          establishmentId: payload.id,
+          establishmentId,
           firstName,
           lastName,
           email,
