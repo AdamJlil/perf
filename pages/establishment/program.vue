@@ -1,18 +1,18 @@
 <template>
   <div
-    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative py-4 lg:pt-[100px] max-lg:mt-[-40px] max-lg:pt-0 bg-[#EFEFEC] my-0"
+    class="w-full bg-cover bg-center text-black flex flex-col justify-center items-center gap-8 relative py-4 lg:pt-[100px] max-lg:mt-[-40px] max-lg:pt-0 bg-[#EFEFEC] my-0 mb-20"
     style="font-family: Montserrat"
   >
     <!-- Bloc1 Component -->
     <Bloc1
-      class="mt-60"
+      class="mt-10"
       :reversed="true"
       :show-button="false"
-      image="/images/amjadSport2.png"
+      :image="customerPicture || '/images/amjadSport2.png'"
       :heading-text="`HEY ${customerName},<br/>READY TO BECOME THE BEST VERSION OF YOURSELF`"
     />
 
-    <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[10px] my-30">
+    <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[5px] my-30">
       <div
         :class="[
           'cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full',
@@ -44,21 +44,19 @@
       </div>
     </div>
 
-    <!-- FlipCardBloc Components -->
     <div
-      class="bg-[#EFEFEC] dark:bg-black max-md:h-fit max-lg:h-[35vh] lg:h-[50vh] lg:w-full flex max-md:flex-col justify-center items-center text-center p-[30px] lg:mt-5 lg:mb-[50px] gap-[20%] max-md:gap-[50px] max-md:py-[120px]"
+      class="w-full flex flex-col md:flex-row justify-center items-center gap-10 md:gap-16 lg:gap-32 px-6 py-5 md:py-10 bg-[#EFEFEC] dark:bg-black"
     >
       <FlipCardBloc
         outside-title="calories"
         style="font-family: Montserrat"
         :back-text="caloriesResult"
-        front-image="/images/arrow3.jpg"
+        :class="{ 'calorie-hump': isCalorieUpdating }"
       />
       <FlipCardBloc
         outside-title="infos"
         style="font-family: Montserrat"
         :back-text="videoCalorieData[costumerVideo]?.description || 'Loading video information...'"
-        front-image="/images/arrow4.jpg"
       />
     </div>
 
@@ -85,20 +83,20 @@
 
     <div class="w-full h-[50px] flex justify-end items-center pr-[40px]">
       <div
-        class="flex items-center justify-center gap-[10px] p-[10px] hover:bg-[#e7e7e7] cursor-pointer"
+        class="flex items-center justify-center gap-[10px] p-[10px] hover:bg-[#e7e7e7] cursor-pointer transition-colors rounded-lg"
         @click="nextVideo"
       >
-        <span class="text-xl sm:text-lg md:text-2xl">NEXT VIDEO</span>
-        <NuxtImg src="/images/next-button.png" alt="arrow" width="40" height="40" />
+        <span class="text-xl sm:text-lg md:text-2xl font-bold">NEXT VIDEO</span>
+        <img src="/images/next-button.png" alt="arrow" class="w-10 h-10 object-contain" />
       </div>
     </div>
 
-    <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-20">
+    <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-10">
       let's keep it up - keep pushing
     </h1>
 
     <!-- Chart Container -->
-    <div class="w-[70%] h-[30vh] md:h-[35vh] lg:h-[40vh] lg:w-[70%] mx-auto p-4">
+    <div class="w-full mx-auto p-1">
       <div class="bg-transparent rounded-lg p-6 h-full">
         {{ console.log(chartData) }}
         <Line :chart-data="chartData" :chart-options="chartOptions" class="h-full w-full" />
@@ -153,12 +151,14 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip,
 
 const route = useRoute();
 const customerName = ref("");
+const customerPicture = ref("");
 const videoSource = ref("");
 const costumerVideo = ref(0);
 const isLoading = ref(true);
 const selectedElement = ref(1);
 const caloriesResult = ref("");
 const isVideoLoading = ref(true);
+const isCalorieUpdating = ref(false);
 
 const ageRange = ref("");
 const weightRange = ref("");
@@ -190,6 +190,13 @@ const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: num
 // Watch pour le changement de poids
 watch(selectedElement, (newValue) => {
   const dumbbellWeight = newValue === 1 ? 2.5 : selectedElement.value === 2 ? 5.0 : 10.0;
+
+  // Trigger animation
+  isCalorieUpdating.value = true;
+  setTimeout(() => {
+    isCalorieUpdating.value = false;
+  }, 600);
+
   caloriesResult.value = calculateCalories(
     ageRange.value,
     weightRange.value,
@@ -198,8 +205,8 @@ watch(selectedElement, (newValue) => {
   );
 });
 
-const labels = ref(["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"]);
-const data = ref([10, 20, 30, 20, 50, 60, 70]);
+const labels = ref<string[]>([]);
+const data = ref<number[]>([]);
 
 // Initial calculation
 onMounted(async () => {
@@ -207,13 +214,14 @@ onMounted(async () => {
 
   if (customerId) {
     try {
-      const data = await $fetch<any[]>('/api/users/customers');
-      const customer = data.find(
+      const allCustomers = await $fetch<any[]>("/api/users/customers");
+      const customer = allCustomers.find(
         (c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
       );
 
       if (customer) {
         customerName.value = `${customer.firstName} ${customer.lastName}`;
+        customerPicture.value = customer.profile_picture || "";
         costumerVideo.value = customer.video || 0;
         ageRange.value = customer.ageRange || "";
         weightRange.value = customer.weightRange || "";
@@ -228,9 +236,15 @@ onMounted(async () => {
 
         // Update labels and data dynamically based on burnedCalories
         const burnedCalories = customer.burnedCalories || {};
-        labels.value = Object.keys(burnedCalories);
-        data.value = Object.values(burnedCalories);
-        
+        const sortedDays = Object.keys(burnedCalories).sort((a, b) => {
+          const numA = parseInt(a.replace("Day ", "")) || 0;
+          const numB = parseInt(b.replace("Day ", "")) || 0;
+          return numA - numB;
+        });
+
+        labels.value = sortedDays;
+        data.value = sortedDays.map((day) => burnedCalories[day]);
+
         caloriesResult.value = calculateCalories(
           ageRange.value,
           weightRange.value,
@@ -328,37 +342,31 @@ const nextVideo = async () => {
     const customerId = route.query.customerId as string;
     if (!customerId) throw new Error("Customer ID not found");
 
-    // Fetch latest data
-    const data = await $fetch<any[]>('/api/users/customers');
+    // Fetch latest data from real backend
+    const data = await $fetch<any[]>("/api/users/customers");
     const customer = data.find(
       (c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
     );
 
     if (!customer) throw new Error("Customer not found");
 
+    // Use the value currently shown on the UI card (parsed average)
+    const currentCaloriesRange = caloriesResult.value;
+    const parts = currentCaloriesRange.split("-").map(Number);
+    const avgCalories = parts.length === 2 ? Math.round((parts[0] + parts[1]) / 2) : parts[0] || 0;
+
     // Calculate next video index
     const nextVideoIndex = (customer.video + 1) % establishmentUserVideos.length;
 
-    // Get current day's calories
-    const dumbbellWeight = selectedElement.value === 1 ? 2.5 : selectedElement.value === 2 ? 5.0 : 10.0;
-    const currentCaloriesRange = calculateCalories(
-      ageRange.value,
-      weightRange.value,
-      dumbbellWeight,
-      calorieData.value[customer.video || 0],
-    );
-
-    // Parse the calories range and get the average
-    const [minCal, maxCal] = currentCaloriesRange.split("-").map(Number);
-    const avgCalories = Math.round((minCal + maxCal) / 2);
-
-    // Update customer's burned calories
+    // Update customer's burned calories session-by-session
     const burnedCalories = customer.burnedCalories || {};
-    const today = `Day ${Object.keys(burnedCalories).length + 1}`;
-    const updatedBurnedCalories = { ...burnedCalories, [today]: avgCalories };
+    const nextDayIndex = Object.keys(burnedCalories).length + 1;
+    const dayLabel = `Day ${nextDayIndex}`;
 
-    // Update the customer in DB
-    await $fetch('/api/users/customers/add', {
+    const updatedBurnedCalories = { ...burnedCalories, [dayLabel]: avgCalories };
+
+    // Update the customer in real MongoDB via API
+    await $fetch("/api/users/customers/add", {
       method: "POST",
       body: {
         ...customer,
@@ -367,11 +375,15 @@ const nextVideo = async () => {
       },
     });
 
-    // Reload the page to show the next video
-    window.location.reload();
+    // Success toast and refresh
+    useToast().success(`Completed! ${avgCalories} kcal added.`);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   } catch (error) {
     console.error("Error in nextVideo:", error);
-    useToast().error("Failed to move to next video. Please try again.");
+    useToast().error("Failed to save progress. Please try again.");
   }
 };
 </script>
@@ -391,6 +403,26 @@ const nextVideo = async () => {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+.calorie-hump {
+  animation: hump 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes hump {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(208, 94, 51, 0);
+  }
+  30% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px 10px rgba(208, 94, 51, 0.4);
+    border-color: #d05e33;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(208, 94, 51, 0);
   }
 }
 </style>

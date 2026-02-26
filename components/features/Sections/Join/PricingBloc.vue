@@ -36,7 +36,7 @@
 
           <div class="!mt-auto w-full text-center">
             <!-- Status Badge Placement -->
-            <div class="mb-4 flex flex-col items-center gap-2">
+            <div class="mb-4 flex flex-col items-center gap-2 justify-start self-start mt-6">
               <span
                 v-if="currentPlan === 'EXPLORER'"
                 :class="isPaid ? 'bg-green-500' : 'bg-[#D05E33]'"
@@ -50,6 +50,13 @@
                 class="bg-yellow-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
               >
                 Upgrade Requested
+              </span>
+
+              <span
+                v-if="currentPlan === 'EXPLORER' && isCancelled"
+                class="bg-red-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                Requested Cancellation - Waiting for approval
               </span>
             </div>
             <div class="pt-6 border-t border-gray-200 w-full">
@@ -99,7 +106,7 @@
 
           <div class="!mt-auto w-full text-center">
             <!-- Status Badge Placement -->
-            <div class="mb-4 flex flex-col items-center gap-2">
+            <div class="mb-4 flex flex-col items-center gap-2 justify-start self-start mt-6">
               <span
                 v-if="currentPlan === 'EXPERIENCE'"
                 :class="isPaid ? 'bg-green-500' : 'bg-[#D05E33]'"
@@ -113,6 +120,13 @@
                 class="bg-yellow-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
               >
                 Upgrade Requested
+              </span>
+
+              <span
+                v-if="currentPlan === 'EXPERIENCE' && isCancelled"
+                class="bg-red-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                Requested Cancellation - Waiting for approval
               </span>
             </div>
             <div class="pt-6 border-t border-gray-200 w-full">
@@ -150,7 +164,7 @@
 
           <div class="!mt-auto w-full text-center">
             <!-- Status Badge Placement -->
-            <div class="mb-4 flex flex-col items-center gap-2">
+            <div class="mb-4 flex flex-col items-center gap-2 justify-start self-start mt-6">
               <span
                 v-if="currentPlan === 'SIGNATURE'"
                 :class="isPaid ? 'bg-green-500' : 'bg-[#D05E33]'"
@@ -164,6 +178,13 @@
                 class="bg-yellow-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
               >
                 Upgrade Requested
+              </span>
+
+              <span
+                v-if="currentPlan === 'SIGNATURE' && isCancelled"
+                class="bg-red-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                Requested Cancellation - Waiting for approval
               </span>
             </div>
             <div class="pt-6 border-t border-gray-200 w-full">
@@ -210,6 +231,10 @@ const props = defineProps({
   requestedPlan: {
     type: String,
     default: null,
+  },
+  isCancelled: {
+    type: Boolean,
+    default: false,
   },
 });
 

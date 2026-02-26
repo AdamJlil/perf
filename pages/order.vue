@@ -94,7 +94,7 @@
             <!-- Complete Order Button -->
             <div class="pt-10">
               <button
-                class="w-full uppercase border border-black text-black bg-transparent py-4 px-6 font-bold tracking-[4px] rounded-md hover:bg-black hover:text-white transition-all duration-300"
+                class="w-full uppercase border-2 border-black text-black bg-transparent py-5 px-6 font-bold tracking-[4px] rounded-xl hover:bg-black hover:text-white transition-all duration-300 active:scale-95 shadow-md"
                 @click="handlePayment"
               >
                 Complete Order

@@ -16,38 +16,53 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event);
-  const { et_customer_id, firstName, lastName, email, phone, gender, age, height, weight, ageRange, weightRange, video, burnedCalories } = body;
+  const { 
+    et_customer_id, 
+    firstName, 
+    lastName, 
+    email, 
+    phone, 
+    gender, 
+    age, 
+    height, 
+    weight, 
+    ageRange, 
+    weightRange, 
+    video, 
+    burnedCalories, 
+    profile_picture 
+  } = body;
 
-  if (!et_customer_id || !firstName || !lastName || !email) {
-    throw createError({ statusCode: 400, statusMessage: "Required fields missing" });
+  if (!et_customer_id) {
+    throw createError({ statusCode: 400, statusMessage: "Customer ID required" });
   }
 
   await connectToDatabase();
 
   try {
-    // Ensure we have a string ID
-    const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
+    // Build update object dynamically
+    const updateData: any = {
+      establishmentId: typeof payload.id === 'object' ? payload.id.toString() : payload.id,
+    };
+
+    if (firstName !== undefined) updateData.firstName = firstName;
+    if (lastName !== undefined) updateData.lastName = lastName;
+    if (email !== undefined) updateData.email = email;
+    if (phone !== undefined) updateData.phone = phone;
+    if (gender !== undefined) updateData.gender = gender;
+    if (age !== undefined) updateData.age = age;
+    if (height !== undefined) updateData.height = height;
+    if (weight !== undefined) updateData.weight = weight;
+    if (ageRange !== undefined) updateData.ageRange = ageRange;
+    if (weightRange !== undefined) updateData.weightRange = weightRange;
+    if (video !== undefined) updateData.video = video;
+    if (burnedCalories !== undefined) updateData.burnedCalories = burnedCalories;
+    if (profile_picture !== undefined) updateData.profile_picture = profile_picture;
 
     const updatedCustomer = await Customer.findOneAndUpdate(
       { et_customer_id },
-      { 
-        $set: {
-          establishmentId,
-          firstName,
-          lastName,
-          email,
-          phone,
-          gender,
-          age,
-          height,
-          weight,
-          ageRange,
-          weightRange,
-          video,
-          burnedCalories: burnedCalories || { 'Day 1': 0 }
-        }
-      },
-      { upsert: true, new: true, runValidators: true }
+      { $set: updateData },
+      { upsert: true, returnDocument: 'after', runValidators: true }
     );
 
     return {

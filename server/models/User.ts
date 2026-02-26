@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  requested_cancel: {
+    type: Boolean,
+    default: false,
+  },
   paid: {
     type: Boolean,
     default: false,
@@ -41,6 +45,10 @@ const userSchema = new mongoose.Schema({
   login_count: {
     type: Number,
     default: 0,
+  },
+  profile_picture: {
+    type: String,
+    default: null,
   },
   createdAt: {
     type: Date,

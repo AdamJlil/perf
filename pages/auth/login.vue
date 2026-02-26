@@ -21,9 +21,9 @@ async function onLoginClick() {
     const result = await login(form.data.email, form.data.password, form.data.rememberMe);
 
     if (result?.isFirstLogin) {
-      toast.success(`Welcome, ${result.user?.first_name || 'User'}!`);
+      toast.success(`Welcome, ${result.user?.first_name || "User"}!`);
     } else {
-      toast.success(`Welcome back, ${result.user?.first_name || 'User'}!`);
+      toast.success(`Welcome back, ${result.user?.first_name || "User"}!`);
     }
 
     // Using a slight delay to ensure session state is correctly picked up
@@ -149,7 +149,7 @@ const togglePassword = () => {
           <button
             type="submit"
             :disabled="form.pending"
-            class="w-full uppercase border border-black text-black bg-transparent py-3 px-6 font-medium tracking-[4px] rounded-md hover:bg-black hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full uppercase border-2 border-black text-black bg-transparent py-4 px-6 font-bold tracking-[4px] rounded-xl hover:bg-black hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 shadow-sm"
           >
             <span v-if="!form.pending">Enter</span>
             <span v-else class="flex items-center justify-center gap-2">

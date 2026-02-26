@@ -31,8 +31,10 @@ export default defineEventHandler(async (event) => {
       user: {
         id: _id.toString(),
         ...rest,
-        // Ensure requested_plan is explicitly included
-        requested_plan: user.requested_plan || null
+        // Ensure status flags are explicitly included
+        requested_plan: user.requested_plan || null,
+        requested_cancel: !!user.requested_cancel,
+        profile_picture: user.profile_picture || null
       },
     };
   } catch (error) {

@@ -270,7 +270,7 @@ const handleSubmit = async () => {
         ageRange: getAgeRange(parseInt(formData.value.age)),
         weightRange: getWeightRange(parseFloat(formData.value.weight)),
         video: 0,
-        burnedCalories: { "Day 1": 0 },
+        burnedCalories: {},
       };
 
       const response: any = await $fetch('/api/users/customers/add', {

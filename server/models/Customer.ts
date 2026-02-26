@@ -54,6 +54,10 @@ const customerSchema = new mongoose.Schema({
     of: Number,
     default: () => new Map([['Day 1', 0]]),
   },
+  profile_picture: {
+    type: String,
+    default: null,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     const updatedUser = await User.findOneAndUpdate(
       { email: userEmail },
       { $set: { requested_plan: planTitle } },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     if (!updatedUser) {

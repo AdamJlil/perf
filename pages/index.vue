@@ -11,6 +11,8 @@ const route = useRoute();
 const { user } = useAuth();
 
 const pricingSection = ref<HTMLElement | null>(null);
+const heroLoginBtn = ref<HTMLElement | null>(null);
+const isHeroLoginVisible = useState("isHeroLoginVisible", () => true);
 
 const currentPlanTitle = computed(() => {
   if (!user.value?.plan) return "";
@@ -26,6 +28,7 @@ const currentPlanTitle = computed(() => {
 
 const isPaid = computed(() => !!user.value?.paid);
 const requestedPlan = computed(() => user.value?.requested_plan);
+const isCancelled = computed(() => !!user.value?.requested_cancel);
 
 const scrollToPricing = () => {
   pricingSection.value?.scrollIntoView({ behavior: "smooth" });
@@ -97,7 +100,28 @@ const features = [
   },
 ];
 
+onMounted(() => {
+  if (process.client) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isHeroLoginVisible.value = entry.isIntersecting;
+      },
+      { threshold: 0.1 }
+    );
+
+    if (heroLoginBtn.value) {
+      const el = (heroLoginBtn.value as any).$el || heroLoginBtn.value;
+      observer.observe(el);
+    }
+  }
+});
+
 const handlePlanSelection = (plan: string) => {
+  if (user.value) {
+    router.push("/myPlan");
+    return;
+  }
+
   const currentQuery = { ...route.query };
   router.push({
     path: "/auth/signUp",
@@ -129,6 +153,7 @@ const handlePlanSelection = (plan: string) => {
             Rise Your Visitors Satisfaction!
           </p>
           <NuxtLink
+            ref="heroLoginBtn"
             to="/auth/login"
             class="uppercase border border-white text-white bg-transparent font-light tracking-[4px] rounded-md hover:bg-white hover:text-black transition-all duration-300 py-3 px-10 text-center text-sm md:text-base w-48 md:w-64 flex items-center justify-center whitespace-nowrap"
           >
@@ -342,6 +367,7 @@ const handlePlanSelection = (plan: string) => {
         :current-plan="currentPlanTitle"
         :is-paid="isPaid"
         :requested-plan="requestedPlan"
+        :is-cancelled="isCancelled"
         @plan-selected="handlePlanSelection"
       />
     </div>

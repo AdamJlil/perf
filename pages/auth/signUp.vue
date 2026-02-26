@@ -361,7 +361,7 @@ const onSignupClick = async () => {
             <button
               type="submit"
               :disabled="form.pending"
-              class="w-full uppercase border border-[#D05E33] text-[#D05E33] bg-transparent py-4 px-6 font-bold tracking-[4px] rounded-md hover:bg-[#D05E33] hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-full uppercase border-2 border-[#D05E33] text-[#D05E33] bg-transparent py-5 px-6 font-bold tracking-[4px] rounded-xl hover:bg-[#D05E33] hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 shadow-md"
             >
               <span v-if="!form.pending">Create Account</span>
               <span v-else class="flex items-center justify-center gap-2">

@@ -80,7 +80,7 @@
               </div>
 
               <div class="pt-10">
-                <button type="submit" class="w-full uppercase border border-black text-black bg-transparent py-4 px-6 font-bold tracking-[4px] rounded-md hover:bg-black hover:text-white transition-all duration-300 disabled:opacity-50" :disabled="form.submitting">
+                <button type="submit" class="w-full uppercase border-2 border-black text-black bg-transparent py-5 px-6 font-bold tracking-[4px] rounded-xl hover:bg-black hover:text-white transition-all duration-300 disabled:opacity-50 active:scale-95 shadow-md" :disabled="form.submitting">
                   <span v-if="!form.submitting">Complete Order</span>
                   <span v-else>Processing...</span>
                 </button>
