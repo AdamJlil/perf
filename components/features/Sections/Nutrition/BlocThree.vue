@@ -43,7 +43,7 @@ onMounted(() => {
       // This ensures the animation resets smoothly
       setTimeout(() => {
         marquee.classList.remove("marquee-animate");
-        void marquee.offsetWidth; // Force reflow
+        void (marquee as HTMLElement).offsetWidth; // Force reflow
         marquee.classList.add("marquee-animate");
       }, 0);
     });

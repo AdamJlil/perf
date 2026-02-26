@@ -17,13 +17,18 @@ async function onLoginClick() {
     form.error = "";
     form.pending = true;
 
-    await login(form.data.email, form.data.password, form.data.rememberMe);
+    // Call real backend API via useAuth
+    const result = await login(form.data.email, form.data.password, form.data.rememberMe);
 
-    toast.success("Welcome back!");
+    if (result?.isFirstLogin) {
+      toast.success(`Welcome, ${result.user?.first_name || 'User'}!`);
+    } else {
+      toast.success(`Welcome back, ${result.user?.first_name || 'User'}!`);
+    }
 
-    // Using a slight delay and a hard redirect to ensure session state is correctly picked up
-    setTimeout(() => {
-      window.location.href = "/establishment/manage-customers";
+    // Using a slight delay to ensure session state is correctly picked up
+    setTimeout(async () => {
+      await useRouter().push("/establishment/manage-customers");
     }, 500);
   } catch (error: any) {
     console.error("Login error:", error);
@@ -44,7 +49,7 @@ const togglePassword = () => {
 
 <template>
   <div
-    class="w-full min-h-screen flex flex-col justify-center items-center bg-[#EFEFEC] py-20 px-4"
+    class="w-full min-h-screen flex flex-col justify-center items-center bg-[#EFEFEC] pb-40 px-4"
     style="font-family: Montserrat"
   >
     <div class="w-full max-w-md bg-white/40 backdrop-blur-md p-10 rounded-[30px] shadow-sm border border-white/20">
@@ -138,13 +143,6 @@ const togglePassword = () => {
             </span>
           </label>
         </div>
-
-        <!-- Error Message -->
-        <Transition name="fade">
-          <p v-if="form.error" class="text-[#ff0d0d] text-xs font-medium tracking-[1px] text-center italic">
-            ** {{ form.error }}
-          </p>
-        </Transition>
 
         <!-- Login Button -->
         <div class="pt-6">

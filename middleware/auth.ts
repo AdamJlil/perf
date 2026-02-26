@@ -6,7 +6,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // If we don't have a user in state, try to fetch from session cookie
   if (!user.value) {
     console.log("Auth Middleware: No user in state, fetching session...");
-    await me();
+    try {
+      await me();
+    } catch (e) {
+      console.error("Auth Middleware: Error fetching user session", e);
+    }
   }
 
   // After attempt, if still no user, redirect to login

@@ -7,8 +7,8 @@ export default defineNuxtPlugin(() => {
     window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = input.toString();
 
-      // Only intercept API calls
-      if (url.includes("/api/")) {
+      // Only intercept API calls, but exclude real backend routes (auth and users)
+      if (url.includes("/api/") && !url.includes("/api/auth/") && !url.includes("/api/users/")) {
         try {
           // Get establishmentId or userId from storage if needed for the mock
           const userStr = localStorage.getItem("user");

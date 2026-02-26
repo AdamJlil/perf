@@ -8,8 +8,24 @@ import { plans } from "~/types/plans";
 
 const router = useRouter();
 const route = useRoute();
+const { user } = useAuth();
 
 const pricingSection = ref<HTMLElement | null>(null);
+
+const currentPlanTitle = computed(() => {
+  if (!user.value?.plan) return "";
+  if (typeof user.value.plan === "string") {
+    try {
+      return JSON.parse(user.value.plan).title;
+    } catch (e) {
+      return user.value.plan;
+    }
+  }
+  return user.value.plan.title;
+});
+
+const isPaid = computed(() => !!user.value?.paid);
+const requestedPlan = computed(() => user.value?.requested_plan);
 
 const scrollToPricing = () => {
   pricingSection.value?.scrollIntoView({ behavior: "smooth" });
@@ -108,7 +124,7 @@ const handlePlanSelection = (plan: string) => {
           class="absolute z-20 top-0 left-0 w-full h-full flex flex-col justify-center items-start px-8 md:px-16 gap-6"
         >
           <p
-            class="text-white text-left text-2xl md:text-4xl lg:text-5xl font-normal tracking-[4px] md:tracking-[8px] uppercase max-w-2xl leading-tight"
+            class="text-white text-left text-2xl md:text-3xl xl:text-4xl font-normal tracking-[4px] md:tracking-[8px] uppercase max-w-2xl leading-tight"
           >
             Rise Your Visitors Satisfaction!
           </p>
@@ -317,12 +333,15 @@ const handlePlanSelection = (plan: string) => {
     </div>
 
     <!-- Pricing Section -->
-    <div ref="pricingSection" class="pb-10">
+    <div id="pricing-section" ref="pricingSection" class="pb-10">
       <PricingBloc
         :title="plans.ESTABLISHEMENT.title"
         :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
         :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
         :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
+        :current-plan="currentPlanTitle"
+        :is-paid="isPaid"
+        :requested-plan="requestedPlan"
         @plan-selected="handlePlanSelection"
       />
     </div>

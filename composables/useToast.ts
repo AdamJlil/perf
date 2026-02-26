@@ -11,13 +11,14 @@ let counter = 0
 
 export const useToast = () => {
   const addToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    console.log(`[Toast] Adding ${type}: ${message}`);
     const id = counter++
     toasts.value.push({ id, message, type })
     
-    // Auto-remove after 5 seconds
+    // Auto-remove after 4 seconds
     setTimeout(() => {
       removeToast(id)
-    }, 5000)
+    }, 4000)
   }
 
   const removeToast = (id: number) => {

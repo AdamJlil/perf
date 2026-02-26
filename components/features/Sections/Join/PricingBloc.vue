@@ -1,158 +1,179 @@
 <template>
   <div
-    class="w-full h-full bg-[#EFEFEC] text-black flex flex-col items-center relative p-8"
+    class="w-full h-full bg-[#EFEFEC] text-black flex flex-col items-center relative p-6"
     style="font-family: Montserrat"
   >
-    <h1 class="text-2xl uppercase text-center tracking-1 mb-[50px]">{{ title }}</h1>
+    <h1 class="text-2xl uppercase text-center tracking-[4px] mb-10 font-light text-gray-800">{{ title }}</h1>
 
     <div
       id="choice-pricing"
-      class="w-full h-auto max-w-6xl flex flex-col lg:flex-row justify-start items-stretch gap-8 lg:gap-7"
+      class="w-full h-auto max-w-6xl flex flex-col lg:flex-row justify-center items-center gap-6"
     >
-      <!-- ESSENTIAL -->
-      <div class="flex flex-col items-center w-full lg:w-1/3 transform scale-[0.95]">
+      <!-- EXPLORER -->
+      <div class="flex flex-col items-center w-full lg:w-1/3 group">
         <div
           id="EXPLORER"
-          class="h-auto font-medium border border-gray-500 rounded-15 flex flex-col items-center p-6 lg:p-8 w-full"
+          class="font-medium border border-gray-300 rounded-[30px] bg-white/40 backdrop-blur-sm flex flex-col items-center p-8 w-full transition-all duration-500 hover:shadow-xl hover:border-[#D05E33]/30"
           :class="{
-            'cursor-pointer transition-transform duration-300 hover:scale-105':
-              currentPlan !== 'EXPLORER' && pendingPlan !== 'EXPLORER',
-            relative: currentPlan === 'EXPLORER' || pendingPlan === 'EXPLORER',
+            'cursor-pointer hover:-translate-y-1': currentPlan !== 'EXPLORER' && pendingPlan !== 'EXPLORER',
+            'border-[#D05E33] bg-white/60 shadow-lg': currentPlan === 'EXPLORER' || pendingPlan === 'EXPLORER',
           }"
           @click="handlePlanSelected('EXPLORER')"
         >
-          <!-- Active badge -->
-          <div
-            v-if="currentPlan === 'EXPLORER'"
-            class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full"
-          >
-            Active
-          </div>
-          <!-- Pending badge -->
-          <div
-            v-else-if="pendingPlan === 'EXPLORER'"
-            class="absolute top-4 right-4 bg-orange-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full"
-          >
-            Pending
-          </div>
+          <h2 class="text-xl uppercase tracking-[3px] mt-6 mb-2 font-bold text-gray-800">{{ plan_1.title }}</h2>
+          <h5 class="text-[10px] font-medium uppercase tracking-[1px] opacity-40 mb-6">{{ plan_1.duration }}</h5>
 
-          <h2 class="text-xl uppercase tracking-2 mt-[40px] mb-[10px] font-bold">{{ plan_1.title }}</h2>
-          <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_1.duration }}</h5>
-
-          <ul class="list-disc pl-5">
+          <ul class="flex flex-col gap-3 w-full mb-8">
             <li
               v-for="(feature, i) in plan_1.features"
               :key="i"
-              class="text-left uppercase tracking-1"
-              :class="{ 'opacity-50': feature.isDisabled }"
+              class="flex items-start text-[11px] uppercase tracking-[1px] leading-relaxed"
+              :class="{ 'opacity-30': feature.isDisabled }"
             >
-              <span class="font-bold mr-2">-</span> {{ feature.text }}
+              <span class="mr-3 text-[#D05E33] font-bold">•</span> {{ feature.text }}
             </li>
           </ul>
 
-          <h2 class="pt-5 text-lg tracking-1">{{ plan_1.price }}</h2>
+          <div class="!mt-auto w-full text-center">
+            <!-- Status Badge Placement -->
+            <div class="mb-4 flex flex-col items-center gap-2">
+              <span
+                v-if="currentPlan === 'EXPLORER'"
+                :class="isPaid ? 'bg-green-500' : 'bg-[#D05E33]'"
+                class="text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                {{ isPaid ? "Active" : "Pending Activation" }}
+              </span>
+
+              <span
+                v-if="requestedPlan === 'EXPLORER'"
+                class="bg-yellow-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                Upgrade Requested
+              </span>
+            </div>
+            <div class="pt-6 border-t border-gray-200 w-full">
+              <h2 class="text-xl font-bold tracking-[1px] text-gray-800">{{ plan_1.price }}</h2>
+            </div>
+          </div>
         </div>
-        <div class="text-sm italic text-black mt-[30px] text-center w-full">
+        <!-- <p class="text-[10px] italic text-gray-400 mt-4 text-center">
           *Monthly subscription is required after first month
-        </div>
+        </p> -->
       </div>
 
       <!-- EXPERIENCE -->
-      <div
-        id="EXPERIENCE"
-        class="md:pt-[80px] relative w-full mb-5 lg:w-1/3 h-auto font-medium border border-black rounded-15 flex flex-col items-center p-6 lg:p-8 transform scale-[1.05]"
-        :class="{
-          'cursor-pointer transition-transform duration-300 hover:scale-110':
-            currentPlan !== 'EXPERIENCE' && pendingPlan !== 'EXPERIENCE',
-          relative: currentPlan === 'EXPERIENCE' || pendingPlan === 'EXPERIENCE',
-        }"
-        @click="handlePlanSelected('EXPERIENCE')"
-      >
-        <!-- Active badge -->
+      <div class="flex flex-col items-center w-full lg:w-1/3 group relative lg:z-10">
         <div
-          v-if="currentPlan === 'EXPERIENCE'"
-          class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full"
-        >
-          Active
-        </div>
-        <!-- Pending badge -->
-        <div
-          v-else-if="pendingPlan === 'EXPERIENCE'"
-          class="absolute top-4 right-4 bg-orange-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full"
-        >
-          Pending
-        </div>
-
-        <img
-          src="/public/images/pricing-popular.png"
-          alt="most popular"
-          class="absolute top-[2px] left-[3px] w-[116px] -translate-y-2.3 -translate-x-2.3"
-        />
-
-        <h2 class="text-xl uppercase tracking-2 mt-[40px] mb-[10px] font-bold">{{ plan_2.title }}</h2>
-        <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_2.duration }}</h5>
-
-        <ul class="list-disc pl-5">
-          <li
-            v-for="(feature, i) in plan_2.features"
-            :key="i"
-            class="text-left uppercase tracking-1"
-            :class="{ 'opacity-50': feature.isDisabled }"
-          >
-            <span class="font-bold mr-2">-</span> {{ feature.text }}
-          </li>
-        </ul>
-
-        <h2 class="pt-5 text-lg tracking-1">{{ plan_2.price }}</h2>
-        <h2 class="discount-price text-md uppercase line-through">{{ plan_2.discount }}</h2>
-      </div>
-
-      <!-- SIGNATURE -->
-      <div class="flex flex-col items-center w-full lg:w-1/3 transform scale-[0.95]">
-        <div
-          id="SIGNATURE"
-          class="h-auto font-medium border border-gray-500 rounded-15 flex flex-col items-center p-6 lg:p-8 w-full"
+          id="EXPERIENCE"
+          class="font-medium border-2 border-[#E9855F] rounded-[30px] bg-white flex flex-col items-center p-8 w-full transition-all duration-500 shadow-xl"
           :class="{
-            'cursor-pointer transition-transform duration-300 hover:scale-105':
-              currentPlan !== 'SIGNATURE' && pendingPlan !== 'SIGNATURE',
-            relative: currentPlan === 'SIGNATURE' || pendingPlan === 'SIGNATURE',
+            'cursor-pointer hover:shadow-2xl hover:scale-[1.02]':
+              currentPlan !== 'EXPERIENCE' && pendingPlan !== 'EXPERIENCE',
+            'border-[#D05E33]': currentPlan === 'EXPERIENCE' || pendingPlan === 'EXPERIENCE',
           }"
-          @click="handlePlanSelected('SIGNATURE')"
+          @click="handlePlanSelected('EXPERIENCE')"
         >
-          <!-- Active badge -->
+          <!-- Smart Popular Badge -->
           <div
-            v-if="currentPlan === 'SIGNATURE'"
-            class="absolute top-4 right-4 bg-green-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full"
+            class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#E9855F] text-white px-8 py-2 rounded-full text-[10px] font-bold uppercase tracking-[3px] shadow-xl z-20 whitespace-nowrap border border-white/10 transition-transform duration-500 group-hover:scale-110"
           >
-            Active
-          </div>
-          <!-- Pending badge -->
-          <div
-            v-else-if="pendingPlan === 'SIGNATURE'"
-            class="absolute top-4 right-4 bg-orange-600 text-white text-xs font-bold uppercase px-3 py-1 rounded-full"
-          >
-            Pending
+            Most Popular
           </div>
 
-          <h2 class="text-xl uppercase tracking-2 mt-[40px] mb-[10px] font-bold">{{ plan_3.title }}</h2>
-          <h5 class="pt-1 -tracking-0.3 opacity-80">{{ plan_3.duration }}</h5>
+          <div class="w-full text-center mb-6">
+            <h2 class="text-xl uppercase tracking-[3px] mt-2 mb-2 font-bold text-gray-900">{{ plan_2.title }}</h2>
+            <h5 class="text-[10px] font-medium uppercase tracking-[1px] opacity-40">{{ plan_2.duration }}</h5>
+          </div>
 
-          <ul class="list-disc pl-5">
+          <ul class="flex flex-col gap-3 w-full mb-8">
             <li
-              v-for="(feature, i) in plan_3.features"
+              v-for="(feature, i) in plan_2.features"
               :key="i"
-              class="text-left uppercase tracking-1"
-              :class="{ 'opacity-50': feature.isDisabled }"
+              class="flex items-start text-[11px] uppercase tracking-[1px] leading-relaxed"
+              :class="{ 'opacity-30': feature.isDisabled }"
             >
-              <span class="font-bold mr-2">-</span> {{ feature.text }}
+              <span class="mr-3 text-[#D05E33] font-bold">•</span> {{ feature.text }}
             </li>
           </ul>
 
-          <h2 class="pt-5 text-lg tracking-1">{{ plan_3.price }}</h2>
+          <div class="!mt-auto w-full text-center">
+            <!-- Status Badge Placement -->
+            <div class="mb-4 flex flex-col items-center gap-2">
+              <span
+                v-if="currentPlan === 'EXPERIENCE'"
+                :class="isPaid ? 'bg-green-500' : 'bg-[#D05E33]'"
+                class="text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                {{ isPaid ? "Active" : "Pending Activation" }}
+              </span>
+
+              <span
+                v-if="requestedPlan === 'EXPERIENCE'"
+                class="bg-yellow-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                Upgrade Requested
+              </span>
+            </div>
+            <div class="pt-6 border-t border-gray-200 w-full">
+              <h2 class="text-xl font-bold tracking-[1px] text-gray-900">{{ plan_2.price }}</h2>
+              <h2 class="text-[10px] uppercase line-through text-[#D05E33] mt-1 opacity-70">{{ plan_2.discount }}</h2>
+            </div>
+          </div>
         </div>
-        <div class="text-sm italic text-black mt-[30px] text-center w-full">
+      </div>
+
+      <!-- SIGNATURE -->
+      <div class="flex flex-col items-center w-full lg:w-1/3 group">
+        <div
+          id="SIGNATURE"
+          class="font-medium border border-gray-300 rounded-[30px] bg-white/40 backdrop-blur-sm flex flex-col items-center p-8 w-full transition-all duration-500 hover:shadow-xl hover:border-[#D05E33]/30"
+          :class="{
+            'cursor-pointer hover:-translate-y-1': currentPlan !== 'SIGNATURE' && pendingPlan !== 'SIGNATURE',
+            'border-[#D05E33] bg-white/60 shadow-lg': currentPlan === 'SIGNATURE' || pendingPlan === 'SIGNATURE',
+          }"
+          @click="handlePlanSelected('SIGNATURE')"
+        >
+          <h2 class="text-xl uppercase tracking-[3px] mt-6 mb-2 font-bold text-gray-800">{{ plan_3.title }}</h2>
+          <h5 class="text-[10px] font-medium uppercase tracking-[1px] opacity-40 mb-6">{{ plan_3.duration }}</h5>
+
+          <ul class="flex flex-col gap-3 w-full mb-8">
+            <li
+              v-for="(feature, i) in plan_3.features"
+              :key="i"
+              class="flex items-start text-[11px] uppercase tracking-[1px] leading-relaxed"
+              :class="{ 'opacity-30': feature.isDisabled }"
+            >
+              <span class="mr-3 text-[#D05E33] font-bold">•</span> {{ feature.text }}
+            </li>
+          </ul>
+
+          <div class="!mt-auto w-full text-center">
+            <!-- Status Badge Placement -->
+            <div class="mb-4 flex flex-col items-center gap-2">
+              <span
+                v-if="currentPlan === 'SIGNATURE'"
+                :class="isPaid ? 'bg-green-500' : 'bg-[#D05E33]'"
+                class="text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                {{ isPaid ? "Active" : "Pending Activation" }}
+              </span>
+
+              <span
+                v-if="requestedPlan === 'SIGNATURE'"
+                class="bg-yellow-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
+              >
+                Upgrade Requested
+              </span>
+            </div>
+            <div class="pt-6 border-t border-gray-200 w-full">
+              <h2 class="text-xl font-bold tracking-[1px] text-gray-800">{{ plan_3.price }}</h2>
+            </div>
+          </div>
+        </div>
+        <!-- <p class="text-[10px] italic text-gray-400 mt-4 text-center">
           *Monthly subscription is required after first month
-        </div>
+        </p> -->
       </div>
     </div>
   </div>
@@ -182,6 +203,14 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  isPaid: {
+    type: Boolean,
+    default: false,
+  },
+  requestedPlan: {
+    type: String,
+    default: null,
+  },
 });
 
 const pendingPlan = ref("");
@@ -197,61 +226,30 @@ const emit = defineEmits(["planSelected"]);
 </script>
 
 <style scoped>
-#choice-pricing {
-  min-height: 800px;
-  display: flex;
-  align-items: flex-start;
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
-#EXPLORER,
-#EXPERIENCE,
-#SIGNATURE {
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  align-self: flex-start;
+li {
+  padding: 0;
+  margin: 0;
 }
 
 @media (min-width: 1024px) {
   #EXPLORER,
-  #EXPERIENCE,
   #SIGNATURE {
-    height: 650px;
+    min-height: 420px;
+  }
+  #EXPERIENCE {
+    min-height: 450px;
   }
 }
 
-ul {
-  flex: 1;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 2rem 1rem;
-  gap: 0.5rem;
-}
-
-li {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  text-align: left;
-  padding: 10px;
-  word-break: break-word;
-  hyphens: auto;
-}
-
-.discount-price {
-  margin-top: 0.5rem;
-  color: #d05e33;
-}
-
-@media (max-width: 768px) {
-  ul {
-    min-height: auto;
-  }
-
-  #choice-pricing {
-    min-height: auto;
+@media (max-width: 1023px) {
+  #EXPERIENCE {
+    margin: 1.5rem 0;
   }
 }
 </style>

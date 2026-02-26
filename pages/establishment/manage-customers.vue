@@ -50,10 +50,20 @@ const closeModal = () => {
   selectedCustomer.value = null;
 };
 
-const confirmRemove = () => {
+const confirmRemove = async () => {
   if (selectedCustomer.value) {
-    customers.value = customers.value.filter((c) => c.id !== selectedCustomer.value?.id);
-    closeModal();
+    const name = `${selectedCustomer.value.firstName} ${selectedCustomer.value.lastName}`;
+    try {
+      await $fetch('/api/users/customers/delete', {
+        method: 'POST',
+        body: { id: selectedCustomer.value.id }
+      });
+      useToast().success(`Access removed for ${name}`);
+      await fetchCustomers();
+      closeModal();
+    } catch (err) {
+      useToast().error("Failed to remove customer.");
+    }
   }
 };
 
@@ -64,49 +74,22 @@ onMounted(async () => {
 const fetchCustomers = async () => {
   loading.value = true;
   try {
-    // In a real app, we'd fetch from /api/users/customers
-    // For now, using mock data if no backend is available
-    const mockData = [
-      {
-        id: "cust_1",
-        et_customer_id: "ET-101",
-        firstName: "John",
-        lastName: "Doe",
-        email: "john@example.com",
-        ageRange: "20-40",
-        weightRange: "70-90",
-        video: 4,
-        burnedCalories: { "Day 1": 250, "Day 2": 310 }
-      },
-      {
-        id: "cust_2",
-        et_customer_id: "ET-102",
-        firstName: "Jane",
-        lastName: "Smith",
-        email: "jane@example.com",
-        ageRange: "20-40",
-        weightRange: "50-70",
-        video: 2,
-        burnedCalories: { "Day 1": 180 }
-      }
-    ];
-
-    setTimeout(() => {
-      customers.value = mockData.map((customer: any) => ({
-        id: customer.id || customer.et_customer_id,
-        et_customer_id: customer.et_customer_id || customer.id,
-        firstName: customer.firstName || customer.first_name || "",
-        lastName: customer.lastName || customer.last_name || "",
-        email: customer.email || "",
-        ageRange: customer.ageRange || customer.age_range || "",
-        weightRange: customer.weightRange || customer.weight_range || "",
-        video: customer.video || 0,
-        burnedCalories: customer.burnedCalories || customer.burned_calories || { "Day 1": 0 },
-      }));
-      loading.value = false;
-    }, 300);
+    const data = await $fetch<any[]>('/api/users/customers');
+    customers.value = data.map((customer: any) => ({
+      id: customer.id || customer._id,
+      et_customer_id: customer.et_customer_id,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      ageRange: customer.ageRange,
+      weightRange: customer.weightRange,
+      video: customer.video,
+      burnedCalories: customer.burnedCalories,
+    }));
   } catch (err) {
-    console.error(err);
+    console.error("Failed to fetch customers:", err);
+    useToast().error("Could not load customers.");
+  } finally {
     loading.value = false;
   }
 };
@@ -134,8 +117,8 @@ const shouldShowCalorieHistory = computed(() => {
       :heading-text="`HEY ${userName},<br/>MANAGE YOUR CUSTOMERS HERE`"
     />
 
-    <!-- Customer Management Section -->
-    <section class="w-full max-w-5xl bg-[#EFEFEC] rounded-lg p-6 my-12">
+    <!-- Customer Management Section (Section 2) -->
+    <section v-if="currentUser?.paid" class="w-full max-w-5xl bg-[#EFEFEC] rounded-lg p-6 my-12">
       <h2 class="text-2xl font-semibold text-gray-800 mb-12 text-center uppercase tracking-[4px]">
         {{ userName }}'s Customers
       </h2>
@@ -253,6 +236,21 @@ const shouldShowCalorieHistory = computed(() => {
           <span class="text-xs font-bold text-gray-400 uppercase tracking-[3px] group-hover:text-gray-800 transition-colors">Add New Customer</span>
         </NuxtLink>
       </div>
+    </section>
+
+    <!-- Payment Pending Placeholder -->
+    <section v-else class="w-full max-w-5xl bg-white/40 backdrop-blur-md rounded-[40px] p-12 md:p-20 my-12 text-center border border-white/20 shadow-sm">
+       <div class="w-24 h-24 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-10 shadow-inner">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D05E33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail-warning"><path d="M22 10.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h7"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M20 14v4"/><path d="M20 22v.01"/></svg>
+       </div>
+       <h2 class="text-2xl md:text-3xl font-bold text-gray-800 uppercase tracking-[6px] mb-6">Payment Pending</h2>
+       <p class="text-gray-500 max-w-md mx-auto leading-relaxed text-sm md:text-base font-medium">
+         We sent an email with the instructions. <br class="hidden md:block"/>
+         Waiting for proceeding payment to unlock all features.
+       </p>
+       <div class="mt-12 pt-10 border-t border-gray-100">
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[3px]">Need help? Contact support at contact@perf.ma</p>
+       </div>
     </section>
   </div>
 </template>

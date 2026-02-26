@@ -7,25 +7,11 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-// Static mock user for the vitrine
-const user = ref({
-  id: "2",
-  email: "establishment@luxury-hotel.com",
-  type: "ESTABLISHEMENT",
-  first_name: "Grand",
-  name: "Resort & Spa",
-  plan: JSON.stringify({
-    title: "EXPERIENCE",
-    price: "7500",
-    status: "Active",
-    active_customers: 12,
-    start_date: "2024-01-15",
-    end_date: "2024-02-15"
-  }),
-  customers: []
-});
+const { user: currentUser } = useAuth();
 
-const plansSection = ref(null);
+const user = computed(() => currentUser.value);
+
+const plansSection = ref<HTMLElement | null>(null);
 const showUpgradeModal = ref(false);
 const selectedUpgradePlan = ref("");
 const isUpgrading = ref(false);
@@ -35,12 +21,35 @@ const showSuccessNotification = ref(false);
 const notificationMessage = ref("");
 
 const currentPlan = computed(() => {
-  try {
-    return JSON.parse(user.value.plan);
-  } catch (e) {
-    return null;
+  if (!user.value?.plan) return null;
+  
+  let planObj: any = {};
+  if (typeof user.value.plan === 'object') {
+    planObj = user.value.plan;
+  } else {
+    try {
+      planObj = JSON.parse(user.value.plan);
+    } catch (e) {
+      planObj = { title: user.value.plan };
+    }
   }
+
+  // If price is missing, try to find it in our plans constant
+  if (!planObj.price && planObj.title) {
+    const p1 = plans.ESTABLISHEMENT.plans.plan_1;
+    const p2 = plans.ESTABLISHEMENT.plans.plan_2;
+    const p3 = plans.ESTABLISHEMENT.plans.plan_3;
+    
+    if (planObj.title === p1.title || planObj.title === 'EXPLORER') planObj.price = p1.price.split(' ')[0];
+    else if (planObj.title === p2.title || planObj.title === 'EXPERIENCE') planObj.price = p2.price.split(' ')[0];
+    else if (planObj.title === p3.title || planObj.title === 'SIGNATURE') planObj.price = p3.price.split(' ')[0];
+  }
+
+  return planObj;
 });
+
+const isPaid = computed(() => !!user.value?.paid);
+const requestedPlan = computed(() => user.value?.requested_plan);
 
 const scrollToPlans = () => {
   plansSection.value?.scrollIntoView({ behavior: "smooth" });
@@ -51,15 +60,30 @@ const handlePlanUpgrade = (planType: string) => {
   showUpgradeModal.value = true;
 };
 
-const confirmUpgrade = () => {
+const confirmUpgrade = async () => {
   isUpgrading.value = true;
-  setTimeout(() => {
-    notificationMessage.value = `Upgrade request to ${selectedUpgradePlan.value} received.`;
-    showSuccessNotification.value = true;
-    showUpgradeModal.value = false;
+  const { me } = useAuth();
+  const toast = useToast();
+
+  try {
+    const response = await $fetch<any>("/api/users/request-upgrade", {
+      method: "POST",
+      body: { planTitle: selectedUpgradePlan.value },
+    });
+
+    if (response.success) {
+      // Small delay to ensure DB consistency before re-fetching
+      setTimeout(async () => {
+        await me(); 
+        toast.success(`Upgrade request to ${selectedUpgradePlan.value} sent!`);
+        showUpgradeModal.value = false;
+      }, 500);
+    }
+  } catch (error: any) {
+    toast.error(error.statusMessage || "Failed to send upgrade request");
+  } finally {
     isUpgrading.value = false;
-    setTimeout(() => { showSuccessNotification.value = false; }, 5000);
-  }, 1000);
+  }
 };
 
 const confirmCancelPlan = () => {
@@ -82,61 +106,74 @@ const confirmCancelPlan = () => {
     </div>
 
     <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-20">
-        <h1 class="text-2xl md:text-3xl font-normal uppercase tracking-[6px] text-gray-800 mb-4">Your Establishment Plan</h1>
-        <p class="text-xs font-medium text-gray-400 uppercase tracking-[3px]">Manage your subscription and billing details</p>
+      <div class="text-center mb-16">
+        <h1 class="text-3xl md:text-4xl font-light uppercase tracking-[8px] text-gray-800 mb-4">
+          {{ isPaid ? 'Your Establishment Plan' : 'Payment Required' }}
+        </h1>
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[4px]">
+          {{ isPaid ? 'Manage your subscription and billing details' : 'Please complete your payment to activate all features' }}
+        </p>
       </div>
 
       <!-- Current Plan Card -->
-      <div v-if="currentPlan" class="bg-white/40 backdrop-blur-md p-10 rounded-[40px] shadow-sm border border-white/20 mb-20 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-[#D05E33]/5 rounded-full -translate-y-32 translate-x-32 blur-3xl"></div>
+      <div v-if="currentPlan" class="bg-white/60 backdrop-blur-md p-10 lg:p-12 rounded-[40px] shadow-sm border border-white/40 mb-16 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-[#D05E33]/5 rounded-full -translate-y-48 translate-x-48 blur-3xl"></div>
         
         <div class="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
-          <div class="space-y-2">
-            <span class="px-3 py-1 bg-[#D05E33] text-white text-[10px] font-bold uppercase tracking-[2px] rounded-full">Active Subscription</span>
-            <h2 class="text-4xl font-bold text-gray-800 tracking-tight pt-2 uppercase">{{ currentPlan.title }}</h2>
-            <p class="text-2xl text-gray-500 font-light">{{ currentPlan.price }} <span class="text-sm">MAD / Month</span></p>
+          <div class="space-y-4">
+            <span v-if="isPaid" class="px-4 py-1.5 bg-[#D05E33] text-white text-[10px] font-bold uppercase tracking-[2px] rounded-full shadow-sm">Active Subscription</span>
+            <span v-else class="px-4 py-1.5 bg-orange-500 text-white text-[10px] font-bold uppercase tracking-[2px] rounded-full shadow-sm animate-pulse">Pending Activation (Check Email)</span>
+            
+            <h2 class="text-5xl font-bold text-gray-900 tracking-tight pt-2 uppercase">{{ currentPlan.title }}</h2>
+            <p class="text-2xl text-gray-400 font-light tracking-[1px]">{{ currentPlan.price }} <span class="text-sm">MAD / Month</span></p>
           </div>
 
-          <div class="flex flex-wrap gap-4">
+          <div v-if="isPaid" class="flex flex-wrap gap-4">
             <button
-              class="uppercase border border-black text-black bg-transparent py-3 px-8 rounded-md font-bold tracking-[2px] hover:bg-black hover:text-white transition-all duration-300 text-xs"
+              class="uppercase border-2 border-black text-black bg-transparent py-3 px-10 rounded-xl font-bold tracking-[2px] hover:bg-black hover:text-white transition-all duration-500 text-[10px] active:scale-95"
               @click="scrollToPlans"
             >
               Change Plan
             </button>
             <button
-              class="uppercase border border-red-100 text-red-400 bg-transparent py-3 px-8 rounded-md font-bold tracking-[2px] hover:bg-red-50 transition-all duration-300 text-xs"
+              class="uppercase border-2 border-red-100 text-red-400 bg-transparent py-3 px-10 rounded-xl font-bold tracking-[2px] hover:bg-red-50 hover:border-red-200 transition-all duration-500 text-[10px] active:scale-95"
               @click="showCancelPlanModal = true"
             >
               Cancel
             </button>
           </div>
+          <div v-else class="max-w-xs text-right">
+            <p class="text-xs font-bold text-[#D05E33] uppercase tracking-[2px] leading-relaxed">
+              Waiting for proceeding payment. Please check your email for the bank details or cash delivery instructions.
+            </p>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-10 border-t border-gray-200">
-          <div class="space-y-1">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[2px]">Managed Rooms</p>
-            <p class="text-xl font-bold text-gray-800">{{ currentPlan.active_customers }} Active</p>
+        <div v-if="isPaid" class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16 pt-12 border-t border-gray-100">
+          <div class="space-y-2">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[3px]">Managed Rooms</p>
+            <p class="text-2xl font-bold text-gray-800">{{ currentPlan.active_customers || 0 }} Active</p>
           </div>
-          <div class="space-y-1">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[2px]">Billing Cycle</p>
-            <p class="text-xl font-bold text-gray-800">{{ currentPlan.start_date }}</p>
+          <div class="space-y-2 border-l border-gray-100 md:pl-10">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[3px]">Billing Cycle</p>
+            <p class="text-2xl font-bold text-gray-800">{{ currentPlan.start_date || '-' }}</p>
           </div>
-          <div class="space-y-1">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[2px]">Next Renewal</p>
-            <p class="text-xl font-bold text-gray-800">{{ currentPlan.end_date }}</p>
+          <div class="space-y-2 border-l border-gray-100 md:pl-10">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[3px]">Next Renewal</p>
+            <p class="text-2xl font-bold text-gray-800">{{ currentPlan.end_date || '-' }}</p>
           </div>
         </div>
       </div>
 
-      <div ref="plansSection" class="pt-10">
+      <div ref="plansSection" class="pt-8">
         <PricingBloc
           title="UPGRADE YOUR EXPERIENCE"
           :plan_1="plans.ESTABLISHEMENT.plans.plan_1"
           :plan_2="plans.ESTABLISHEMENT.plans.plan_2"
           :plan_3="plans.ESTABLISHEMENT.plans.plan_3"
           :current-plan="currentPlan?.title"
+          :is-paid="isPaid"
+          :requested-plan="requestedPlan"
           @plan-selected="handlePlanUpgrade"
         />
       </div>

@@ -1,0 +1,45 @@
+import Customer from '../../../models/Customer';
+import { verifyToken } from '../../../utils/auth';
+import { connectToDatabase } from '../../../utils/mongodb';
+
+export default defineEventHandler(async (event) => {
+  const cookieName = process.env.NUXT_COOKIE_NAME || "__session";
+  const token = getCookie(event, cookieName);
+
+  if (!token) {
+    throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
+  }
+
+  const payload = await verifyToken(token);
+  if (!payload || !payload.id) {
+    throw createError({ statusCode: 401, statusMessage: "Invalid session" });
+  }
+
+  const body = await readBody(event);
+  const { id } = body;
+
+  if (!id) {
+    throw createError({ statusCode: 400, statusMessage: "Customer ID required" });
+  }
+
+  await connectToDatabase();
+
+  try {
+    const result = await Customer.deleteOne({ _id: id, establishmentId: payload.id });
+    
+    if (result.deletedCount === 0) {
+      throw createError({ statusCode: 404, statusMessage: "Customer not found" });
+    }
+
+    return {
+      success: true,
+      message: "Customer deleted successfully"
+    };
+  } catch (err: any) {
+    console.error("Delete Customer API Error:", err);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Internal Server Error",
+    });
+  }
+});

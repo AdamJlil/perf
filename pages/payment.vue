@@ -153,11 +153,22 @@ onMounted(() => {
 });
 
 const handlePayment = async () => {
-  sendingInformation.value = true;
-  setTimeout(() => {
-    sendingInformation.value = false;
-    showConfirmationMessage.value = true;
-  }, 1500);
+  form.submitting = true;
+  form.error = "";
+  
+  const toast = useToast();
+  const router = useRouter();
+
+  // Simulate order processing
+  setTimeout(async () => {
+    form.submitting = false;
+    toast.success("Order completed successfully!");
+    
+    // Redirect to login after showing toast
+    setTimeout(async () => {
+      await router.push("/auth/login");
+    }, 2000);
+  }, 1000);
 };
 </script>
 

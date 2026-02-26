@@ -86,6 +86,7 @@ const onSignupClick = async () => {
 
     form.pending = true;
 
+    // Call real backend API via useAuth
     await signup({
       email: form.data.email,
       password: form.data.password,
@@ -142,16 +143,6 @@ const onSignupClick = async () => {
         </div>
 
         <form class="space-y-8" @submit.prevent="onSignupClick">
-          <!-- Error Message -->
-          <Transition name="fade">
-            <div
-              v-if="form.error"
-              class="mb-8 p-4 bg-red-50 text-red-600 text-xs font-medium tracking-[1px] rounded-md border border-red-100 text-center italic"
-            >
-              ** {{ form.error }}
-            </div>
-          </Transition>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="relative group">
               <label class="block text-xs font-medium tracking-[2px] uppercase text-gray-500 mb-1">First Name</label>

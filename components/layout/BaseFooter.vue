@@ -5,14 +5,20 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start pb-12 border-b border-gray-200">
         <!-- Logo & Mission -->
         <div class="md:col-span-5 space-y-6 text-center md:text-left flex flex-col items-center md:items-start">
-          <NuxtLink to="/" class="inline-block">
-            <NuxtImg src="/images/pepe.png" alt="PERF" class="h-10 w-auto grayscale contrast-125" />
+          <NuxtLink to="/" class="flex items-center">
+            <img src="/images/pepe.png" alt="PERF Logo" class="h-8 md:h-10 w-auto object-contain" />
           </NuxtLink>
           <p class="text-xs font-medium text-gray-500 uppercase tracking-[2px] leading-relaxed max-w-sm">
-            Elevating hospitality through seamless wellness integration. Premium fitness solutions tailored for the modern establishment.
+            Elevating hospitality through seamless wellness integration. Premium fitness solutions tailored for the
+            modern establishment.
           </p>
           <div class="flex items-center gap-4 pt-2">
-            <a v-for="social in socials" :key="social.name" :href="social.link" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:text-[#D05E33] hover:border-[#D05E33] transition-all duration-300">
+            <a
+              v-for="social in socials"
+              :key="social.name"
+              :href="social.link"
+              class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 hover:text-[#D05E33] hover:border-[#D05E33] transition-all duration-300"
+            >
               <span :class="social.icon" class="w-4 h-4"></span>
             </a>
           </div>
@@ -23,7 +29,10 @@
           <h3 class="text-[10px] font-bold tracking-[3px] uppercase text-black">Menu</h3>
           <ul class="space-y-3">
             <li v-for="item in navItems" :key="item.path">
-              <NuxtLink :to="item.path" class="text-xs font-medium text-gray-500 hover:text-[#D05E33] transition-colors uppercase tracking-[1px]">
+              <NuxtLink
+                :to="item.path"
+                class="text-xs font-medium text-gray-500 hover:text-[#D05E33] transition-colors uppercase tracking-[1px]"
+              >
                 {{ item.name }}
               </NuxtLink>
             </li>
@@ -35,13 +44,18 @@
           <h3 class="text-[10px] font-bold tracking-[3px] uppercase text-black">Legal & Support</h3>
           <ul class="space-y-3">
             <li v-for="item in legalItems" :key="item.path">
-              <NuxtLink :to="item.path" class="text-xs font-medium text-gray-500 hover:text-[#D05E33] transition-colors uppercase tracking-[1px]">
+              <NuxtLink
+                :to="item.path"
+                class="text-xs font-medium text-gray-500 hover:text-[#D05E33] transition-colors uppercase tracking-[1px]"
+              >
                 {{ item.name }}
               </NuxtLink>
             </li>
             <li class="pt-2">
               <p class="text-[10px] font-bold text-black uppercase tracking-[2px] mb-1">Inquiries</p>
-              <a href="mailto:contact@perf.ma" class="text-xs font-medium text-[#D05E33] underline tracking-[1px]">contact@perf.ma</a>
+              <a href="mailto:contact@perf.ma" class="text-xs font-medium text-[#D05E33] underline tracking-[1px]"
+                >contact@perf.ma</a
+              >
             </li>
           </ul>
         </div>
@@ -62,27 +76,27 @@
 
 <script setup lang="ts">
 const navItems = [
-  { name: 'Hospitality', path: '/' },
-  { name: 'About Us', path: '/aboutUs' },
-  { name: 'Contact', path: '/contact' },
-  { name: 'Dashboard', path: '/establishment/manage-customers' }
+  { name: "Hospitality", path: "/" },
+  { name: "About Us", path: "/aboutUs" },
+  { name: "Contact", path: "/contact" },
+  { name: "Dashboard", path: "/establishment/manage-customers" },
 ];
 
 const legalItems = [
-  { name: 'Privacy Policy', path: '/privacypolicy' },
-  { name: 'Terms of Service', path: '/terms' },
-  { name: 'FAQ', path: '/faq' }
+  { name: "Privacy Policy", path: "/privacypolicy" },
+  { name: "Terms of Service", path: "/terms" },
+  { name: "FAQ", path: "/faq" },
 ];
 
 const socials = [
-  { name: 'Instagram', icon: 'i-lucide-instagram', link: '#' },
-  { name: 'Twitter', icon: 'i-lucide-twitter', link: '#' },
-  { name: 'Facebook', icon: 'i-lucide-facebook', link: '#' }
+  { name: "Instagram", icon: "i-lucide-instagram", link: "#" },
+  { name: "Twitter", icon: "i-lucide-twitter", link: "#" },
+  { name: "Facebook", icon: "i-lucide-facebook", link: "#" },
 ];
 </script>
 
 <style scoped>
 footer {
-  border-top: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 </style>

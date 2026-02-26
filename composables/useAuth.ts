@@ -16,7 +16,7 @@ export const useAuth = () => {
       // Double check by calling me() to ensure cookie is accepted and readable
       await me();
       
-      return authUser;
+      return { user: authUser.value, isFirstLogin: data.isFirstLogin };
     } catch (error: any) {
       throw error;
     }
@@ -46,7 +46,8 @@ export const useAuth = () => {
 
   const me = async () => {
     try {
-      const data = await $fetch<any>("/api/auth/me");
+      const headers = useRequestHeaders(["cookie"]);
+      const data = await $fetch<any>("/api/auth/me", { headers });
       authUser.value = data.user;
       return authUser.value;
     } catch (error) {

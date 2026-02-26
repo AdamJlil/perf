@@ -203,43 +203,20 @@ const data = ref([10, 20, 30, 20, 50, 60, 70]);
 
 // Initial calculation
 onMounted(async () => {
-  // Set initial calories with default video index (0)
-  const initialDumbbellWeight = 2.5; // Default to beginner weight
-
   const customerId = route.query.customerId as string;
 
   if (customerId) {
     try {
-      const userStr = localStorage.getItem("user");
-      if (!userStr) {
-        throw new Error("User not found in localStorage");
-      }
-
-      const userData = JSON.parse(userStr);
-      const token = userData.token;
-
-      const response = await fetch(`${baseURL}/api/users/customers`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch customer data");
-      }
-
-      const customers = await response.json();
-      const customer = customers.find(
-        (c: { id: string; _id: string; et_customer_id: string }) =>
-          c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
+      const data = await $fetch<any[]>('/api/users/customers');
+      const customer = data.find(
+        (c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
       );
 
       if (customer) {
-        customerName.value = customer.name || `${customer.first_name || ""} ${customer.last_name || ""}`;
+        customerName.value = `${customer.firstName} ${customer.lastName}`;
         costumerVideo.value = customer.video || 0;
-        ageRange.value = customer.age_range || customer.ageRange || "";
-        weightRange.value = customer.weight_range || customer.weightRange || "";
+        ageRange.value = customer.ageRange || "";
+        weightRange.value = customer.weightRange || "";
 
         if (
           typeof costumerVideo.value === "number" &&
@@ -250,9 +227,10 @@ onMounted(async () => {
         }
 
         // Update labels and data dynamically based on burnedCalories
-        const burnedCalories = customer.burned_calories || customer.burnedCalories || {};
-        labels.value = Object.keys(burnedCalories); // Extract keys dynamically
-        data.value = Object.values(burnedCalories); // Extract values dynamically
+        const burnedCalories = customer.burnedCalories || {};
+        labels.value = Object.keys(burnedCalories);
+        data.value = Object.values(burnedCalories);
+        
         caloriesResult.value = calculateCalories(
           ageRange.value,
           weightRange.value,
@@ -262,6 +240,7 @@ onMounted(async () => {
       }
     } catch (error) {
       console.error("Error fetching customer:", error);
+      useToast().error("Failed to load program data.");
     }
   }
 
@@ -346,47 +325,23 @@ const chartOptions = {
 
 const nextVideo = async () => {
   try {
-    const userStr = localStorage.getItem("user");
-    if (!userStr) {
-      throw new Error("User not found in localStorage");
-    }
-
-    const userData = JSON.parse(userStr);
-    const token = userData.token;
     const customerId = route.query.customerId as string;
+    if (!customerId) throw new Error("Customer ID not found");
 
-    if (!customerId) {
-      throw new Error("Customer ID not found");
-    }
-
-    // Get current customer data to update
-    const response = await fetch(`${baseURL}/api/users/customers`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch customer data");
-    }
-
-    const customers = await response.json();
-    const customer = customers.find(
-      (c: { id: string; _id: string; et_customer_id: string }) =>
-        c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
+    // Fetch latest data
+    const data = await $fetch<any[]>('/api/users/customers');
+    const customer = data.find(
+      (c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
     );
 
-    if (!customer) {
-      throw new Error("Customer not found");
-    }
+    if (!customer) throw new Error("Customer not found");
 
     // Calculate next video index
     const nextVideoIndex = (customer.video + 1) % establishmentUserVideos.length;
 
     // Get current day's calories
     const dumbbellWeight = selectedElement.value === 1 ? 2.5 : selectedElement.value === 2 ? 5.0 : 10.0;
-    const currentCalories = calculateCalories(
+    const currentCaloriesRange = calculateCalories(
       ageRange.value,
       weightRange.value,
       dumbbellWeight,
@@ -394,47 +349,29 @@ const nextVideo = async () => {
     );
 
     // Parse the calories range and get the average
-    const [minCal, maxCal] = currentCalories.split("-").map(Number);
+    const [minCal, maxCal] = currentCaloriesRange.split("-").map(Number);
     const avgCalories = Math.round((minCal + maxCal) / 2);
 
-    // Update customer's burned calories for the current day
-    const burnedCalories = customer.burned_calories || customer.burnedCalories || {};
+    // Update customer's burned calories
+    const burnedCalories = customer.burnedCalories || {};
     const today = `Day ${Object.keys(burnedCalories).length + 1}`;
-
-    // Update the customer data
     const updatedBurnedCalories = { ...burnedCalories, [today]: avgCalories };
 
-    // Create updated customer data, preserving the name fields
-    const updatedCustomer = {
-      et_customer_id: customer.et_customer_id,
-      firstName: customer.firstName || customer.first_name,
-      lastName: customer.LastName || customer.last_name,
-      email: customer.email,
-      ageRange: customer.ageRange || customer.age_range,
-      weightRange: customer.weightRange || customer.weight_range,
-      video: nextVideoIndex,
-      burnedCalories: updatedBurnedCalories,
-    };
-
-    // Update the customer data in the database using the add endpoint
-    const updateResponse = await fetch(`${baseURL}/api/users/customers/add/${customerId}`, {
+    // Update the customer in DB
+    await $fetch('/api/users/customers/add', {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+      body: {
+        ...customer,
+        video: nextVideoIndex,
+        burnedCalories: updatedBurnedCalories,
       },
-      body: JSON.stringify(updatedCustomer),
     });
-
-    if (!updateResponse.ok) {
-      throw new Error("Failed to update customer data");
-    }
 
     // Reload the page to show the next video
     window.location.reload();
   } catch (error) {
     console.error("Error in nextVideo:", error);
-    alert("Failed to move to next video. Please try again.");
+    useToast().error("Failed to move to next video. Please try again.");
   }
 };
 </script>

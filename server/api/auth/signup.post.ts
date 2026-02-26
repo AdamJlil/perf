@@ -1,10 +1,12 @@
-import { Redis } from "@upstash/redis";
-
-const redis = Redis.fromEnv();
+import User from '../../models/User';
+import { hashPassword } from '../../utils/auth';
+import { connectToDatabase } from '../../utils/mongodb';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const { email, password, type, first_name, name, plan } = body;
+
+  console.log(`Signup Attempt: ${email}`);
 
   if (!email || !password) {
     throw createError({
@@ -13,35 +15,48 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Check if user already exists
-  const existingUser = await redis.get(`user:${email}`);
-  if (existingUser) {
+  await connectToDatabase();
+
+  try {
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      console.warn(`Signup Warning: User ${email} already exists`);
+      throw createError({
+        statusCode: 409,
+        statusMessage: "User already exists",
+      });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
+      type,
+      first_name,
+      name,
+      plan,
+      paid: false,
+    });
+
+    console.log(`Signup Success: User ${email} stored in MongoDB`);
+
+    const userObject = newUser.toObject();
+    const { password: _, _id, ...rest } = userObject;
+    const userWithoutPassword = {
+      id: _id.toString(),
+      ...rest,
+    };
+
+    return {
+      user: userWithoutPassword,
+    };
+  } catch (err: any) {
+    console.error("Signup API Error:", err);
     throw createError({
-      statusCode: 409,
-      statusMessage: "User already exists",
+      statusCode: err.statusCode || 500,
+      statusMessage: err.statusMessage || err.message || "Database connection error",
     });
   }
-
-  const hashedPassword = await hashPassword(password);
-
-  const newUser = {
-    id: crypto.randomUUID(),
-    email,
-    password: hashedPassword,
-    type,
-    first_name,
-    name,
-    plan,
-    paid: false,
-    createdAt: new Date().toISOString(),
-  };
-
-  // Save to Redis
-  await redis.set(`user:${email}`, newUser);
-
-  const { password: _, ...userWithoutPassword } = newUser;
-
-  return {
-    user: userWithoutPassword,
-  };
 });

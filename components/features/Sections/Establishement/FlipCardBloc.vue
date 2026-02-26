@@ -1,28 +1,31 @@
 <template>
   <div
-    class="flip-container relative w-[25%] max-sm:w-[150px] max-md:w-[300px] min-w-[220px] max-w-[350px] aspect-[7/8] max-h-[400px]"
+    class="flip-container relative w-[80%] sm:w-[60%] md:w-[30%] lg:w-[28%] max-w-[380px] aspect-[4/5] mb-8 md:mb-0 group"
   >
     <div class="flipper">
       <!-- Front Side -->
       <div
-        class="front absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl"
-        :style="frontStyle"
+        class="front absolute inset-0 border border-black/5 rounded-[30px] bg-[#EFEFEB] shadow-xl flex flex-col justify-center items-center p-8 gap-8 group-hover:border-[#D05E33]/20 transition-all duration-500"
       >
-        <!-- Bottom Text -->
+        <div class="text-[#D05E33] transition-transform duration-500 group-hover:scale-110">
+          <svg v-if="outsideTitle.toLowerCase().includes('calorie')" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flame"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.292 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </div>
+        
+        <!-- Centered Title -->
         <div
-          class="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 lg:text-xl max-md:text-[18px] sm:text-[16px] text-black w-full"
-          style="font-weight: 600; letter-spacing: 0px"
+          class="text-sm md:text-base lg:text-lg text-black font-bold uppercase tracking-[4px] leading-tight text-center"
         >
           {{ outsideTitle }}
         </div>
       </div>
       <!-- Back Side -->
       <div
-        class="back absolute inset-0 border border-[#00000094] rounded-[80px] max-lg:rounded-[50px] shadow-2xl bg-[#EFEFEC] flex justify-center items-center"
+        class="back absolute inset-0 border border-black/5 rounded-[30px] shadow-2xl bg-[#EFEFEB] flex flex-col justify-center items-center p-8 lg:p-10"
       >
+        <div class="w-12 h-1 bg-[#D05E33] mb-6 rounded-full"></div>
         <div
-          class="text-black text-[15px] lg:text-[20px] bg-[#dedcd4] h-full w-full rounded-[80px] max-lg:rounded-[50px] flex justify-center items-center p-[10px]"
-          style="font-weight: 400; letter-spacing: 0px"
+          class="text-gray-800 text-xs md:text-sm lg:text-[15px] text-center font-medium leading-relaxed tracking-wide"
         >
           {{ backText }}
         </div>
@@ -31,33 +34,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "FlipCard",
-  props: {
-    frontImage: {
-      type: String,
-      required: true,
-    },
-    outsideTitle: {
-      type: String,
-      required: true,
-    },
-    backText: {
-      type: String,
-      required: true,
-    },
+<script setup>
+defineProps({
+  outsideTitle: {
+    type: String,
+    required: true,
   },
-  computed: {
-    frontStyle() {
-      return {
-        backgroundImage: `url(${this.frontImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      };
-    },
+  backText: {
+    type: String,
+    required: true,
   },
-};
+  frontImage: {
+    type: String,
+    default: "",
+  },
+});
 </script>
 
 <style scoped>

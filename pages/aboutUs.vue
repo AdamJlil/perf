@@ -44,6 +44,39 @@ const handleSwipe = () => {
     goTo(currentIndex.value - 1);
   }
 };
+
+const features = [
+  {
+    title: "Mobile training station",
+    desc: "Professional grade fitness equipment delivered directly to your guest rooms.",
+    icon: '<path d="M6.5 2h11M6.5 22h11M12 2v20M2 7h20M2 17h20" />', // Simplified dumbbell-ish
+  },
+  {
+    title: "More bookings",
+    desc: "Attract health-conscious travelers and increase your establishment's appeal.",
+    icon: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/><path d="M16.2 11a3 3 0 1 1-5.9-1.2"/>', // Trending/Growth
+  },
+  {
+    title: "Workout videos",
+    desc: "Guided, high-quality workout content tailored for every fitness level.",
+    icon: '<polygon points="5 3 19 12 5 21 5 3"/>', // Play icon
+  },
+  {
+    title: "Upgraded experience",
+    desc: "Transform a standard stay into a premium wellness journey.",
+    icon: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>', // Sparkle
+  },
+  {
+    title: "Space optimization",
+    desc: "Maximize your room utility without the need for a dedicated gym facility.",
+    icon: '<path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/>', // Grid
+  },
+  {
+    title: "Higher satisfaction",
+    desc: "Boost your reviews and guest loyalty with thoughtful wellness amenities.",
+    icon: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>', // Heart
+  },
+];
 </script>
 
 <template>
@@ -99,31 +132,48 @@ const handleSwipe = () => {
       </div>
     </div>
 
-    <!-- Stuff we are good at -->
-    <div class="w-full py-20 px-4 bg-white/20">
+    <!-- Stuff we are good at (Enhanced to match home page) -->
+    <div class="w-full py-32 px-4 bg-white/40 backdrop-blur-sm border-y border-white/20">
       <div class="max-w-7xl mx-auto flex flex-col items-center">
-        <h2 class="text-2xl md:text-3xl font-normal text-center mb-12 uppercase tracking-[6px] text-gray-800">
+        <span class="text-[10px] font-bold tracking-[4px] uppercase text-[#D05E33] mb-4">The PERF Advantage</span>
+        <h2
+          class="text-3xl md:text-4xl font-normal text-center mb-20 uppercase tracking-[8px] text-gray-800 leading-tight"
+        >
           Stuff we are good at
         </h2>
-        <div class="w-32 h-1 bg-[#D05E33] mb-16 opacity-30"></div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16 w-full max-w-6xl">
           <div
-            v-for="item in [
-              'Mobile training station',
-              'More bookings',
-              'Workout videos',
-              'Upgraded experience',
-              'Space optimization',
-              'Higher satisfaction',
-            ]"
-            :key="item"
-            class="flex items-center gap-6 p-6 bg-white/40 backdrop-blur-sm rounded-2xl border border-white/20 group hover:border-[#D05E33]/30 transition-all duration-500"
+            v-for="item in features"
+            :key="item.title"
+            class="flex flex-col items-center md:items-start group transition-all duration-500"
           >
-            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-[#D05E33]/5 text-[#D05E33]">
-              <span class="i-lucide-check w-5 h-5"></span>
+            <div
+              class="w-16 h-16 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-gray-100 group-hover:shadow-xl group-hover:border-[#D05E33]/30 group-hover:-translate-y-2 transition-all duration-500 mb-8"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#D05E33"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                v-html="item.icon"
+              ></svg>
             </div>
-            <span class="text-sm font-bold uppercase tracking-[2px] text-gray-700">{{ item }}</span>
+            <h3
+              class="text-gray-800 font-bold uppercase tracking-[2px] text-sm mb-4 group-hover:text-[#D05E33] transition-colors"
+            >
+              {{ item.title }}
+            </h3>
+            <p
+              class="text-gray-500 text-xs leading-relaxed max-w-xs text-center md:text-left font-medium tracking-wide"
+            >
+              {{ item.desc }}
+            </p>
           </div>
         </div>
       </div>
@@ -240,17 +290,17 @@ const handleSwipe = () => {
           Who we are
         </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-20 max-w-5xl mx-auto">
+        <div class="flex flex-wrap justify-center gap-16 md:gap-20 max-w-6xl mx-auto">
           <div
             v-for="member in [
               { name: 'AMJAD ARKHIS', role: 'Co-founder', img: 'mjdAbout.png' },
               { name: 'SAAD TANTAOUI', role: 'Co-founder', img: 'saad.png' },
-              { name: 'MEHDI ARKHIS', role: 'Front-end Developer', img: 'mehdiAbout.png' },
+              { name: 'MEHDI ARKHIS', role: 'Full-stack Developer', img: 'mehdiAbout.png' },
               { name: 'ADAM JLIL', role: 'Back-end Developer', img: 'adamAbout.png' },
               { name: 'ANAS ORKHIS', role: 'Back-end Developer', img: 'anasAbout.png' },
             ]"
             :key="member.name"
-            class="flex flex-col items-center text-center group"
+            class="flex flex-col items-center text-center group w-full sm:w-[calc(50%-40px)] lg:w-[calc(33.33%-60px)]"
           >
             <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl mb-6">
               <img :src="`/images/${member.img}`" :alt="member.name" class="w-full h-full object-cover" />

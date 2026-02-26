@@ -232,8 +232,8 @@ const createPlanObject = (planName: string, userType: string, price: string) => 
 };
 
 const handlePayment = async () => {
-  alert("Redirecting to payment confirmation...");
-  window.location.href = "/";
+  useToast().info("Redirecting to payment confirmation...");
+  window.location.href = "/payment" + window.location.search;
 };
 </script>
 

@@ -255,42 +255,38 @@ const getWeightRange = (weight: number) => {
 const handleSubmit = async () => {
   if (validateForm()) {
     try {
-      const userStr = localStorage.getItem("user");
-      if (!userStr) throw new Error("Not logged in");
-      
-      const userData = JSON.parse(userStr);
-      const token = userData.token;
-
-      const customerId = `et_id!-${formData.value.firstName.toLowerCase()}${formData.value.lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}`;
+      const customerId = `et-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
       const customerData = {
         et_customer_id: customerId,
         firstName: formData.value.firstName.trim(),
         lastName: formData.value.lastName.trim(),
         email: formData.value.email.trim(),
+        phone: formData.value.phone.trim(),
+        gender: formData.value.gender,
+        age: parseInt(formData.value.age),
+        height: parseFloat(formData.value.height),
+        weight: parseFloat(formData.value.weight),
         ageRange: getAgeRange(parseInt(formData.value.age)),
         weightRange: getWeightRange(parseFloat(formData.value.weight)),
         video: 0,
         burnedCalories: { "Day 1": 0 },
       };
 
-      const response = await fetch(`${baseURL}/api/users/customers/add/${customerId}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(customerData),
+      const response: any = await $fetch('/api/users/customers/add', {
+        method: 'POST',
+        body: customerData
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to add customer");
+      if (!response.success) {
+        throw new Error("Failed to add customer");
       }
 
+      useToast().success("Customer added successfully!");
       router.push("/establishment/manage-customers");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error adding customer:", error);
+      useToast().error(error.statusMessage || "Failed to add customer");
     }
   }
 };
