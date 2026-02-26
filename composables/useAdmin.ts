@@ -1,10 +1,12 @@
+import { computed } from 'vue';
+
 export const useAdmin = () => {
-  const authUser = useAuthUser();
+  const { user } = useAuth();
 
   return computed(() => {
-    if (!authUser.value) return false;
+    if (!user.value) return false;
     
     // Check if roles exists before trying to use includes
-    return authUser.value.roles ? authUser.value.roles.includes("founder") : false;
+    return user.value.roles ? user.value.roles.includes("founder") : false;
   });
 };

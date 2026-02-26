@@ -1,20 +1,23 @@
 <template>
   <div class="mx-auto min-w-[430px] min-h-screen flex flex-col relative bg-[#EFEFEC]">
-    <BaseHeader />
-    <main class="w-full flex-1 text-[black] bg-[#EFEFEC]">
+    <LayoutBaseHeader />
+    <!-- Added pt-40 (160px) to provide ample space for the floating header -->
+    <main class="w-full flex-1 text-[black] bg-[#EFEFEC] pt-35">
       <slot />
     </main>
-    <BaseFooter />
+    <LayoutBaseFooter />
   </div>
 </template>
 
-<style scoped>
-/* Applique Montserrat à tout le document */
-
-</style>
 <script lang="ts" setup>
-const isActive = (route: string): boolean => {
+import { useRoute } from "#app";
+
+const isActive = (routePath: string): boolean => {
   const currentPath = useRoute().path;
-  return route === "/" ? currentPath === "/" : currentPath.includes(route);
+  return routePath === "/" ? currentPath === "/" : currentPath.includes(routePath);
 };
 </script>
+
+<style scoped>
+/* Applique Montserrat à tout le document */
+</style>

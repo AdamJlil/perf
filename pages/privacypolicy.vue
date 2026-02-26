@@ -59,7 +59,10 @@
       </p>
 
       <h4>7. CONTACT</h4>
-      <p>For any questions or requests related to this policy: <span class="text-blue-500 font-bold">contact@perf.ma</span></p>
+      <p>
+        For any questions or requests related to this policy:
+        <span class="text-blue-500 font-bold">contact@perf.ma</span>
+      </p>
     </div>
   </div>
 </template>

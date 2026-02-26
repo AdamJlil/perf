@@ -12,25 +12,19 @@ export default defineNuxtConfig({
     cookieExpires: ONE_DAY.toString(),
     cookieRememberMeExpires: ONE_WEEK.toString(),
     public: {
-      // Use environment variable or default to localhost for API base URL
-      // This allows different configurations for Docker vs local development
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:3001",
+      // Local-only setup, API is mocked
+      apiBase: "http://localhost:3000",
     },
   },
 
-  modules: ["@unocss/nuxt", "@nuxt/image"],
-  plugins: ["~/plugins/swiper.client.js"],
+  modules: ["@unocss/nuxt", "@nuxt/image", "@pinia/nuxt"],
+  plugins: ["~/plugins/swiper.client.js", "~/plugins/mock-api.ts"],
 
   build: {
     transpile: ["swiper"],
   },
 
   nitro: {
-    routeRules: {
-      "/api/**": {
-        proxy: process.env.NUXT_PUBLIC_API_BASE ? `${process.env.NUXT_PUBLIC_API_BASE}/api/**` : "http://localhost:3001/api/**",
-      },
-    },
     // Fix for circular dependency issues
     imports: {
       presets: [
@@ -46,6 +40,9 @@ export default defineNuxtConfig({
     head: {
       title: 'PERF',
       titleTemplate: '',
+      bodyAttrs: {
+        class: 'min-w-[430px] bg-slate-950 antialiased text-white'
+      },
       link: [
         {
           rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'

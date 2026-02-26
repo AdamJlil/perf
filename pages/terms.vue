@@ -1,18 +1,22 @@
 <template>
-  <div class="w-full pt-30 flex justify-center items-center" style="font-family: 'Montserrat'">
+  <div class="w-full pt-30 flex justify-center items-center" style="font-family: &quot;Montserrat&quot;">
     <div class="w-[60vw] relative">
       <p class="py-20">
-        Welcome to PERF! By using our platform, services, and content, you agree to the following Terms and Conditions. Please read them carefully as they govern your relationship with PERF.
+        Welcome to PERF! By using our platform, services, and content, you agree to the following Terms and Conditions.
+        Please read them carefully as they govern your relationship with PERF.
       </p>
 
       <h4>1. Acceptance of Terms</h4>
       <p>
-        By accessing or using PERF (including our website, mobile app, or any related services), you acknowledge that you have read, understood, and agree to be bound by these Terms. If you do not agree, please do not use our services.
+        By accessing or using PERF (including our website, mobile app, or any related services), you acknowledge that
+        you have read, understood, and agree to be bound by these Terms. If you do not agree, please do not use our
+        services.
       </p>
 
       <h4>2. Eligibility</h4>
       <p>
-        You must be at least 18 years old or have parental/guardian consent to use PERF. By registering, you confirm that all information you provide is accurate and complete.
+        You must be at least 18 years old or have parental/guardian consent to use PERF. By registering, you confirm
+        that all information you provide is accurate and complete.
       </p>
 
       <h4>3. User Accounts & Security</h4>
@@ -24,7 +28,9 @@
 
       <h4>4. Health Disclaimer</h4>
       <p>
-        PERF provides fitness, nutrition, and wellness information for educational purposes. Consult a healthcare professional before starting any program. PERF is not responsible for injuries or health issues resulting from the use of our content or services.
+        PERF provides fitness, nutrition, and wellness information for educational purposes. Consult a healthcare
+        professional before starting any program. PERF is not responsible for injuries or health issues resulting from
+        the use of our content or services.
       </p>
 
       <h4>5. Payments & Subscriptions</h4>
@@ -44,17 +50,20 @@
 
       <h4>7. Intellectual Property</h4>
       <p>
-        All content, trademarks, and materials on PERF are the property of PERF or its licensors. You may not reproduce, distribute, or create derivative works without our written consent.
+        All content, trademarks, and materials on PERF are the property of PERF or its licensors. You may not reproduce,
+        distribute, or create derivative works without our written consent.
       </p>
 
       <h4>8. Modifications to Service</h4>
       <p>
-        PERF may update, modify, or discontinue services at any time. We will provide notice of significant changes via our website or email.
+        PERF may update, modify, or discontinue services at any time. We will provide notice of significant changes via
+        our website or email.
       </p>
 
       <h4>9. Limitation of Liability</h4>
       <p>
-        PERF is not liable for indirect, incidental, or consequential damages arising from your use of our services. Our total liability is limited to the amount paid by you (if any) in the past 12 months.
+        PERF is not liable for indirect, incidental, or consequential damages arising from your use of our services. Our
+        total liability is limited to the amount paid by you (if any) in the past 12 months.
       </p>
 
       <h4>10. Governing Law</h4>
