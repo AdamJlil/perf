@@ -1,10 +1,30 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 const currentIndex = ref(0);
+const intervalId = ref<any>(null);
+
 const goTo = (index: number) => {
   if (index >= 0 && index < 5) {
     currentIndex.value = index;
+  } else if (index >= 5) {
+    currentIndex.value = 0;
+  } else if (index < 0) {
+    currentIndex.value = 4;
+  }
+};
+
+const startAutoScroll = () => {
+  stopAutoScroll();
+  intervalId.value = setInterval(() => {
+    goTo(currentIndex.value + 1);
+  }, 4000); // Change image every 4 seconds
+};
+
+const stopAutoScroll = () => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+    intervalId.value = null;
   }
 };
 
@@ -13,6 +33,8 @@ let startX = 0;
 let endX = 0;
 
 onMounted(() => {
+  startAutoScroll();
+  
   const carousel = document.getElementById("carousel");
   if (!carousel) return;
 
@@ -20,6 +42,7 @@ onMounted(() => {
     "touchstart",
     (e) => {
       startX = e.touches[0].clientX;
+      stopAutoScroll(); // Stop auto-scroll when user interacts
     },
     { passive: true },
   );
@@ -29,9 +52,14 @@ onMounted(() => {
     (e) => {
       endX = e.changedTouches[0].clientX;
       handleSwipe();
+      startAutoScroll(); // Resume auto-scroll after interaction
     },
     { passive: true },
   );
+});
+
+onUnmounted(() => {
+  stopAutoScroll();
 });
 
 const handleSwipe = () => {

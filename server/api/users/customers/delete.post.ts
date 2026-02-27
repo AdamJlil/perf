@@ -26,15 +26,20 @@ export default defineEventHandler(async (event) => {
 
   try {
     const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
-    const result = await Customer.deleteOne({ _id: id, establishmentId });
     
-    if (result.deletedCount === 0) {
+    // Soft delete: set hasAccess to false instead of removing from DB
+    const result = await Customer.updateOne(
+      { _id: id, establishmentId },
+      { $set: { hasAccess: false } }
+    );
+    
+    if (result.matchedCount === 0) {
       throw createError({ statusCode: 404, statusMessage: "Customer not found" });
     }
 
     return {
       success: true,
-      message: "Customer deleted successfully"
+      message: "Customer access removed successfully"
     };
   } catch (err: any) {
     console.error("Delete Customer API Error:", err);

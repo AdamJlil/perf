@@ -12,7 +12,7 @@
       :heading-text="`HEY ${customerName},<br/>READY TO BECOME THE BEST VERSION OF YOURSELF`"
     />
 
-    <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[5px] my-30">
+    <div class="flex items-center justify-center w-full max-w-2xl mx-auto space-x-4 px-[15px] py-[5px] mt-20 mb-10">
       <div
         :class="[
           'cursor-pointer px-6 py-3 transition-colors duration-200 text-center w-full',
@@ -44,8 +44,18 @@
       </div>
     </div>
 
+    <!-- Total Burned (Moved above cards) -->
+    <div class="w-full max-w-4xl mx-auto px-4 mt-10">
+      <p
+        class="text-[#D05E33] uppercase text-xl sm:text-2xl md:text-3xl text-center font-black tracking-[4px] leading-tight"
+      >
+        Total Burned Until Now: {{ totalBurnedCalories }} kcal
+      </p>
+    </div>
+
+    <!-- FlipCard Section -->
     <div
-      class="w-full flex flex-col md:flex-row justify-center items-center gap-10 md:gap-16 lg:gap-32 px-6 py-5 md:py-10 bg-[#EFEFEC] dark:bg-black"
+      class="w-full flex flex-col md:flex-row justify-center items-center gap-10 md:gap-16 lg:gap-32 px-6 py-10 bg-[#EFEFEC] dark:bg-black"
     >
       <FlipCardBloc
         outside-title="calories"
@@ -60,55 +70,79 @@
       />
     </div>
 
-    <!-- Video Section -->
-    <!-- Loading Overlay for Video -->
-    <div v-if="isVideoLoading" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-50">
-      <div class="loader"></div>
-    </div>
-    <div id="video" class="w-full mt-30">
-      <div v-if="!isLoading" class="relative w-full" style="padding-top: 56.25%">
-        <iframe
-          :src="videoSource"
-          loading="lazy"
-          class="border-none absolute top-0 left-0 h-full w-full"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-          allowfullscreen="true"
-          @load="isVideoLoading = false"
-        ></iframe>
-      </div>
-      <div v-else class="w-full h-[300px] flex items-center justify-center bg-gray-100">
-        <div class="loader"></div>
-      </div>
-    </div>
-
-    <div class="w-full h-[50px] flex justify-end items-center pr-[40px]">
-      <div
-        class="flex items-center justify-center gap-[10px] p-[10px] hover:bg-[#e7e7e7] cursor-pointer transition-colors rounded-lg"
-        @click="nextVideo"
-      >
-        <span class="text-xl sm:text-lg md:text-2xl font-bold">NEXT VIDEO</span>
-        <img src="/images/next-button.png" alt="arrow" class="w-10 h-10 object-contain" />
-      </div>
-    </div>
-
     <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-10">
       let's keep it up - keep pushing
     </h1>
 
-    <!-- Chart Container -->
+    <!-- Chart Container (Moved Above Video) -->
     <div class="w-full mx-auto p-1">
-      <div class="bg-transparent rounded-lg p-6 h-full">
-        {{ console.log(chartData) }}
-        <Line :chart-data="chartData" :chart-options="chartOptions" class="h-full w-full" />
+      <div class="bg-transparent rounded-lg p-6 h-full min-h-[300px]">
+        <Line
+          :chart-data="chartData"
+          :chart-options="chartOptions"
+          :plugins="[gamificationPlugin]"
+          class="h-full w-full"
+        />
       </div>
     </div>
 
-    <p
-      class="text-black dark:text-white uppercase text-xl sm:text-lg md:text-2xl text-center p-2"
-      style="letter-spacing: 0.1em; line-height: 1.3"
-    >
-      TOTAL BURNED UNTIL NOW : {{ totalBurnedCalories }}
-    </p>
+    <!-- Video Section -->
+    <div id="video" class="w-full mt-20 relative group">
+      <!-- Loading Overlay for Video -->
+      <div
+        v-if="isVideoLoading"
+        class="absolute inset-0 z-[10] flex items-center justify-center bg-[#EFEFEC]/80 backdrop-blur-sm rounded-3xl"
+      >
+        <div class="loader"></div>
+      </div>
+
+      <div v-if="!isLoading" class="relative w-full max-w-6xl mx-auto px-4">
+        <div
+          class="relative w-full rounded-[30px] overflow-hidden shadow-2xl border-4 border-white"
+          style="padding-top: 56.25%"
+        >
+          <iframe
+            :src="videoSource"
+            loading="lazy"
+            class="border-none absolute top-0 left-0 h-full w-full"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true"
+            @load="isVideoLoading = false"
+          ></iframe>
+        </div>
+
+        <!-- Themed Next Video Button (Directly Under Video) -->
+        <div class="mt-12 flex justify-center pb-10">
+          <button
+            class="group flex items-center gap-6 bg-black text-white px-12 py-6 rounded-2xl transition-all duration-500 hover:bg-[#D05E33] hover:shadow-[0_20px_50px_-10px_rgba(208,94,51,0.5)] active:scale-95 shadow-xl"
+            @click="nextVideo"
+          >
+            <span class="text-lg md:text-xl font-black uppercase tracking-[4px]">Next Session</span>
+            <div
+              class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div v-else class="w-full h-[400px] flex items-center justify-center bg-gray-100 rounded-[40px]">
+        <div class="loader"></div>
+      </div>
+    </div>
 
     <!-- <Bloc1
       class="my-20"
@@ -150,6 +184,8 @@ const baseURL =
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 const route = useRoute();
+const router = useRouter();
+const { user } = useAuth();
 const customerName = ref("");
 const customerPicture = ref("");
 const videoSource = ref("");
@@ -210,6 +246,13 @@ const data = ref<number[]>([]);
 
 // Initial calculation
 onMounted(async () => {
+  // Redirect unpaid users
+  if (!user.value?.paid) {
+    useToast().error("Access denied. Please complete your payment first.");
+    router.push("/establishment/manage-customers");
+    return;
+  }
+
   const customerId = route.query.customerId as string;
 
   if (customerId) {
@@ -222,7 +265,12 @@ onMounted(async () => {
       if (customer) {
         customerName.value = `${customer.firstName} ${customer.lastName}`;
         customerPicture.value = customer.profile_picture || "";
-        costumerVideo.value = customer.video || 0;
+        
+        // SYNC: Derive current video from the number of completed logs
+        const burnedCalories = customer.burnedCalories || {};
+        const completedSessions = Object.keys(burnedCalories).length;
+        costumerVideo.value = completedSessions % establishmentUserVideos.length;
+        
         ageRange.value = customer.ageRange || "";
         weightRange.value = customer.weightRange || "";
 
@@ -234,8 +282,7 @@ onMounted(async () => {
           videoSource.value = establishmentUserVideos[costumerVideo.value];
         }
 
-        // Update labels and data dynamically based on burnedCalories
-        const burnedCalories = customer.burnedCalories || {};
+        // Sort keys by Day number to ensure correct chart sequence
         const sortedDays = Object.keys(burnedCalories).sort((a, b) => {
           const numA = parseInt(a.replace("Day ", "")) || 0;
           const numB = parseInt(b.replace("Day ", "")) || 0;
@@ -272,6 +319,23 @@ const chartData = computed(() => {
   const accumulatedData: number[] = [];
   let runningTotal = 0;
 
+  // If no data, provide a starting point for gamification
+  if (data.value.length === 0) {
+    return {
+      labels: [""],
+      datasets: [
+        {
+          label: "",
+          data: [0],
+          fill: false,
+          borderColor: "transparent",
+          backgroundColor: "transparent",
+          pointRadius: 0,
+        },
+      ],
+    };
+  }
+
   // Transform the data to show accumulated values
   data.value.forEach((value) => {
     runningTotal += value;
@@ -299,8 +363,67 @@ const chartData = computed(() => {
   };
 });
 
+// Custom gamification plugin for empty charts
+const gamificationPlugin = {
+  id: "gamificationPlugin",
+  afterDraw: (chart: any) => {
+    if (data.value.length === 0) {
+      const {
+        ctx,
+        chartArea: { left, bottom },
+        scales: { y },
+      } = chart;
+
+      // Position at the far left (near 0,0)
+      const xPos = left + 30;
+      const yPos = y.getPixelForValue(0) - 30;
+
+      ctx.save();
+
+      // Draw Star
+      ctx.fillStyle = "#D05E33";
+      ctx.beginPath();
+      const spikes = 5;
+      const outerRadius = 25;
+      const innerRadius = 10;
+      let rot = (Math.PI / 2) * 3;
+      const step = Math.PI / spikes;
+
+      ctx.moveTo(xPos, yPos - outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        const px = xPos + Math.cos(rot) * outerRadius;
+        const py = yPos + Math.sin(rot) * outerRadius;
+        ctx.lineTo(px, py);
+        rot += step;
+
+        const ix = xPos + Math.cos(rot) * innerRadius;
+        const iy = yPos + Math.sin(rot) * innerRadius;
+        ctx.lineTo(ix, iy);
+        rot += step;
+      }
+      ctx.lineTo(xPos, yPos - outerRadius);
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw Text aligned with star
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+
+      ctx.font = "900 12px Montserrat";
+      ctx.fillStyle = "#1A1A1A";
+      ctx.fillText("YOU ARE HERE", xPos + 35, yPos - 5);
+
+      ctx.font = "700 9px Montserrat";
+      ctx.fillStyle = "#D05E33";
+      ctx.fillText("LET'S GO BURN YOUR FIRST CALORIES!", xPos + 35, yPos + 12);
+
+      ctx.restore();
+    }
+  },
+};
+
 const chartOptions = {
-  //hover with ease mode further from the point
+  // hover with ease mode further from the point
   hover: {
     mode: "nearest" as "nearest",
     intersect: false,
@@ -319,20 +442,23 @@ const chartOptions = {
     y: {
       beginAtZero: true,
       grid: {
-        display: true, // Hide y-axis grid lines
-        color: "rgba(0, 0, 0, 0.1)", // Optional: Customize grid line color
-        lineWidth: 1, // Optional: Customize grid line width
+        display: true,
+        color: "rgba(0, 0, 0, 0.05)",
+        lineWidth: 1,
       },
       ticks: {
-        maxTicksLimit: 10, // Limit the number of x-axis grid lines
-        stepSize: 1,
+        maxTicksLimit: 8,
+        font: { size: 10 },
       },
     },
     x: {
       grid: {
-        display: false, // Show x-axis grid lines
+        display: false,
       },
-      offset: true, // Show x-axis grid lines
+      offset: true,
+      ticks: {
+        font: { size: 10, weight: "bold" },
+      },
     },
   },
 };
@@ -355,9 +481,6 @@ const nextVideo = async () => {
     const parts = currentCaloriesRange.split("-").map(Number);
     const avgCalories = parts.length === 2 ? Math.round((parts[0] + parts[1]) / 2) : parts[0] || 0;
 
-    // Calculate next video index
-    const nextVideoIndex = (customer.video + 1) % establishmentUserVideos.length;
-
     // Update customer's burned calories session-by-session
     const burnedCalories = customer.burnedCalories || {};
     const nextDayIndex = Object.keys(burnedCalories).length + 1;
@@ -366,12 +489,13 @@ const nextVideo = async () => {
     const updatedBurnedCalories = { ...burnedCalories, [dayLabel]: avgCalories };
 
     // Update the customer in real MongoDB via API
+    // The video index will be derived automatically from the new count on refresh
     await $fetch("/api/users/customers/add", {
       method: "POST",
       body: {
         ...customer,
-        video: nextVideoIndex,
         burnedCalories: updatedBurnedCalories,
+        video: nextDayIndex % establishmentUserVideos.length
       },
     });
 

@@ -69,6 +69,25 @@ const togglePassword = (field: "password" | "confirmPassword") => {
 const onSignupClick = async () => {
   try {
     form.error = "";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!form.data.first_name.trim() || !form.data.name.trim()) {
+      const msg = "Please enter your full name";
+      toast.error(msg);
+      return;
+    }
+
+    if (!emailRegex.test(form.data.email)) {
+      const msg = "Please enter a valid email address";
+      toast.error(msg);
+      return;
+    }
+
+    if (form.data.password.length < 8) {
+      const msg = "Password must be at least 8 characters long";
+      toast.error(msg);
+      return;
+    }
 
     if (form.data.password !== form.data.confirmPassword) {
       const msg = "Passwords do not match";

@@ -1,6 +1,7 @@
 import User from "../../models/User";
 import { verifyToken } from "../../utils/auth";
 import { connectToDatabase } from "../../utils/mongodb";
+import { sendAdminNotification, upgradeRequestEmail } from "../../utils/emails";
 
 export default defineEventHandler(async (event) => {
   const cookieName = process.env.NUXT_COOKIE_NAME || "__session";
@@ -43,6 +44,9 @@ export default defineEventHandler(async (event) => {
     }
 
     console.log(`[UpgradeAPI] Successfully updated ${userEmail}. New requested_plan: ${updatedUser.requested_plan}`);
+
+    // Notify Admin
+    sendAdminNotification("Upgrade Request Received", upgradeRequestEmail(updatedUser, planTitle));
 
     return {
       success: true,

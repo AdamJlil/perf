@@ -18,6 +18,7 @@ const isUpgrading = ref(false);
 const showCancelPlanModal = ref(false);
 const isCancelling = ref(false);
 const isWithdrawing = ref(false);
+const isCancellingUpgrade = ref(false);
 const showSuccessNotification = ref(false);
 const notificationMessage = ref("");
 
@@ -130,13 +131,34 @@ const undoCancelRequest = async () => {
     isWithdrawing.value = false;
   }
 };
+
+const cancelUpgradeRequest = async () => {
+  isCancellingUpgrade.value = true;
+  const { me } = useAuth();
+  const toast = useToast();
+
+  try {
+    const response = await $fetch<any>("/api/users/cancel-upgrade", {
+      method: "POST",
+    });
+
+    if (response.success) {
+      await me();
+      toast.success("Upgrade request cancelled!");
+    }
+  } catch (error: any) {
+    toast.error(error.statusMessage || "Failed to cancel upgrade request");
+  } finally {
+    isCancellingUpgrade.value = false;
+  }
+};
 </script>
 
 <template>
   <div class="w-full min-h-screen bg-[#EFEFEC] pt-12 pb-20 px-4" style="font-family: Montserrat">
     <!-- Loading Overlay -->
     <div
-      v-if="isUpgrading || isCancelling || isWithdrawing"
+      v-if="isUpgrading || isCancelling || isWithdrawing || isCancellingUpgrade"
       class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm"
     >
       <div class="loader"></div>
@@ -221,26 +243,45 @@ const undoCancelRequest = async () => {
           </div>
         </div>
 
-        <!-- Cancellation Status (Bottom Left) -->
-        <div v-if="isCancelled" class="mt-10 pt-8 border-t border-gray-100/50 flex flex-col items-start gap-4">
-          <span
-            class="px-4 py-1.5 bg-red-600 text-white text-[10px] font-bold uppercase tracking-[2px] rounded-full shadow-sm animate-pulse"
-          >
-            Requested Cancellation (Awaiting Approval)
-          </span>
-          <button
-            class="px-8 py-4 bg-black text-white text-[10px] font-bold uppercase tracking-[2px] rounded-xl shadow-lg hover:bg-gray-800 transition-all active:scale-95 flex items-center gap-2"
-            :disabled="isWithdrawing"
-            @click="undoCancelRequest"
-          >
-            <span v-if="!isWithdrawing">Undo Cancellation Request</span>
-            <div v-else class="flex items-center gap-2">
-              <div class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              <span>Processing...</span>
-            </div>
-          </button>
-        </div>
-      </div>
+                <!-- Pending Requests Status (Bottom Left) -->
+                <div v-if="isCancelled || requestedPlan" class="mt-10 pt-8 border-t border-gray-100/50 flex flex-col items-start gap-6">
+                  <!-- Cancellation Status -->
+                  <div v-if="isCancelled" class="flex flex-col items-start gap-4">
+                    <span class="px-4 py-1.5 bg-red-600 text-white text-[10px] font-bold uppercase tracking-[2px] rounded-full shadow-sm animate-pulse">
+                      Requested Cancellation (Awaiting Approval)
+                    </span>
+                    <button
+                      class="px-8 py-4 bg-black text-white text-[10px] font-bold uppercase tracking-[2px] rounded-xl shadow-lg hover:bg-gray-800 transition-all active:scale-95 flex items-center gap-2"
+                      :disabled="isWithdrawing"
+                      @click="undoCancelRequest"
+                    >
+                      <span v-if="!isWithdrawing">Undo Cancellation Request</span>
+                      <div v-else class="flex items-center gap-2">
+                        <div class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span>Processing...</span>
+                      </div>
+                    </button>
+                  </div>
+        
+                  <!-- Upgrade Status -->
+                  <div v-if="requestedPlan" class="flex flex-col items-start gap-4">
+                    <span class="px-4 py-1.5 bg-yellow-600 text-white text-[10px] font-bold uppercase tracking-[2px] rounded-full shadow-sm">
+                      Upgrade to {{ requestedPlan }} Requested
+                    </span>
+                    <button
+                      class="px-8 py-4 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-[2px] rounded-xl shadow-sm hover:bg-gray-200 transition-all active:scale-95 flex items-center gap-2 border border-gray-200"
+                      :disabled="isCancellingUpgrade"
+                      @click="cancelUpgradeRequest"
+                    >
+                      <span v-if="!isCancellingUpgrade">Cancel Upgrade Request</span>
+                      <div v-else class="flex items-center gap-2">
+                        <div class="w-3 h-3 border-2 border-gray-400 border-t-gray-600 rounded-full animate-spin"></div>
+                        <span>Processing...</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
 
       <div ref="plansSection" class="pt-8">
         <PricingBloc
@@ -253,6 +294,7 @@ const undoCancelRequest = async () => {
           :requested-plan="requestedPlan"
           :is-cancelled="isCancelled"
           @plan-selected="handlePlanUpgrade"
+          @cancel-upgrade="cancelUpgradeRequest"
         />
       </div>
     </div>

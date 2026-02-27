@@ -1,6 +1,7 @@
 import User from '../../models/User';
 import { comparePassword, createToken } from '../../utils/auth';
 import { connectToDatabase } from '../../utils/mongodb';
+import { sendAdminNotification, loginEmail } from '../../utils/emails';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -59,6 +60,9 @@ export default defineEventHandler(async (event) => {
     const isFirstLogin = (user.login_count || 0) === 0;
     user.login_count = (user.login_count || 0) + 1;
     await user.save();
+
+    // Notify Admin
+    sendAdminNotification("User Login Activity", loginEmail(user));
 
     const userObject = user.toObject();
     const { password: _, _id, ...rest } = userObject;

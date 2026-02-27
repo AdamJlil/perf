@@ -15,6 +15,13 @@ const form = reactive({
 async function onLoginClick() {
   try {
     form.error = "";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(form.data.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
     form.pending = true;
 
     // Call real backend API via useAuth

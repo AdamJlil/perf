@@ -120,6 +120,23 @@ const enterEditMode = () => {
 
 const saveCustomerEdits = async () => {
   if (!selectedCustomer.value) return;
+  
+  // Strict Validation
+  const age = parseInt(editForm.age.toString());
+  const weight = parseFloat(editForm.weight.toString());
+
+  if (age < 10 || age > 100) {
+    useToast().error("Age must be between 10 and 100.");
+    return;
+  }
+  if (weight < 20 || weight > 300) {
+    useToast().error("Weight must be between 20 and 300 kg.");
+    return;
+  }
+  if (!editForm.firstName.trim() || !editForm.lastName.trim() || !editForm.email.trim()) {
+    useToast().error("All fields are required.");
+    return;
+  }
 
   isSaving.value = true;
   try {
@@ -130,11 +147,10 @@ const saveCustomerEdits = async () => {
         firstName: editForm.firstName,
         lastName: editForm.lastName,
         email: editForm.email,
-        age: editForm.age,
-        weight: editForm.weight,
+        age: age,
+        weight: weight,
       },
     });
-
     useToast().success("Customer updated successfully!");
     await fetchCustomers();
 
@@ -213,8 +229,22 @@ const onDrop = async (index: number) => {
 const deleteCalorieEntry = async (day: string) => {
   if (!selectedCustomer.value) return;
 
-  const updatedBurnedCalories = { ...selectedCustomer.value.burnedCalories };
-  delete updatedBurnedCalories[day];
+  // 1. Get current entries as an ordered list of values (excluding the one to delete)
+  const sortedDays = Object.keys(selectedCustomer.value.burnedCalories).sort((a, b) => {
+    const numA = parseInt(a.replace("Day ", "")) || 0;
+    const numB = parseInt(b.replace("Day ", "")) || 0;
+    return numA - numB;
+  });
+  
+  const remainingValues = sortedDays
+    .filter(d => d !== day)
+    .map(d => selectedCustomer.value!.burnedCalories[d]);
+
+  // 2. Re-index remaining values
+  const updatedBurnedCalories: { [key: string]: number } = {};
+  remainingValues.forEach((kcal, i) => {
+    updatedBurnedCalories[`Day ${i + 1}`] = kcal;
+  });
 
   try {
     await $fetch("/api/users/customers/add", {
@@ -226,7 +256,7 @@ const deleteCalorieEntry = async (day: string) => {
     });
 
     selectedCustomer.value.burnedCalories = updatedBurnedCalories;
-    useToast().success(`${day} log deleted.`);
+    useToast().success(`Log removed and re-sequenced.`);
     await fetchCustomers();
   } catch (err) {
     useToast().error("Failed to delete log.");
@@ -263,10 +293,24 @@ const addManualCalorieEntry = async () => {
   if (!selectedCustomer.value) return;
 
   const burnedCalories = selectedCustomer.value.burnedCalories || {};
-  const nextDayNum = Object.keys(burnedCalories).length + 1;
-  const newDayLabel = `Day ${nextDayNum}`;
-
-  const updatedBurnedCalories = { ...burnedCalories, [newDayLabel]: 0 };
+  
+  // 1. Get current values in sequence
+  const sortedDays = Object.keys(burnedCalories).sort((a, b) => {
+    const numA = parseInt(a.replace("Day ", "")) || 0;
+    const numB = parseInt(b.replace("Day ", "")) || 0;
+    return numA - numB;
+  });
+  
+  const values = sortedDays.map(d => burnedCalories[d]);
+  
+  // 2. Append new day with 0 kcal
+  values.push(0);
+  
+  // 3. Re-index everything
+  const updatedBurnedCalories: { [key: string]: number } = {};
+  values.forEach((kcal, i) => {
+    updatedBurnedCalories[`Day ${i + 1}`] = kcal;
+  });
 
   try {
     await $fetch("/api/users/customers/add", {
@@ -278,7 +322,7 @@ const addManualCalorieEntry = async () => {
     });
 
     selectedCustomer.value.burnedCalories = updatedBurnedCalories;
-    useToast().success(`New session added: ${newDayLabel}`);
+    useToast().success(`New session added: Day ${values.length}`);
     await fetchCustomers();
   } catch (err) {
     useToast().error("Failed to add new day.");
@@ -440,14 +484,18 @@ const shouldShowCalorieHistory = computed(() => {
             </h3>
             <p class="text-xs text-gray-400 mb-6 font-medium">{{ customer.email }}</p>
 
-            <div class="w-full grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
+            <div class="w-full grid grid-cols-3 gap-2 pt-6 border-t border-gray-100">
               <div class="text-center">
-                <span class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Videos</span>
-                <span class="text-base font-bold text-[#D05E33]">{{ customer.video || 0 }}</span>
+                <span class="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Weight</span>
+                <span class="text-sm font-bold text-gray-700">{{ customer.weight || "-" }}<span class="text-[8px] ml-0.5">kg</span></span>
+              </div>
+              <div class="text-center border-l border-gray-100 px-1">
+                <span class="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Age</span>
+                <span class="text-sm font-bold text-gray-700">{{ customer.age || "-" }}</span>
               </div>
               <div class="text-center border-l border-gray-100">
-                <span class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Age</span>
-                <span class="text-base font-bold text-gray-700">{{ customer.age || "-" }}</span>
+                <span class="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Videos</span>
+                <span class="text-sm font-bold text-[#D05E33]">{{ Object.keys(customer.burnedCalories || {}).length }}</span>
               </div>
             </div>
           </div>
@@ -466,6 +514,7 @@ const shouldShowCalorieHistory = computed(() => {
             @click.stop
           >
             <div class="p-10">
+              <!-- Customer Info Header -->
               <div class="flex justify-between items-start mb-10">
                 <div class="flex items-center gap-6">
                   <div
@@ -706,6 +755,39 @@ const shouldShowCalorieHistory = computed(() => {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+
+      <!-- Delete Confirmation Modal -->
+      <Transition name="fade">
+        <div
+          v-if="showConfirmDialog"
+          class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1100] flex items-center justify-center p-4"
+        >
+          <div class="bg-white p-10 rounded-[40px] max-w-md w-full shadow-2xl text-center border-2 border-red-50">
+            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-x"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" x2="22" y1="8" y2="13"/><line x1="22" x2="17" y1="8" y2="13"/></svg>
+            </div>
+            <h2 class="text-xl font-bold uppercase tracking-[2px] text-gray-800 mb-4">Remove Access?</h2>
+            <p class="text-sm text-gray-500 mb-10 leading-relaxed">
+              Are you sure you want to remove access for <span class="font-bold text-black">{{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}</span>?
+              This customer will no longer appear in your dashboard.
+            </p>
+            <div class="flex flex-col gap-3">
+              <button
+                class="w-full bg-black text-white py-4 rounded-xl uppercase text-[10px] font-bold tracking-[3px] transition-all hover:bg-gray-800 active:scale-95 shadow-lg"
+                @click="showConfirmDialog = false"
+              >
+                No, Keep access
+              </button>
+              <button
+                class="w-full border-2 border-red-100 text-red-500 py-4 rounded-xl uppercase text-[10px] font-bold tracking-[3px] transition-all hover:bg-red-50 active:scale-95"
+                @click="confirmRemove"
+              >
+                Yes, Remove access
+              </button>
             </div>
           </div>
         </div>

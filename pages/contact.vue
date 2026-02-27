@@ -14,29 +14,28 @@ const formSubmitted = ref(false);
 const formError = ref(false);
 
 const submitForm = async () => {
-  if (!formData.name || !formData.email || !formData.message) {
-    formError.value = true;
-    toast.error("Please fill in all fields");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  if (!formData.name.trim() || formData.name.trim().length < 2) {
+    toast.error("Please enter a valid full name");
     return;
   }
+  if (!emailRegex.test(formData.email)) {
+    toast.error("Please enter a valid email address");
+    return;
+  }
+  if (!formData.message.trim() || formData.message.trim().length < 10) {
+    toast.error("Message must be at least 10 characters long");
+    return;
+  }
+  
   isSubmitting.value = true;
 
-  const baseURL =
-    typeof window !== "undefined" &&
-    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-      ? ""
-      : "";
-
   try {
-    const response = await fetch(`${baseURL}/api/contact/submit`, {
+    const result: any = await $fetch("/api/contact/submit", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+      body: formData,
     });
-
-    const result = await response.json();
 
     if (result.success) {
       isSubmitting.value = false;
@@ -51,9 +50,9 @@ const submitForm = async () => {
       formError.value = true;
       toast.error(result.message || "Failed to send message");
     }
-  } catch (error) {
+  } catch (error: any) {
     formError.value = true;
-    toast.error("An error occurred. Please try again.");
+    toast.error(error.statusMessage || "An error occurred. Please try again.");
     console.error("Error submitting form:", error);
   } finally {
     isSubmitting.value = false;

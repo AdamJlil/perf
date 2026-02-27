@@ -21,7 +21,10 @@ export default defineEventHandler(async (event) => {
     // Ensure we have a string ID for the query
     const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
     
-    const customers = await Customer.find({ establishmentId }).sort({ createdAt: -1 });
+    const customers = await Customer.find({ 
+      establishmentId,
+      hasAccess: true 
+    }).sort({ createdAt: -1 });
     
     // Convert Map to Object for JSON response
     return customers.map(c => {

@@ -102,6 +102,12 @@ const features = [
 
 onMounted(() => {
   if (process.client) {
+    // Redirect logged-in users to dashboard
+    if (user.value) {
+      router.push("/establishment/manage-customers");
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         isHeroLoginVisible.value = entry.isIntersecting;
@@ -130,6 +136,22 @@ const handlePlanSelection = (plan: string) => {
       plan,
     },
   });
+};
+
+const handleCancelUpgrade = async () => {
+  const { me } = useAuth();
+  const toast = useToast();
+  try {
+    const response = await $fetch<any>("/api/users/cancel-upgrade", {
+      method: "POST",
+    });
+    if (response.success) {
+      await me();
+      toast.success("Upgrade request cancelled!");
+    }
+  } catch (error: any) {
+    toast.error("Failed to cancel upgrade request");
+  }
 };
 </script>
 
@@ -369,6 +391,7 @@ const handlePlanSelection = (plan: string) => {
         :requested-plan="requestedPlan"
         :is-cancelled="isCancelled"
         @plan-selected="handlePlanSelection"
+        @cancel-upgrade="handleCancelUpgrade"
       />
     </div>
   </div>

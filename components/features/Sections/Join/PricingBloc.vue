@@ -52,6 +52,14 @@
                 Upgrade Requested
               </span>
 
+              <button
+                v-if="requestedPlan === 'EXPLORER'"
+                class="text-[8px] font-bold uppercase tracking-[1px] text-gray-400 hover:text-red-500 transition-colors underline mb-2"
+                @click.stop="$emit('cancelUpgrade')"
+              >
+                Cancel Request
+              </button>
+
               <span
                 v-if="currentPlan === 'EXPLORER' && isCancelled"
                 class="bg-red-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
@@ -122,6 +130,14 @@
                 Upgrade Requested
               </span>
 
+              <button
+                v-if="requestedPlan === 'EXPERIENCE'"
+                class="text-[8px] font-bold uppercase tracking-[1px] text-gray-400 hover:text-red-500 transition-colors underline mb-2"
+                @click.stop="$emit('cancelUpgrade')"
+              >
+                Cancel Request
+              </button>
+
               <span
                 v-if="currentPlan === 'EXPERIENCE' && isCancelled"
                 class="bg-red-600 text-white text-[9px] font-bold uppercase px-4 py-1.5 rounded-full tracking-[2px] shadow-sm"
@@ -179,6 +195,14 @@
               >
                 Upgrade Requested
               </span>
+
+              <button
+                v-if="requestedPlan === 'SIGNATURE'"
+                class="text-[8px] font-bold uppercase tracking-[1px] text-gray-400 hover:text-red-500 transition-colors underline mb-2"
+                @click.stop="$emit('cancelUpgrade')"
+              >
+                Cancel Request
+              </button>
 
               <span
                 v-if="currentPlan === 'SIGNATURE' && isCancelled"
@@ -247,7 +271,7 @@ const handlePlanSelected = (planType: string) => {
   }
 };
 
-const emit = defineEmits(["planSelected"]);
+const emit = defineEmits(["planSelected", "cancelUpgrade"]);
 </script>
 
 <style scoped>

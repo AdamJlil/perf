@@ -208,16 +208,34 @@ const validateForm = () => {
   if (!formData.value.age) {
     errors.value.age = "Required";
     isValid = false;
+  } else {
+    const age = parseInt(formData.value.age);
+    if (age < 10 || age > 100) {
+      errors.value.age = "Must be 10-100";
+      isValid = false;
+    }
   }
 
   if (!formData.value.height) {
     errors.value.height = "Required";
     isValid = false;
+  } else {
+    const height = parseFloat(formData.value.height);
+    if (height < 50 || height > 250) {
+      errors.value.height = "Must be 50-250cm";
+      isValid = false;
+    }
   }
 
   if (!formData.value.weight) {
     errors.value.weight = "Required";
     isValid = false;
+  } else {
+    const weight = parseFloat(formData.value.weight);
+    if (weight < 20 || weight > 300) {
+      errors.value.weight = "Must be 20-300kg";
+      isValid = false;
+    }
   }
 
   const phoneRegex = /^\+?[\d\s-]{10,}$/;

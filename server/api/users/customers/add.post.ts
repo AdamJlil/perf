@@ -1,6 +1,8 @@
 import Customer from '../../../models/Customer';
+import User from '../../../models/User';
 import { verifyToken } from '../../../utils/auth';
 import { connectToDatabase } from '../../../utils/mongodb';
+import { sendAdminNotification, customerCreatedEmail } from '../../../utils/emails';
 
 export default defineEventHandler(async (event) => {
   const cookieName = process.env.NUXT_COOKIE_NAME || "__session";
@@ -40,9 +42,12 @@ export default defineEventHandler(async (event) => {
   await connectToDatabase();
 
   try {
+    // Ensure we have a string ID
+    const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
+
     // Build update object dynamically
     const updateData: any = {
-      establishmentId: typeof payload.id === 'object' ? payload.id.toString() : payload.id,
+      establishmentId,
     };
 
     if (firstName !== undefined) updateData.firstName = firstName;
@@ -64,6 +69,14 @@ export default defineEventHandler(async (event) => {
       { $set: updateData },
       { upsert: true, returnDocument: 'after', runValidators: true }
     );
+
+    // If it's a NEW customer (created just now)
+    if (updatedCustomer.createdAt.getTime() === updatedCustomer.updatedAt.getTime()) {
+      const establishment = await User.findById(establishmentId);
+      if (establishment) {
+        sendAdminNotification("Customer Added", customerCreatedEmail(establishment, updatedCustomer));
+      }
+    }
 
     return {
       success: true,

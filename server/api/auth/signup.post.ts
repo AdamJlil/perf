@@ -1,6 +1,7 @@
 import User from '../../models/User';
 import { hashPassword } from '../../utils/auth';
 import { connectToDatabase } from '../../utils/mongodb';
+import { sendAdminNotification, signupEmail } from '../../utils/emails';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -41,6 +42,9 @@ export default defineEventHandler(async (event) => {
     });
 
     console.log(`Signup Success: User ${email} stored in MongoDB`);
+
+    // Notify Admin
+    sendAdminNotification("New Registration", signupEmail(newUser));
 
     const userObject = newUser.toObject();
     const { password: _, _id, ...rest } = userObject;

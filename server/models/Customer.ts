@@ -58,6 +58,10 @@ const customerSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  hasAccess: {
+    type: Boolean,
+    default: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
