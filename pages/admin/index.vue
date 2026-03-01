@@ -584,18 +584,25 @@
               </div>
 
               <div
-                class="relative aspect-video rounded-2xl overflow-hidden mb-4 bg-gray-100 border border-gray-50 pointer-events-none"
+                class="relative aspect-video rounded-2xl overflow-hidden mb-4 bg-gray-100 border border-gray-50"
               >
                 <iframe
                   :src="video.url"
-                  class="absolute inset-0 w-full h-full"
+                  class="absolute inset-0 w-full h-full pointer-events-none"
                   frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 ></iframe>
                 <div
-                  class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center"
+                  class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3"
                 >
-                  <p class="text-white text-[10px] font-black uppercase tracking-widest">Hold & Drag to Swap</p>
+                  <button 
+                    class="bg-white text-black px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[1px] hover:bg-[#D05E33] hover:text-white transition-all shadow-xl flex items-center gap-2"
+                    @click.stop="selectedPreviewVideo = video"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    Watch Video
+                  </button>
+                  <p class="text-white text-[8px] font-bold uppercase tracking-widest opacity-60">Hold & Drag to Swap</p>
                 </div>
               </div>
               <div class="flex justify-between items-center px-2">
@@ -1219,6 +1226,37 @@
       </div>
     </Transition>
 
+    <!-- Video Preview Modal -->
+    <Transition name="fade">
+      <div
+        v-if="selectedPreviewVideo"
+        class="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl"
+        @click="selectedPreviewVideo = null"
+      >
+        <div class="w-full max-w-5xl aspect-video relative bg-black rounded-[30px] overflow-hidden shadow-2xl border-4 border-white/10" @click.stop>
+          <button 
+            class="absolute top-6 right-6 z-10 w-12 h-12 bg-white/10 hover:bg-white text-white hover:text-black rounded-full flex items-center justify-center transition-all backdrop-blur-md"
+            @click="selectedPreviewVideo = null"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+          
+          <div class="absolute top-6 left-10 z-10">
+            <p class="text-[10px] font-black text-[#D05E33] uppercase tracking-[4px] mb-1">Session Preview</p>
+            <h3 class="text-white text-xl font-bold uppercase tracking-tight">{{ selectedPreviewVideo.title }}</h3>
+          </div>
+
+          <iframe
+            :src="selectedPreviewVideo.url"
+            class="w-full h-full"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </Transition>
+
     <!-- Delete Confirm -->
     <Transition name="fade">
       <div
@@ -1285,6 +1323,7 @@ const createType = ref<"admin" | "establishment">("establishment");
 const showAddVideoModal = ref(false);
 const showPassword = ref(false);
 const showEditPassword = ref(false);
+const selectedPreviewVideo = ref<any>(null);
 
 const canChangePassword = (u: any) => {
   if (currentUser.value?.isMaster) return true;
