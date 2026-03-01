@@ -23,28 +23,46 @@ const showSuccessNotification = ref(false);
 const notificationMessage = ref("");
 
 const currentPlan = computed(() => {
-  if (!user.value?.plan) return null;
+  const rawPlan = user.value?.plan;
+  if (!rawPlan) return null;
 
-  let planObj: any = {};
-  if (typeof user.value.plan === "object") {
-    planObj = user.value.plan;
-  } else {
-    try {
-      planObj = JSON.parse(user.value.plan);
-    } catch (e) {
-      planObj = { title: user.value.plan };
+  let planObj: any = null;
+
+  // 1. Handle Object type
+  if (typeof rawPlan === "object" && rawPlan !== null) {
+    planObj = { ...rawPlan };
+  } 
+  // 2. Handle String type
+  else if (typeof rawPlan === "string") {
+    // If it looks like a JSON object, try to parse it
+    if (rawPlan.trim().startsWith("{")) {
+      try {
+        planObj = JSON.parse(rawPlan);
+      } catch (e) {
+        planObj = { title: rawPlan };
+      }
+    } else {
+      // It's a plain string title (e.g., "EXPERIENCE")
+      planObj = { title: rawPlan };
     }
   }
 
-  // If price is missing, try to find it in our plans constant
+  // 3. Absolute Fallback
+  if (!planObj || typeof planObj !== "object") {
+    planObj = { title: String(rawPlan || "UNKNOWN") };
+  }
+
+  // 4. Fill in price if missing using the central plans constant
   if (!planObj.price && planObj.title) {
+    const titleKey = String(planObj.title).toUpperCase();
     const p1 = plans.ESTABLISHEMENT.plans.plan_1;
     const p2 = plans.ESTABLISHEMENT.plans.plan_2;
     const p3 = plans.ESTABLISHEMENT.plans.plan_3;
 
-    if (planObj.title === p1.title || planObj.title === "EXPLORER") planObj.price = p1.price.split(" ")[0];
-    else if (planObj.title === p2.title || planObj.title === "EXPERIENCE") planObj.price = p2.price.split(" ")[0];
-    else if (planObj.title === p3.title || planObj.title === "SIGNATURE") planObj.price = p3.price.split(" ")[0];
+    if (titleKey === p1.title || titleKey === "EXPLORER") planObj.price = p1.price.split(" ")[0];
+    else if (titleKey === p2.title || titleKey === "EXPERIENCE") planObj.price = p2.price.split(" ")[0];
+    else if (titleKey === p3.title || titleKey === "SIGNATURE") planObj.price = p3.price.split(" ")[0];
+    else planObj.price = "0";
   }
 
   return planObj;

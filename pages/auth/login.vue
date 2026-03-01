@@ -35,7 +35,11 @@ async function onLoginClick() {
 
     // Using a slight delay to ensure session state is correctly picked up
     setTimeout(async () => {
-      await useRouter().push("/establishment/manage-customers");
+      if (result.user?.isAdmin) {
+        await useRouter().push("/admin");
+      } else {
+        await useRouter().push("/establishment/manage-customers");
+      }
     }, 500);
   } catch (error: any) {
     console.error("Login error:", error);

@@ -31,10 +31,25 @@ export default defineEventHandler(async (event) => {
     // Force lowercase email match just in case
     const userEmail = payload.email.toLowerCase();
 
+    // Fetch the current user to check their current plan
+    const currentUser = await User.findOne({ email: userEmail });
+    if (!currentUser) {
+      console.error(`[UpgradeAPI] No user found for email: ${userEmail}`);
+      throw createError({ statusCode: 404, statusMessage: "User not found" });
+    }
+
+    // Build the update object
+    const updatePayload: any = { $set: { requested_plan: planTitle } };
+    
+    // Automatically reset registration_denied to false if the requested plan is new
+    if (planTitle !== currentUser.plan) {
+      updatePayload.$set.registration_denied = false;
+    }
+
     // Use findOneAndUpdate to get the document and ensure it exists
     const updatedUser = await User.findOneAndUpdate(
       { email: userEmail },
-      { $set: { requested_plan: planTitle } },
+      updatePayload,
       { returnDocument: "after", runValidators: true },
     );
 
@@ -47,6 +62,17 @@ export default defineEventHandler(async (event) => {
 
     // Notify Admin
     sendAdminNotification("Upgrade Request Received", upgradeRequestEmail(updatedUser, planTitle));
+
+    // Notify User
+    sendUserEmail(
+      updatedUser.email,
+      "PERF - Upgrade Request Received",
+      genericUserEmail(
+        updatedUser, 
+        "Upgrade Request Received", 
+        `We have received your request to upgrade to the <strong>${planTitle}</strong> plan. Our team will review it and contact you shortly to finalize the details.`
+      )
+    );
 
     return {
       success: true,

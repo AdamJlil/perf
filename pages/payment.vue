@@ -289,17 +289,41 @@ const handlePayment = async () => {
 
   const toast = useToast();
   const router = useRouter();
+  const urlParams = new URLSearchParams(window.location.search);
 
-  // Simulate order processing
-  setTimeout(async () => {
+  try {
+    // Collect all data for the email templates
+    const orderData = {
+      first_name: urlParams.get("first_name") || "User",
+      name: urlParams.get("name") || "",
+      email: urlParams.get("email") || "",
+      plan: urlParams.get("plan") || "EXPERIENCE",
+      price: selectedPlan.value?.price || "7500 dh",
+      address: form.address,
+      city: form.city,
+      phone: form.phone,
+      paymentMethod: form.paymentMethod
+    };
+
+    const response: any = await $fetch("/api/users/complete-order", {
+      method: "POST",
+      body: orderData
+    });
+
+    if (response.success) {
+      form.submitting = false;
+      toast.success("Order completed! Check your email for payment instructions.");
+
+      // Redirect to login after showing toast
+      setTimeout(async () => {
+        await router.push("/auth/login");
+      }, 3000);
+    }
+  } catch (error: any) {
     form.submitting = false;
-    toast.success("Completed! An Email has been sent to you.");
-
-    // Redirect to login after showing toast
-    setTimeout(async () => {
-      await router.push("/auth/login");
-    }, 2000);
-  }, 1000);
+    form.error = error.statusMessage || "Failed to process order";
+    toast.error(form.error);
+  }
 };
 </script>
 

@@ -160,7 +160,8 @@
 </template>
 
 <script setup lang="ts">
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
+// Use chart.js/auto default import for maximum compatibility and automatic registration
+import ChartJS from "chart.js/auto";
 import { Line } from "vue-chartjs";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -173,15 +174,13 @@ import { videoCalorieData } from "~/services/mock/video-calories";
 const config = useRuntimeConfig();
 
 // Define API base URL based on environment
-// Use a safe check for detecting localhost that works in both client and server
 const baseURL =
   typeof window !== "undefined" &&
   (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
     ? ""
     : "";
 
-// Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+// Registration is handled automatically by chart.js/auto
 
 const route = useRoute();
 const router = useRouter();
@@ -190,6 +189,7 @@ const customerName = ref("");
 const customerPicture = ref("");
 const videoSource = ref("");
 const costumerVideo = ref(0);
+const dbVideos = ref<any[]>([]);
 const isLoading = ref(true);
 const selectedElement = ref(1);
 const caloriesResult = ref("");
@@ -244,8 +244,88 @@ watch(selectedElement, (newValue) => {
 const labels = ref<string[]>([]);
 const data = ref<number[]>([]);
 
+const loadData = async () => {
+  const customerId = route.query.customerId as string;
+  console.log("[Program] Loading data for customerId:", customerId);
+  if (!customerId) return;
+
+  try {
+    // Fetch videos from DB first
+    try {
+      const videoRes = await $fetch<any>("/api/videos");
+      if (videoRes && videoRes.success) {
+        dbVideos.value = videoRes.videos;
+      }
+    } catch (vErr) {
+      console.error("[Program] Error fetching videos, falling back to mock:", vErr);
+    }
+
+    const allCustomers = await $fetch<any[]>("/api/users/customers");
+    console.log("[Program] All customers fetched:", allCustomers.length);
+    
+    const customer = allCustomers.find(
+      (c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
+    );
+
+    if (customer) {
+      console.log("[Program] Customer found:", customer.firstName);
+      customerName.value = `${customer.firstName} ${customer.lastName}`;
+      customerPicture.value = customer.profile_picture || "";
+      
+      // SYNC: Derive current video from the number of completed logs
+      const burnedCalories = customer.burnedCalories || {};
+      const completedSessions = Object.keys(burnedCalories).length;
+      
+      const videoList = dbVideos.value.length > 0 ? dbVideos.value.map(v => v.url) : establishmentUserVideos;
+      costumerVideo.value = completedSessions % videoList.length;
+      
+      ageRange.value = customer.ageRange || "";
+      weightRange.value = customer.weightRange || "";
+
+      if (
+        typeof costumerVideo.value === "number" &&
+        costumerVideo.value >= 0 &&
+        costumerVideo.value < videoList.length
+      ) {
+        videoSource.value = videoList[costumerVideo.value];
+      }
+
+      // Sort keys by Day number to ensure correct chart sequence
+      const sortedDays = Object.keys(burnedCalories).sort((a, b) => {
+        const numA = parseInt(a.replace("Day ", "")) || 0;
+        const numB = parseInt(b.replace("Day ", "")) || 0;
+        return numA - numB;
+      });
+
+      labels.value = sortedDays;
+      data.value = sortedDays.map((day) => burnedCalories[day]);
+
+      caloriesResult.value = calculateCalories(
+        ageRange.value,
+        weightRange.value,
+        2.5,
+        calorieData.value[costumerVideo.value || 0],
+      );
+    } else {
+      console.error("[Program] Customer not found in the establishment list");
+      throw new Error("Customer not found");
+    }
+  } catch (error: any) {
+    console.error("[Program] Critical error in loadData:", error);
+    useToast().error(`Failed to load program data: ${error.message || "Unknown error"}`);
+  }
+};
+
 // Initial calculation
 onMounted(async () => {
+  // Force scroll to top and disable browser's auto-scroll restoration
+  if (process.client) {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }
+
   // Redirect unpaid users
   if (!user.value?.paid) {
     useToast().error("Access denied. Please complete your payment first.");
@@ -253,58 +333,7 @@ onMounted(async () => {
     return;
   }
 
-  const customerId = route.query.customerId as string;
-
-  if (customerId) {
-    try {
-      const allCustomers = await $fetch<any[]>("/api/users/customers");
-      const customer = allCustomers.find(
-        (c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
-      );
-
-      if (customer) {
-        customerName.value = `${customer.firstName} ${customer.lastName}`;
-        customerPicture.value = customer.profile_picture || "";
-        
-        // SYNC: Derive current video from the number of completed logs
-        const burnedCalories = customer.burnedCalories || {};
-        const completedSessions = Object.keys(burnedCalories).length;
-        costumerVideo.value = completedSessions % establishmentUserVideos.length;
-        
-        ageRange.value = customer.ageRange || "";
-        weightRange.value = customer.weightRange || "";
-
-        if (
-          typeof costumerVideo.value === "number" &&
-          costumerVideo.value >= 0 &&
-          costumerVideo.value < establishmentUserVideos.length
-        ) {
-          videoSource.value = establishmentUserVideos[costumerVideo.value];
-        }
-
-        // Sort keys by Day number to ensure correct chart sequence
-        const sortedDays = Object.keys(burnedCalories).sort((a, b) => {
-          const numA = parseInt(a.replace("Day ", "")) || 0;
-          const numB = parseInt(b.replace("Day ", "")) || 0;
-          return numA - numB;
-        });
-
-        labels.value = sortedDays;
-        data.value = sortedDays.map((day) => burnedCalories[day]);
-
-        caloriesResult.value = calculateCalories(
-          ageRange.value,
-          weightRange.value,
-          2.5,
-          calorieData.value[costumerVideo.value || 0],
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching customer:", error);
-      useToast().error("Failed to load program data.");
-    }
-  }
-
+  await loadData();
   isLoading.value = false;
 });
 
@@ -490,20 +519,25 @@ const nextVideo = async () => {
 
     // Update the customer in real MongoDB via API
     // The video index will be derived automatically from the new count on refresh
+    const videoList = dbVideos.value.length > 0 ? dbVideos.value.map(v => v.url) : establishmentUserVideos;
     await $fetch("/api/users/customers/add", {
       method: "POST",
       body: {
         ...customer,
         burnedCalories: updatedBurnedCalories,
-        video: nextDayIndex % establishmentUserVideos.length
+        video: nextDayIndex % videoList.length
       },
     });
 
-    // Success toast and refresh
+    // Success toast
     useToast().success(`Completed! ${avgCalories} kcal added.`);
 
-    setTimeout(() => {
-      window.location.reload();
+    // Smooth data refresh and scroll to top
+    setTimeout(async () => {
+      await loadData();
+      if (process.client) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }, 1000);
   } catch (error) {
     console.error("Error in nextVideo:", error);

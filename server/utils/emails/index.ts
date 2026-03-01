@@ -1,18 +1,15 @@
 import nodemailer from 'nodemailer';
-import fs from 'fs';
-import path from 'path';
 
-// Admin recipient
-const ADMIN_EMAIL = 'contact@perf.ma';
+// Configuration
+const SENDER_EMAIL = process.env.GMAIL_USER || 'perf912@gmail.com';
+const ADMIN_EMAIL = 'perf912@gmail.com';
 
-// Configure transporter (Update these in your .env for real sending)
+// Configure Gmail SMTP transporter using the 'service' shortcut for better stability
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false, 
+  service: 'gmail',
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
   },
 });
 
@@ -20,23 +17,51 @@ const transporter = nodemailer.createTransport({
  * Core function to send notification to admin
  */
 export const sendAdminNotification = async (subject: string, html: string) => {
-  console.log(`[Email] Sending Admin Notification: ${subject}`);
+  console.log(`[Email] Attempting to send Admin Notification to ${ADMIN_EMAIL} via ${SENDER_EMAIL}`);
 
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn('[Email] Skipping real SMTP send: SMTP credentials not set in .env');
-    return;
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
+    console.warn('[Email] Skipping real SMTP send: GMAIL credentials not set in .env');
+    return { success: false, error: 'Credentials missing' };
   }
 
   try {
-    await transporter.sendMail({
-      from: '"PERF Notifications" <no-reply@perf.ma>',
+    const info = await transporter.sendMail({
+      from: `"PERF System" <${SENDER_EMAIL}>`,
       to: ADMIN_EMAIL,
       subject: `[PERF ADMIN] ${subject}`,
       html: html,
     });
-    console.log('[Email] Sent successfully');
-  } catch (error) {
-    console.error('[Email] Failed to send real email:', error);
+    console.log('[Email] Admin notification sent successfully:', info.messageId);
+    return { success: true, messageId: info.messageId };
+  } catch (error: any) {
+    console.error('[Email] Failed to send admin email:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Core function to send email to a specific user
+ */
+export const sendUserEmail = async (to: string, subject: string, html: string) => {
+  console.log(`[Email] Attempting to send User Email to ${to} via ${SENDER_EMAIL}`);
+
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
+    console.warn('[Email] Skipping real SMTP send: GMAIL credentials not set in .env');
+    return { success: false, error: 'Credentials missing' };
+  }
+
+  try {
+    const info = await transporter.sendMail({
+      from: `"PERF" <${SENDER_EMAIL}>`,
+      to: to,
+      subject: subject,
+      html: html,
+    });
+    console.log('[Email] User email sent successfully:', info.messageId);
+    return { success: true, messageId: info.messageId };
+  } catch (error: any) {
+    console.error(`[Email] Failed to send email to ${to}:`, error);
+    return { success: false, error: error.message };
   }
 };
 
@@ -47,3 +72,7 @@ export * from './templates/customer-created';
 export * from './templates/upgrade-request';
 export * from './templates/upgrade-cancel';
 export * from './templates/contact-form';
+export * from './templates/order-user';
+export * from './templates/order-admin';
+export * from './templates/generic-user';
+export * from './templates/welcome-user';

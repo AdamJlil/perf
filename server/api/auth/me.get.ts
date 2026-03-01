@@ -34,6 +34,8 @@ export default defineEventHandler(async (event) => {
         // Ensure status flags are explicitly included
         requested_plan: user.requested_plan || null,
         requested_cancel: !!user.requested_cancel,
+        isAdmin: !!user.isAdmin,
+        isMaster: !!user.isMaster,
         profile_picture: user.profile_picture || null
       },
     };

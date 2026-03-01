@@ -104,7 +104,11 @@ onMounted(() => {
   if (process.client) {
     // Redirect logged-in users to dashboard
     if (user.value) {
-      router.push("/establishment/manage-customers");
+      if (user.value.isAdmin) {
+        router.push("/admin");
+      } else {
+        router.push("/establishment/manage-customers");
+      }
       return;
     }
 

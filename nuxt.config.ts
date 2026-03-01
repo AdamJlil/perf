@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   plugins: ["~/plugins/swiper.client.js", "~/plugins/mock-api.ts"],
 
   build: {
-    transpile: ["swiper"],
+    transpile: ["swiper", "chart.js", "vue-chartjs"],
   },
 
   nitro: {

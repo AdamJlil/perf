@@ -61,7 +61,7 @@
           <div v-for="(section, index) in [
             { id: '03', title: 'Sharing of Information', content: 'We do not sell, trade, or rent your personal data. We may share it with trusted third-party services (e.g., payment processors, CRM/email platforms) necessary to operate our business — and only under confidentiality agreements.' },
             { id: '04', title: 'Data Security', content: 'We take reasonable measures to protect your data using encryption, secure storage, and limited access protocols. However, no system is 100% secure, and we cannot guarantee absolute security.' },
-            { id: '05', title: 'Your Rights', content: 'You have the right to access your personal data, request correction or deletion, withdraw consent at any time, or opt out of marketing emails. To exercise any of these rights, contact us at: contact@perf.ma' },
+            { id: '05', title: 'Your Rights', content: 'You have the right to access your personal data, request correction or deletion, withdraw consent at any time, or opt out of marketing emails. To exercise any of these rights, contact us at: perf912@gmail.com' },
             { id: '06', title: 'Cookies and Analytics', content: 'Our website may use cookies and analytics tools (e.g., Google Analytics) to collect usage data and enhance user experience. You can adjust your browser settings to disable cookies if you prefer.' }
           ]" :key="section.id">
             <h2 class="text-lg font-bold uppercase tracking-[2px] text-gray-800 mb-6 flex items-center gap-4">
@@ -76,7 +76,7 @@
             </h2>
             <p class="text-sm md:text-base leading-relaxed flex flex-wrap items-center gap-2">
               For any questions or requests related to this policy:
-              <a href="mailto:contact@perf.ma" class="text-[#D05E33] font-bold hover:underline">contact@perf.ma</a>
+              <a href="mailto:perf912@gmail.com" class="text-[#D05E33] font-bold hover:underline">perf912@gmail.com</a>
             </p>
           </div>
         </section>

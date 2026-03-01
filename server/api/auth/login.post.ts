@@ -43,7 +43,12 @@ export default defineEventHandler(async (event) => {
       Date.now() + (rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000)
     );
 
-    const token = await createToken({ id: user._id.toString(), email: user.email }, expiresAt);
+    const token = await createToken({ 
+      id: user._id.toString(), 
+      email: user.email, 
+      isAdmin: !!user.isAdmin,
+      isMaster: !!user.isMaster
+    }, expiresAt);
     const cookieName = process.env.NUXT_COOKIE_NAME || "__session";
 
     setCookie(event, cookieName, token, {
@@ -69,6 +74,8 @@ export default defineEventHandler(async (event) => {
     const userWithoutPassword = {
       id: _id.toString(),
       ...rest,
+      isAdmin: !!user.isAdmin,
+      isMaster: !!user.isMaster,
     };
 
     return {

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -50,11 +51,34 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  isMaster: {
+    type: Boolean,
+    default: false,
+  },
+  registration_denied: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 }, { timestamps: true });
+
+// Hash password before saving
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (err: any) {
+    throw err;
+  }
+});
 
 // Prevent overwrite on hot reload
 const User = mongoose.models.User || mongoose.model('User', userSchema);

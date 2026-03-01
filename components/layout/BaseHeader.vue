@@ -175,7 +175,7 @@ onUnmounted(() => {
 
             <!-- Welcome Message -->
             <div class="hidden md:flex flex-col items-start">
-              <span class="text-[10px] font-bold uppercase tracking-[1px] text-gray-400">Welcome back!</span>
+              <span class="text-[10px] font-bold uppercase tracking-[1px] text-gray-400">Hey,</span>
               <span class="text-[14px] font-black uppercase tracking-[2px] text-black leading-none">{{
                 user?.first_name
               }}</span>
@@ -184,7 +184,7 @@ onUnmounted(() => {
         </template>
       </div>
 
-      <!-- Desktop Center Navigation -->
+      <!-- Desktop Center Navigation (Only visible when logged out) -->
       <div v-if="!isLoggedIn" class="hidden lg:flex items-center gap-10">
         <template
           v-for="item in [
@@ -208,6 +208,7 @@ onUnmounted(() => {
         </template>
       </div>
 
+      <!-- Right Section: Dashboard Tabs or Auth Buttons -->
       <div class="relative flex items-center gap-[15px]">
         <template v-if="isLoggedIn">
           <!-- Hidden File Input -->
@@ -227,6 +228,7 @@ onUnmounted(() => {
               Dashboard
             </NuxtLink>
             <NuxtLink
+              v-if="route.path !== '/establishment/program'"
               to="/myPlan"
               class="px-5 py-2 text-[10px] font-bold tracking-[2px] uppercase transition-all duration-300 rounded-full"
               :class="[isActive('/myPlan') ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600']"
@@ -234,6 +236,7 @@ onUnmounted(() => {
               My Plan
             </NuxtLink>
             <NuxtLink
+              v-if="route.path !== '/establishment/program'"
               to="/contact"
               class="px-5 py-2 text-[10px] font-bold tracking-[2px] uppercase transition-all duration-300 rounded-full"
               :class="[isActive('/contact') ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600']"
@@ -337,6 +340,7 @@ onUnmounted(() => {
                 Dashboard
               </NuxtLink>
               <NuxtLink
+                v-if="route.path !== '/establishment/program'"
                 to="/myPlan"
                 class="w-full py-4 rounded-2xl text-center font-bold uppercase tracking-[3px] transition-all"
                 :class="[isActive('/myPlan') ? 'bg-black text-white shadow-xl' : 'bg-gray-100 text-gray-500']"
@@ -345,6 +349,7 @@ onUnmounted(() => {
                 My Plan
               </NuxtLink>
               <NuxtLink
+                v-if="route.path !== '/establishment/program'"
                 to="/contact"
                 class="w-full py-4 rounded-2xl text-center font-bold uppercase tracking-[3px] transition-all"
                 :class="[isActive('/contact') ? 'bg-black text-white shadow-xl' : 'bg-gray-100 text-gray-500']"

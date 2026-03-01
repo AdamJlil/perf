@@ -36,6 +36,17 @@ export default defineEventHandler(async (event) => {
     // Notify Admin
     sendAdminNotification("Upgrade Request Withdrawn", upgradeCancelEmail(updatedUser, cancelledPlan));
 
+    // Notify User
+    sendUserEmail(
+      updatedUser.email,
+      "PERF - Upgrade Request Cancelled",
+      genericUserEmail(
+        updatedUser,
+        "Upgrade Request Cancelled",
+        `As requested, we have cancelled your upgrade request for the <strong>${cancelledPlan}</strong> plan. Your current subscription remains unchanged.`
+      )
+    );
+
     return {
       success: true,
       message: "Upgrade request cancelled",

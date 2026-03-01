@@ -97,7 +97,7 @@
             </h2>
             <p class="text-sm md:text-base leading-relaxed flex flex-wrap items-center gap-2">
               For questions regarding these Terms, contact us at:
-              <a href="mailto:contact@perf.ma" class="text-[#D05E33] font-bold hover:underline">contact@perf.ma</a>
+              <a href="mailto:perf912@gmail.com" class="text-[#D05E33] font-bold hover:underline">perf912@gmail.com</a>
             </p>
           </div>
         </section>

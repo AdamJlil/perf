@@ -101,7 +101,7 @@ const submitForm = async () => {
             </div>
             <div>
               <p class="text-xs font-medium tracking-[2px] uppercase text-gray-500 mb-1">Email</p>
-              <p class="text-xl text-gray-800">contact@perf.ma</p>
+              <p class="text-xl text-gray-800">perf912@gmail.com</p>
             </div>
           </div>
         </div>

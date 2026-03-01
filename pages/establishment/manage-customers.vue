@@ -846,7 +846,7 @@ const shouldShowCalorieHistory = computed(() => {
       </p>
       <div class="mt-12 pt-10 border-t border-gray-100">
         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[3px]">
-          Need help? Contact support at contact@perf.ma
+          Need help? Contact support at perf912@gmail.com
         </p>
       </div>
     </section>

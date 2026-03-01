@@ -53,8 +53,8 @@
             </li>
             <li class="pt-2">
               <p class="text-[10px] font-bold text-black uppercase tracking-[2px] mb-1">Inquiries</p>
-              <a href="mailto:contact@perf.ma" class="text-xs font-medium text-[#D05E33] underline tracking-[1px]"
-                >contact@perf.ma</a
+              <a href="mailto:perf912@gmail.com" class="text-xs font-medium text-[#D05E33] underline tracking-[1px]"
+                >perf912@gmail.com</a
               >
             </li>
           </ul>
