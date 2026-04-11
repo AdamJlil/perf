@@ -12,8 +12,8 @@ export default defineNuxtConfig({
     cookieExpires: ONE_DAY.toString(),
     cookieRememberMeExpires: ONE_WEEK.toString(),
     public: {
-      // Local-only setup, API is mocked
-      apiBase: "http://localhost:3000",
+      // Dynamic base URL for local or production
+      apiBase: process.env.BASE_URL || "http://localhost:3000",
     },
   },
 

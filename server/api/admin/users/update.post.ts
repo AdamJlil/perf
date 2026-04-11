@@ -1,6 +1,7 @@
 import User from '../../../models/User';
 import { verifyToken } from '../../../utils/auth';
 import { connectToDatabase } from '../../../utils/mongodb';
+import { sendUserEmail, accountActivatedEmail } from '../../../utils/emails';
 
 export default defineEventHandler(async (event) => {
   const cookieName = process.env.NUXT_COOKIE_NAME || "__session";
@@ -62,12 +63,20 @@ export default defineEventHandler(async (event) => {
       delete updates.password; // Remove from updates to avoid overwriting with plain text via findByIdAndUpdate later if we were still using it
     }
 
+    // Detect Activation (Paid false -> true)
+    const isActivating = updates.paid === true && targetUser.paid === false && !targetUser.isAdmin;
+
     // Update other fields
     Object.keys(updates).forEach(key => {
       targetUser[key] = updates[key];
     });
 
     const updatedUser = await targetUser.save();
+
+    // Send Activation Email if needed
+    if (isActivating) {
+      sendUserEmail(updatedUser.email, "Your PERF Account is Active!", accountActivatedEmail(updatedUser));
+    }
 
     return { success: true, user: updatedUser };
   } catch (err: any) {

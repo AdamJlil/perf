@@ -135,7 +135,7 @@ const togglePassword = () => {
           </div>
         </div>
 
-        <!-- Remember Me -->
+        <!-- Remember Me & Forgot Password -->
         <div class="flex items-center justify-between pt-2">
           <label class="flex items-center gap-3 cursor-pointer group">
             <div class="relative">
@@ -153,6 +153,13 @@ const togglePassword = () => {
               Remember Me
             </span>
           </label>
+
+          <NuxtLink
+            to="/auth/forgot-password"
+            class="text-[10px] font-bold tracking-[1px] uppercase text-[#D05E33] hover:underline"
+          >
+            Forgot Password?
+          </NuxtLink>
         </div>
 
         <!-- Login Button -->

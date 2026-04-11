@@ -236,23 +236,21 @@ const showConfirmationMessage = ref(false);
 const sendingInformation = ref(false);
 
 const createPlanObject = (planName: string, userType: string, price: string) => {
+  const planData = plans.ESTABLISHEMENT.plans[
+    planName === "EXPLORER" ? "plan_1" : planName === "EXPERIENCE" ? "plan_2" : "plan_3"
+  ];
   selectedPlan.value = {
     title: planName,
-    price: price ? `${price} dh` : "",
-    duration:
-      planName === "EXPLORER"
-        ? "Less than 10 rooms"
-        : planName === "EXPERIENCE"
-          ? "Between 10-20 rooms"
-          : "More than 20 rooms",
-    features: [],
-    discount: "",
+    price: price ? `${price} dh /mois` : "",
+    duration: planData.duration,
+    features: planData.features,
+    discount: planData.discount,
   };
 };
 
 onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search);
-  createPlanObject(urlParams.get("plan") || "EXPERIENCE", "ESTABLISHEMENT", urlParams.get("price") || "7500");
+  createPlanObject(urlParams.get("plan") || "EXPERIENCE", "ESTABLISHEMENT", urlParams.get("price") || "800");
 });
 
 const validateForm = () => {
@@ -298,7 +296,7 @@ const handlePayment = async () => {
       name: urlParams.get("name") || "",
       email: urlParams.get("email") || "",
       plan: urlParams.get("plan") || "EXPERIENCE",
-      price: selectedPlan.value?.price || "7500 dh",
+      price: selectedPlan.value?.price || "800 dh /mois",
       address: form.address,
       city: form.city,
       phone: form.phone,

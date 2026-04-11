@@ -204,9 +204,9 @@ const fetchUserData = async () => {
       const planTitle = typeof userData.user.plan === "string" ? JSON.parse(userData.user.plan).title || "" : userData.user.plan.title || "";
       
       if (userData.user.type === "ESTABLISHEMENT") {
-        if (planTitle === "EXPLORER") price = "6500";
-        else if (planTitle === "EXPERIENCE") price = "7500";
-        else if (planTitle === "SIGNATURE") price = "8000";
+        if (planTitle === "EXPLORER") price = "500";
+        else if (planTitle === "EXPERIENCE") price = "800";
+        else if (planTitle === "SIGNATURE") price = "900";
       }
       createPlanObject(planTitle, userData.user.type, price);
     }
@@ -216,18 +216,15 @@ const fetchUserData = async () => {
 };
 
 const createPlanObject = (planName: string, userType: string, price: string) => {
+  const planData = plans.ESTABLISHEMENT.plans[
+    planName === "EXPLORER" ? "plan_1" : planName === "EXPERIENCE" ? "plan_2" : "plan_3"
+  ];
   selectedPlan.value = {
     title: planName,
-    price: price ? `${price} dh` : "",
-    duration: planName === "EXPLORER" ? "Less than 10 rooms" : planName === "EXPERIENCE" ? "Between 10-20 rooms" : "More than 20 rooms",
-    features: [
-      { text: "Member accounts", isDisabled: false },
-      { text: "Analytics dashboard", isDisabled: false },
-      { text: "Email support", isDisabled: false },
-      { text: "Custom branding", isDisabled: planName === "EXPLORER" },
-      { text: "Priority support", isDisabled: planName !== "SIGNATURE" },
-    ],
-    discount: planName === "EXPLORER" ? "6500 dh" : planName === "EXPERIENCE" ? "Save 7500 dh" : "Save 8000 dh",
+    price: price ? `${price} dh /mois` : "",
+    duration: planData.duration,
+    features: planData.features,
+    discount: planData.discount,
   };
 };
 

@@ -28,9 +28,9 @@ export const mockUsers = [
 ];
 
 export const mockPlans = [
-  { title: "EXPLORER", price: "6500" },
-  { title: "EXPERIENCE", price: "7500" },
-  { title: "SIGNATURE", price: "8000" },
+  { title: "EXPLORER", price: "500" },
+  { title: "EXPERIENCE", price: "800" },
+  { title: "SIGNATURE", price: "900" },
 ];
 
 export const getStoredUsers = () => {

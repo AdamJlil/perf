@@ -42,11 +42,11 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const hashedPassword = await hashPassword(password);
-
+    // Let the User model's pre-save middleware handle hashing
+    // Remove the manual hashPassword call to avoid double-hashing
     const newUser = await User.create({
       email,
-      password: hashedPassword,
+      password, // Pass plain text, model hashes it
       type,
       first_name,
       name,

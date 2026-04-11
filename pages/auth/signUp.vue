@@ -126,7 +126,7 @@ const onSignupClick = async () => {
         email: form.data.email,
         userType: form.data.userType,
         plan: form.data.plan,
-        price: selectedPlan.value?.price || "6500",
+        price: selectedPlan.value?.price || "500",
       },
     });
   } catch (error: any) {

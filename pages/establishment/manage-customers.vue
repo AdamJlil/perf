@@ -352,6 +352,32 @@ const confirmRemove = async () => {
   }
 };
 
+const resetCustomerProgress = async () => {
+  if (!selectedCustomer.value) return;
+  useToast().info(`Resetting all progress for ${selectedCustomer.value.firstName}...`);
+
+  try {
+    await $fetch("/api/users/customers/add", {
+      method: "POST",
+      body: {
+        ...selectedCustomer.value,
+        burnedCalories: {},
+        video: 0
+      },
+    });
+    
+    useToast().success("Progress has been reset to Day 1.");
+    
+    // Update local state
+    selectedCustomer.value.burnedCalories = {};
+    selectedCustomer.value.video = 0;
+    
+    await fetchCustomers();
+  } catch (err) {
+    useToast().error("Failed to reset progress.");
+  }
+};
+
 onMounted(async () => {
   await fetchCustomers();
 });
@@ -642,26 +668,36 @@ const shouldShowCalorieHistory = computed(() => {
                     class="text-xs font-bold text-gray-500 uppercase tracking-[3px] mb-6 border-b border-gray-200 pb-4 flex justify-between items-center"
                   >
                     <span>Activity Logs</span>
-                    <button
-                      class="text-[10px] uppercase font-bold text-[#D05E33] hover:underline flex items-center gap-1"
-                      @click="addManualCalorieEntry"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                    <div class="flex gap-4">
+                      <button
+                        v-if="calorieEntriesToDisplay.length > 0"
+                        class="text-[10px] uppercase font-bold text-gray-400 hover:text-red-500 flex items-center gap-1 transition-colors"
+                        @click="resetCustomerProgress"
                       >
-                        <path d="M5 12h14" />
-                        <path d="M12 5v14" />
-                      </svg>
-                      Add Day
-                    </button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        Reset Progress
+                      </button>
+                      <button
+                        class="text-[10px] uppercase font-bold text-[#D05E33] hover:underline flex items-center gap-1"
+                        @click="addManualCalorieEntry"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="3"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="M12 5v14" />
+                        </svg>
+                        Add Day
+                      </button>
+                    </div>
                   </h3>
                   <div v-if="calorieEntriesToDisplay.length > 0" class="space-y-4">
                     <div

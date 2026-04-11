@@ -19,5 +19,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/auth/login");
   }
 
+  // LOCKDOWN MODE: If we are coming from /establishment/program, 
+  // prevent navigating to other sensitive establishment pages
+  if (from.path === "/establishment/program" && to.path !== "/establishment/program") {
+    // Only allow navigating to /auth/login (logout) or the same page
+    if (to.path.startsWith("/establishment/") || to.path === "/myPlan") {
+      console.warn("Auth Middleware: Guest Lockdown active. Navigation blocked.");
+      return navigateTo(from.fullPath);
+    }
+  }
+
   console.log("Auth Middleware: Access granted for", user.value.email);
 });

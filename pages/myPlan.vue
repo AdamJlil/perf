@@ -220,7 +220,7 @@ const cancelUpgradeRequest = async () => {
 
             <h2 class="text-5xl font-bold text-gray-900 tracking-tight pt-2 uppercase">{{ currentPlan.title }}</h2>
             <p class="text-2xl text-gray-400 font-light tracking-[1px]">
-              {{ currentPlan.price }} <span class="text-sm">MAD / Month</span>
+              {{ currentPlan.price }} <span class="text-sm">dh /mois</span>
             </p>
           </div>
 

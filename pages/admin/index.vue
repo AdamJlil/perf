@@ -333,6 +333,27 @@
                   </div>
 
                   <div class="flex items-center gap-3 ml-auto">
+                    <!-- Quick Toggle (Feature 3) -->
+                    <button
+                      v-if="!est.isAdmin"
+                      class="p-3 rounded-full transition-all shadow-sm flex items-center justify-center"
+                      :class="est.paid ? 'bg-orange-50 text-orange-400 hover:bg-orange-500 hover:text-white' : 'bg-emerald-50 text-emerald-400 hover:bg-emerald-500 hover:text-white'"
+                      :title="est.paid ? 'Suspend Access' : 'Activate Access'"
+                      @click.stop="toggleUserStatus(est)"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" x2="12" y1="2" y2="12"/></svg>
+                    </button>
+
+                    <!-- Impersonate (Feature 2) -->
+                    <button
+                      v-if="currentUser?.isMaster"
+                      class="p-3 rounded-full bg-blue-50 text-blue-400 hover:bg-blue-500 hover:text-white transition-all shadow-sm flex items-center justify-center"
+                      title="Login as this User"
+                      @click.stop="impersonateUser(est)"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="19" cy="7" r="4"/></svg>
+                    </button>
+
                     <!-- Quick Delete Establishment -->
                     <button
                       v-if="canDeleteUser(est)"
@@ -614,7 +635,7 @@
                 </div>
                 <button
                   class="p-3 rounded-xl bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                  @click.stop="deleteVideo(video.id)"
+                  @click="deleteVideo(video.id)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1343,9 +1364,10 @@ const addVideo = async () => {
     return;
   }
   isSaving.value = true;
+  useToast().info("Adding video to registry...");
   try {
     await $fetch("/api/admin/videos/add", { method: "POST", body: newVideo });
-    useToast().success("Video added to registry.");
+    useToast().success("Video added successfully!");
     newVideo.url = "";
     newVideo.title = "";
     showAddVideoModal.value = false;
@@ -1358,7 +1380,7 @@ const addVideo = async () => {
 };
 
 const deleteVideo = async (id: string) => {
-  if (!confirm("Are you sure you want to delete this video?")) return;
+  useToast().info("Removing video...");
   try {
     await $fetch("/api/admin/videos/delete", { method: "POST", body: { id } });
     useToast().success("Video removed.");
@@ -1395,10 +1417,36 @@ const onDrop = async (index: number) => {
   try {
     const videoOrders = data.value.videos.map((v, i) => ({ id: v.id, order: i }));
     await $fetch("/api/admin/videos/reorder", { method: "POST", body: { videoOrders } });
-    useToast().success("Video order updated!");
+    useToast().success("Order updated!");
   } catch (err: any) {
     useToast().error("Failed to save video order");
     await fetchAdminData(); // Refresh if failed
+  }
+};
+
+const impersonateUser = async (user: any) => {
+  useToast().info(`Switching to ${user.first_name}'s view...`);
+  try {
+    const res = await $fetch<any>("/api/admin/users/impersonate", { method: "POST", body: { id: user.id } });
+    if (res.success) {
+      window.location.href = res.redirect;
+    }
+  } catch (e: any) {
+    useToast().error(e.statusMessage || "Impersonation failed");
+  }
+};
+
+const toggleUserStatus = async (user: any) => {
+  const newStatus = !user.paid;
+  try {
+    await $fetch("/api/admin/users/update", { 
+      method: "POST", 
+      body: { id: user.id, updates: { paid: newStatus } } 
+    });
+    useToast().success(`${user.first_name} is now ${newStatus ? 'ACTIVE' : 'SUSPENDED'}`);
+    await fetchAdminData();
+  } catch (e: any) {
+    useToast().error("Status update failed");
   }
 };
 

@@ -63,6 +63,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  resetPasswordToken: {
+    type: String,
+    default: null,
+  },
+  resetPasswordExpires: {
+    type: Date,
+    default: null,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -71,11 +79,18 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
+  if (!this.isModified('password')) {
+    console.log(`[UserModel] Password NOT modified for ${this.email}`);
+    return;
+  }
+  
   try {
+    console.log(`[UserModel] Hashing password for ${this.email}. Length: ${this.password?.length}`);
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+    console.log(`[UserModel] Hashing complete for ${this.email}`);
   } catch (err: any) {
+    console.error(`[UserModel] Hashing failed for ${this.email}:`, err);
     throw err;
   }
 });

@@ -114,7 +114,7 @@ onUnmounted(() => {
     >
       <!-- Left Section: Logo & Profile -->
       <div class="flex items-center gap-4 md:gap-6">
-        <NuxtLink to="/" class="flex items-center">
+        <NuxtLink :to="route.path === '/establishment/program' ? '#' : '/'" class="flex items-center" :class="{ 'cursor-default': route.path === '/establishment/program' }">
           <img src="/images/pepe.png" alt="PERF Logo" class="h-8 md:h-10 w-auto object-contain" />
         </NuxtLink>
 
@@ -122,6 +122,7 @@ onUnmounted(() => {
           <div class="flex items-center gap-3 border-l-[2px] border-[#D05E334A] pl-4 md:pl-6 ml-0 md:ml-2">
             <!-- Profile Picture Avatar -->
             <button
+              v-if="route.path !== '/establishment/program'"
               class="hidden md:flex relative w-12 h-12 rounded-full border border-gray-200 overflow-hidden group shadow-sm bg-white items-center justify-center transition-all hover:border-[#D05E33]"
               :disabled="isUpdatingPicture"
               title="Edit profile picture"
@@ -215,7 +216,7 @@ onUnmounted(() => {
           <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="handleFileUpload" />
 
           <!-- Switch Tab for Dashboard, My Plan & Contact - CONSISTENT EVERYWHERE -->
-          <div class="hidden lg:flex items-center bg-gray-100/80 p-1 rounded-full border border-gray-200 shadow-inner">
+          <div v-if="route.path !== '/establishment/program'" class="hidden lg:flex items-center bg-gray-100/80 p-1 rounded-full border border-gray-200 shadow-inner">
             <NuxtLink
               to="/establishment/manage-customers"
               class="px-5 py-2 text-[10px] font-bold tracking-[2px] uppercase transition-all duration-300 rounded-full"
@@ -324,7 +325,7 @@ onUnmounted(() => {
             </NuxtLink>
           </template>
 
-          <div v-if="isLoggedIn" class="w-full flex flex-col items-center gap-8 mt-8 border-t border-gray-100 pt-12">
+          <div v-if="isLoggedIn && route.path !== '/establishment/program'" class="w-full flex flex-col items-center gap-8 mt-8 border-t border-gray-100 pt-12">
             <!-- Mobile Switch Tab - CONSISTENT -->
             <div class="flex flex-col w-full max-w-xs gap-4">
               <NuxtLink
@@ -396,6 +397,16 @@ onUnmounted(() => {
                 Logout
               </button>
             </div>
+          </div>
+
+          <!-- Specific Guest Logout for Program Page -->
+          <div v-else-if="isLoggedIn && route.path === '/establishment/program'" class="w-full flex flex-col items-center gap-8 mt-8 border-t border-gray-100 pt-12">
+             <button
+                class="px-12 py-4 bg-black text-white font-bold uppercase tracking-[4px] rounded-2xl hover:bg-gray-800 transition-all active:scale-95 mt-4"
+                @click="handleLogout"
+              >
+                Exit Session & Logout
+              </button>
           </div>
 
           <template v-else>
