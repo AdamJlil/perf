@@ -120,7 +120,7 @@ const enterEditMode = () => {
 
 const saveCustomerEdits = async () => {
   if (!selectedCustomer.value) return;
-  
+
   // Strict Validation
   const age = parseInt(editForm.age.toString());
   const weight = parseFloat(editForm.weight.toString());
@@ -235,10 +235,8 @@ const deleteCalorieEntry = async (day: string) => {
     const numB = parseInt(b.replace("Day ", "")) || 0;
     return numA - numB;
   });
-  
-  const remainingValues = sortedDays
-    .filter(d => d !== day)
-    .map(d => selectedCustomer.value!.burnedCalories[d]);
+
+  const remainingValues = sortedDays.filter((d) => d !== day).map((d) => selectedCustomer.value!.burnedCalories[d]);
 
   // 2. Re-index remaining values
   const updatedBurnedCalories: { [key: string]: number } = {};
@@ -293,19 +291,19 @@ const addManualCalorieEntry = async () => {
   if (!selectedCustomer.value) return;
 
   const burnedCalories = selectedCustomer.value.burnedCalories || {};
-  
+
   // 1. Get current values in sequence
   const sortedDays = Object.keys(burnedCalories).sort((a, b) => {
     const numA = parseInt(a.replace("Day ", "")) || 0;
     const numB = parseInt(b.replace("Day ", "")) || 0;
     return numA - numB;
   });
-  
-  const values = sortedDays.map(d => burnedCalories[d]);
-  
+
+  const values = sortedDays.map((d) => burnedCalories[d]);
+
   // 2. Append new day with 0 kcal
   values.push(0);
-  
+
   // 3. Re-index everything
   const updatedBurnedCalories: { [key: string]: number } = {};
   values.forEach((kcal, i) => {
@@ -362,16 +360,16 @@ const resetCustomerProgress = async () => {
       body: {
         ...selectedCustomer.value,
         burnedCalories: {},
-        video: 0
+        video: 0,
       },
     });
-    
+
     useToast().success("Progress has been reset to Day 1.");
-    
+
     // Update local state
     selectedCustomer.value.burnedCalories = {};
     selectedCustomer.value.video = 0;
-    
+
     await fetchCustomers();
   } catch (err) {
     useToast().error("Failed to reset progress.");
@@ -513,7 +511,9 @@ const shouldShowCalorieHistory = computed(() => {
             <div class="w-full grid grid-cols-3 gap-2 pt-6 border-t border-gray-100">
               <div class="text-center">
                 <span class="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Weight</span>
-                <span class="text-sm font-bold text-gray-700">{{ customer.weight || "-" }}<span class="text-[8px] ml-0.5">kg</span></span>
+                <span class="text-sm font-bold text-gray-700"
+                  >{{ customer.weight || "-" }}<span class="text-[8px] ml-0.5">kg</span></span
+                >
               </div>
               <div class="text-center border-l border-gray-100 px-1">
                 <span class="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Age</span>
@@ -521,7 +521,9 @@ const shouldShowCalorieHistory = computed(() => {
               </div>
               <div class="text-center border-l border-gray-100">
                 <span class="block text-[8px] font-bold text-gray-400 uppercase tracking-widest mb-1">Videos</span>
-                <span class="text-sm font-bold text-[#D05E33]">{{ Object.keys(customer.burnedCalories || {}).length }}</span>
+                <span class="text-sm font-bold text-[#D05E33]">{{
+                  Object.keys(customer.burnedCalories || {}).length
+                }}</span>
               </div>
             </div>
           </div>
@@ -674,7 +676,20 @@ const shouldShowCalorieHistory = computed(() => {
                         class="text-[10px] uppercase font-bold text-gray-400 hover:text-red-500 flex items-center gap-1 transition-colors"
                         @click="resetCustomerProgress"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="3"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                          <path d="M3 3v5h5" />
+                        </svg>
                         Reset Progress
                       </button>
                       <button
@@ -804,12 +819,30 @@ const shouldShowCalorieHistory = computed(() => {
         >
           <div class="bg-white p-10 rounded-[40px] max-w-md w-full shadow-2xl text-center border-2 border-red-50">
             <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-x"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" x2="22" y1="8" y2="13"/><line x1="22" x2="17" y1="8" y2="13"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#ef4444"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-user-x"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <line x1="17" x2="22" y1="8" y2="13" />
+                <line x1="22" x2="17" y1="8" y2="13" />
+              </svg>
             </div>
             <h2 class="text-xl font-bold uppercase tracking-[2px] text-gray-800 mb-4">Remove Access?</h2>
             <p class="text-sm text-gray-500 mb-10 leading-relaxed">
-              Are you sure you want to remove access for <span class="font-bold text-black">{{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}</span>?
-              This customer will no longer appear in your dashboard.
+              Are you sure you want to remove access for
+              <span class="font-bold text-black"
+                >{{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}</span
+              >? This customer will no longer appear in your dashboard.
             </p>
             <div class="flex flex-col gap-3">
               <button
@@ -882,7 +915,7 @@ const shouldShowCalorieHistory = computed(() => {
       </p>
       <div class="mt-12 pt-10 border-t border-gray-100">
         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[3px]">
-          Need help? Contact support at perf912@gmail.com
+          Need help? Contact support at contact@perf-club.com
         </p>
       </div>
     </section>

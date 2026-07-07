@@ -90,7 +90,7 @@
                       :src="signal.profile_picture"
                       class="w-full h-full object-cover"
                     />
-                    <span v-else>{{ signal.first_name[0] }}</span>
+                    <span v-else>{{ signal.first_name?.[0] || "?" }}</span>
                   </div>
                   <div class="min-w-0">
                     <p class="text-xs font-black text-gray-800 uppercase tracking-tight truncate">
@@ -183,7 +183,7 @@
                     <span
                       v-else
                       class="w-full h-full flex items-center justify-center font-bold text-gray-300 text-xl"
-                      >{{ admin.first_name[0] }}</span
+                      >{{ admin.first_name?.[0] || "?" }}</span
                     >
                   </div>
                   <div>
@@ -297,7 +297,7 @@
                     <span
                       v-else
                       class="w-full h-full flex items-center justify-center font-bold text-gray-300 text-xl"
-                      >{{ est.first_name[0] }}</span
+                      >{{ est.first_name?.[0] || "?" }}</span
                     >
                   </div>
                   <div>
@@ -449,7 +449,7 @@
                             class="w-12 h-12 rounded-full overflow-hidden bg-[#EFEFEC] border border-white shadow-sm flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-gray-400"
                           >
                             <img v-if="c.profile_picture" :src="c.profile_picture" class="w-full h-full object-cover" />
-                            <span v-else>{{ c.firstName[0] }}{{ c.lastName[0] }}</span>
+                            <span v-else>{{ c.firstName?.[0] || "" }}{{ c.lastName?.[0] || "" }}</span>
                           </div>
                           <div>
                             <p class="text-xs font-bold text-gray-800 uppercase tracking-tight leading-none mb-1">
@@ -504,7 +504,7 @@
                       <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-50 text-center">
                         <div class="bg-gray-50/50 p-2 rounded-lg">
                           <p class="text-[7px] font-black text-gray-400 uppercase mb-1">Sessions</p>
-                          <p class="text-[10px] font-bold text-gray-800">{{ Object.keys(c.burnedCalories).length }}</p>
+                          <p class="text-[10px] font-bold text-gray-800">{{ Object.keys(c.burnedCalories || {}).length }}</p>
                         </div>
                         <div class="bg-gray-50/50 p-2 rounded-lg">
                           <p class="text-[7px] font-black text-gray-400 uppercase mb-1">Status</p>
@@ -626,33 +626,60 @@
                   <p class="text-white text-[8px] font-bold uppercase tracking-widest opacity-60">Hold & Drag to Swap</p>
                 </div>
               </div>
-              <div class="flex justify-between items-center px-2">
-                <div>
+              <div class="flex justify-between items-start px-2 gap-2">
+                <div class="min-w-0">
                   <h3 class="text-xs font-bold text-gray-800 uppercase tracking-tight truncate max-w-[150px]">
                     {{ video.title }}
                   </h3>
-                  <p class="text-[8px] font-bold text-[#D05E33] uppercase mt-0.5">Session Order Active</p>
+                  <p v-if="videoKcalPreview(video)" class="text-[8px] font-bold text-[#D05E33] uppercase mt-0.5">
+                    ~{{ videoKcalPreview(video) }} kcal / session
+                  </p>
+                  <p class="text-[8px] text-gray-400 mt-1 leading-relaxed line-clamp-2">
+                    {{ video.description || "No description yet — click edit to add one." }}
+                  </p>
                 </div>
-                <button
-                  class="p-3 rounded-xl bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                  @click="deleteVideo(video.id)"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    class="p-3 rounded-xl bg-black text-white hover:bg-[#D05E33] transition-all shadow-sm"
+                    title="Edit title, video, kcal & description"
+                    @click="openVideoEditor(video)"
                   >
-                    <path d="M3 6h18" />
-                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                    </svg>
+                  </button>
+                  <button
+                    class="p-3 rounded-xl bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                    title="Delete video"
+                    @click="deleteVideo(video.id)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M3 6h18" />
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1043,6 +1070,20 @@
                 />
                 <p class="text-[8px] text-gray-400 italic">Please use embeddable URLs for proper rendering.</p>
               </div>
+              <div class="space-y-2">
+                <label class="block text-[8px] font-black text-gray-400 uppercase tracking-[2px] ml-1"
+                  >Session Description (Shown to customers)</label
+                >
+                <textarea
+                  v-model="newVideo.description"
+                  rows="3"
+                  class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none resize-none"
+                  placeholder="e.g. This full-body workout focuses on strength and core engagement..."
+                ></textarea>
+                <p class="text-[8px] text-gray-400 italic">
+                  Default kcal values are applied automatically — you can fine-tune them via Edit after creation.
+                </p>
+              </div>
             </div>
           </div>
           <div class="p-8 bg-gray-50 border-t border-gray-100 flex justify-end gap-4">
@@ -1062,6 +1103,175 @@
                 class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"
               ></div>
               Register Video
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Video / Session Editor Modal (title, url, kcal, description) -->
+    <Transition name="fade">
+      <div
+        v-if="editingVideo"
+        class="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
+      >
+        <div
+          class="bg-white rounded-[40px] shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-white/20 animate-scale-up"
+        >
+          <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-[#D05E33] text-white rounded-2xl flex items-center justify-center shadow-xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11" />
+                  <rect width="14" height="12" x="2" y="6" rx="2" />
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold uppercase tracking-[2px] text-gray-800">Edit Session</h2>
+                <p class="text-[9px] font-bold text-[#D05E33] uppercase tracking-[3px]">
+                  Video &middot; Title &middot; Kcal &middot; Description
+                </p>
+              </div>
+            </div>
+            <button class="p-3 hover:bg-gray-100 rounded-full text-gray-400" @click="editingVideo = null">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="flex-1 overflow-y-auto p-8 lg:p-12 space-y-10">
+            <!-- Live Preview -->
+            <div class="relative aspect-video rounded-2xl overflow-hidden bg-gray-100 border border-gray-100 max-w-lg mx-auto">
+              <iframe
+                :src="videoForm.url"
+                class="absolute inset-0 w-full h-full"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              ></iframe>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="space-y-2">
+                <label class="block text-[8px] font-black text-gray-400 uppercase tracking-[2px] ml-1">Video Title</label>
+                <input
+                  v-model="videoForm.title"
+                  type="text"
+                  class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none"
+                  placeholder="e.g. Morning Yoga Flow"
+                />
+              </div>
+              <div class="space-y-2">
+                <label class="block text-[8px] font-black text-gray-400 uppercase tracking-[2px] ml-1"
+                  >Video URL (Embed Link)</label
+                >
+                <input
+                  v-model="videoForm.url"
+                  type="text"
+                  class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none"
+                  placeholder="https://drive.google.com/file/d/.../preview"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-[8px] font-black text-gray-400 uppercase tracking-[2px] ml-1"
+                >Session Description (Shown on the customer's "Infos" card)</label
+              >
+              <textarea
+                v-model="videoForm.description"
+                rows="3"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none resize-none"
+                placeholder="Describe this workout step for customers..."
+              ></textarea>
+            </div>
+
+            <!-- Kcal Matrix -->
+            <div class="space-y-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-[10px] font-black uppercase tracking-[4px] text-gray-800">Calorie Estimations (kcal)</h3>
+                  <p class="text-[8px] font-bold text-gray-400 uppercase tracking-[2px] mt-1">
+                    Per age range &times; body weight &times; dumbbell weight &mdash; format: min-max
+                  </p>
+                </div>
+              </div>
+
+              <div v-for="age in AGE_RANGES" :key="age" class="bg-gray-50/70 rounded-2xl border border-gray-100 p-6 space-y-4">
+                <p class="text-[9px] font-black uppercase tracking-[3px] text-[#D05E33]">Age {{ age }}</p>
+                <div class="overflow-x-auto">
+                  <table class="w-full min-w-[420px]">
+                    <thead>
+                      <tr>
+                        <th class="text-left text-[8px] font-black text-gray-400 uppercase tracking-[2px] pb-2 pr-4">
+                          Body Weight
+                        </th>
+                        <th
+                          v-for="d in DUMBBELLS"
+                          :key="d"
+                          class="text-left text-[8px] font-black text-gray-400 uppercase tracking-[2px] pb-2 pr-4"
+                        >
+                          {{ d }} kg dumbbell
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="w in WEIGHT_RANGES" :key="w">
+                        <td class="text-[10px] font-bold text-gray-600 uppercase py-2 pr-4 whitespace-nowrap">{{ w }} kg</td>
+                        <td v-for="d in DUMBBELLS" :key="d" class="py-2 pr-4">
+                          <input
+                            v-model="videoForm.calories[age][w][d]"
+                            type="text"
+                            class="w-full min-w-[90px] px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#D05E33]"
+                            placeholder="900-1100"
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-8 bg-gray-50 border-t border-gray-100 flex justify-end gap-4">
+            <button
+              class="px-10 py-4 rounded-2xl border border-gray-200 text-[10px] font-black uppercase tracking-[2px] hover:bg-gray-100"
+              @click="editingVideo = null"
+            >
+              Cancel
+            </button>
+            <button
+              :disabled="isSaving"
+              class="px-12 py-4 rounded-2xl bg-black text-white text-[10px] font-black uppercase tracking-[2px] hover:bg-[#D05E33] shadow-2xl transition-all flex items-center gap-2"
+              @click="saveVideoChanges"
+            >
+              <div
+                v-if="isSaving"
+                class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"
+              ></div>
+              Save Session
             </button>
           </div>
         </div>
@@ -1331,7 +1541,7 @@ import { ref, onMounted, computed, reactive } from "vue";
 
 definePageMeta({ middleware: ["admin"] });
 
-const data = ref({ users: [] as any[], customers: [] as any[] });
+const data = ref({ users: [] as any[], customers: [] as any[], videos: [] as any[] });
 const isLoading = ref(true);
 const isSaving = ref(false);
 const expandedEst = ref<string | null>(null);
@@ -1356,6 +1566,7 @@ const canChangePassword = (u: any) => {
 const newVideo = reactive({
   url: "",
   title: "",
+  description: "",
 });
 
 const addVideo = async () => {
@@ -1370,14 +1581,104 @@ const addVideo = async () => {
     useToast().success("Video added successfully!");
     newVideo.url = "";
     newVideo.title = "";
+    newVideo.description = "";
     showAddVideoModal.value = false;
     await fetchAdminData();
   } catch (e: any) {
-    useToast().error("Failed to add video");
+    useToast().error(e?.data?.statusMessage || "Failed to add video");
   } finally {
     isSaving.value = false;
   }
 };
+
+// ------- Full Video / Session Editor (title, url, description, kcal matrix) -------
+const AGE_RANGES = ["20-40", "40-60", "Over 60"];
+const WEIGHT_RANGES = ["50-70", "70-90", "90-120"];
+const DUMBBELLS = ["2.5", "5", "10"];
+
+const emptyCalorieMatrix = () => {
+  const m: any = {};
+  for (const a of AGE_RANGES) {
+    m[a] = {};
+    for (const w of WEIGHT_RANGES) {
+      m[a][w] = {};
+      for (const d of DUMBBELLS) m[a][w][d] = "";
+    }
+  }
+  return m;
+};
+
+const editingVideo = ref<any>(null);
+const videoForm = ref<any>({ id: "", title: "", url: "", description: "", calories: emptyCalorieMatrix() });
+
+const openVideoEditor = (video: any) => {
+  const matrix = emptyCalorieMatrix();
+  for (const a of AGE_RANGES) {
+    for (const w of WEIGHT_RANGES) {
+      for (const d of DUMBBELLS) {
+        const val = video.calories?.[a]?.[w]?.[d];
+        if (typeof val === "string") matrix[a][w][d] = val;
+      }
+    }
+  }
+  videoForm.value = {
+    id: video.id,
+    title: video.title || "",
+    url: video.url || "",
+    description: video.description || "",
+    calories: matrix,
+  };
+  editingVideo.value = video;
+};
+
+const saveVideoChanges = async () => {
+  if (!videoForm.value.title.trim()) {
+    useToast().error("Title is required");
+    return;
+  }
+  if (!/^https:\/\/.+/i.test(videoForm.value.url.trim())) {
+    useToast().error("URL must be a valid https:// embed link");
+    return;
+  }
+  const kcalPattern = /^\d+\s*-\s*\d+$/;
+  for (const a of AGE_RANGES) {
+    for (const w of WEIGHT_RANGES) {
+      for (const d of DUMBBELLS) {
+        const cell = String(videoForm.value.calories[a][w][d] || "").trim();
+        if (cell && !kcalPattern.test(cell)) {
+          useToast().error(`Invalid kcal range "${cell}" (Age ${a}, ${w}kg, ${d}kg dumbbell). Use e.g. 900-1100`);
+          return;
+        }
+      }
+    }
+  }
+
+  isSaving.value = true;
+  try {
+    await $fetch("/api/admin/videos/update", {
+      method: "POST",
+      body: {
+        id: videoForm.value.id,
+        updates: {
+          title: videoForm.value.title.trim(),
+          url: videoForm.value.url.trim(),
+          description: videoForm.value.description.trim(),
+          calories: videoForm.value.calories,
+        },
+      },
+    });
+    useToast().success("Session updated successfully!");
+    editingVideo.value = null;
+    await fetchAdminData();
+  } catch (e: any) {
+    useToast().error(e?.data?.statusMessage || "Failed to update video");
+  } finally {
+    isSaving.value = false;
+  }
+};
+
+// Representative kcal shown on the card (middle of the matrix)
+const videoKcalPreview = (video: any) => video?.calories?.["20-40"]?.["70-90"]?.["5"] || null;
 
 const deleteVideo = async (id: string) => {
   useToast().info("Removing video...");
@@ -1432,7 +1733,7 @@ const impersonateUser = async (user: any) => {
       window.location.href = res.redirect;
     }
   } catch (e: any) {
-    useToast().error(e.statusMessage || "Impersonation failed");
+    useToast().error(e?.data?.statusMessage || "Impersonation failed");
   }
 };
 
@@ -1487,21 +1788,24 @@ const establishmentUsers = computed(() => {
 
 const activeSignals = computed(() => {
   if (!data.value?.users) return [];
-  return data.value.users.filter((u) => (u.requested_plan || u.requested_cancel || !u.paid) && !u.registration_denied);
+  return data.value.users.filter(
+    (u) => !u.isAdmin && (u.requested_plan || u.requested_cancel || !u.paid) && !u.registration_denied
+  );
 });
 
 const stats = computed(() => {
   const users = data.value.users || [];
   const customers = data.value.customers || [];
 
-  const explorerCount = users.filter((u) => u.plan === "EXPLORER").length;
-  const experienceCount = users.filter((u) => u.plan === "EXPERIENCE").length;
-  const signatureCount = users.filter((u) => u.plan === "SIGNATURE").length;
+  const establishments = users.filter((u) => !u.isAdmin);
+  const explorerCount = establishments.filter((u) => u.plan === "EXPLORER").length;
+  const experienceCount = establishments.filter((u) => u.plan === "EXPERIENCE").length;
+  const signatureCount = establishments.filter((u) => u.plan === "SIGNATURE").length;
 
   return [
     {
       label: "Total Establishments",
-      value: users.filter((u) => u.type === "ESTABLISHEMENT").length,
+      value: users.filter((u) => !u.isAdmin).length,
       details: `${explorerCount} Explorer, ${experienceCount} Experience, ${signatureCount} Signature`,
     },
     { label: "Total Customers", value: customers.length },
@@ -1599,6 +1903,14 @@ const openCreateUserModal = (type: "admin" | "establishment") => {
   });
 };
 const saveNewUser = async () => {
+  if (!createUserForm.first_name.trim() || !createUserForm.name.trim() || !createUserForm.email.trim()) {
+    useToast().error("First name, last name and email are required");
+    return;
+  }
+  if (createUserForm.password.length < 8) {
+    useToast().error("Password must be at least 8 characters");
+    return;
+  }
   isSaving.value = true;
   try {
     await $fetch("/api/auth/signup", { method: "POST", body: createUserForm });
@@ -1606,7 +1918,7 @@ const saveNewUser = async () => {
     showCreateModal.value = false;
     await fetchAdminData();
   } catch (e: any) {
-    useToast().error("Creation Failed");
+    useToast().error(e?.data?.statusMessage || "Creation Failed");
   } finally {
     isSaving.value = false;
   }
@@ -1620,7 +1932,7 @@ const saveMasterChanges = async () => {
     editingItem.value = null;
     await fetchAdminData();
   } catch (e: any) {
-    useToast().error("Commit Failed");
+    useToast().error(e?.data?.statusMessage || "Commit Failed");
   } finally {
     isSaving.value = false;
   }
@@ -1634,7 +1946,7 @@ const executeHardDelete = async () => {
     editingItem.value = null;
     await fetchAdminData();
   } catch (e: any) {
-    useToast().error("Purge Failed");
+    useToast().error(e?.data?.statusMessage || "Purge Failed");
   }
 };
 const confirmDelete = () => {

@@ -348,7 +348,7 @@ const onSignupClick = async () => {
               <span
                 class="text-xs font-medium tracking-[1px] uppercase text-gray-500 group-hover:text-black transition-colors"
               >
-                Accept <a href="/privacypolicy" class="text-[#D05E33] underline">Terms & Conditions</a>
+                Accept <a href="/terms" class="text-[#D05E33] underline">Terms & Conditions</a>
               </span>
             </label>
 
@@ -371,7 +371,7 @@ const onSignupClick = async () => {
               <span
                 class="text-xs font-medium tracking-[1px] uppercase text-gray-500 group-hover:text-black transition-colors"
               >
-                Accept <a href="/terms" class="text-[#D05E33] underline">Privacy Policy</a>
+                Accept <a href="/privacypolicy" class="text-[#D05E33] underline">Privacy Policy</a>
               </span>
             </label>
           </div>

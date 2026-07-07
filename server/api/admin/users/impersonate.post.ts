@@ -44,6 +44,15 @@ export default defineEventHandler(async (event) => {
       isImpersonated: true // Flag to track this session
     }, expiresAt);
 
+    // Stash the admin's own token so they can return to the console afterwards
+    setCookie(event, "__admin_return", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      expires: expiresAt,
+    });
+
     // Overwrite the session cookie
     setCookie(event, cookieName, impersonationToken, {
       httpOnly: true,

@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const userObject = user.toObject();
-    const { password: _, _id, ...rest } = userObject;
+    const { password: _, resetPasswordToken, resetPasswordExpires, _id, ...rest } = userObject;
     
     return {
       user: {
@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
         requested_cancel: !!user.requested_cancel,
         isAdmin: !!user.isAdmin,
         isMaster: !!user.isMaster,
+        isImpersonated: !!payload.isImpersonated,
         profile_picture: user.profile_picture || null
       },
     };

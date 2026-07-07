@@ -1,4 +1,4 @@
-import { baseEmailTemplate } from './base';
+import { baseEmailTemplate } from "./base";
 
 export const genericUserEmail = (userData: any, title: string, message: string) => {
   const content = `
@@ -12,7 +12,7 @@ export const genericUserEmail = (userData: any, title: string, message: string) 
     </div>
 
     <div class="footer" style="margin-top: 40px; border-top: 1px solid #eeeeee; padding-top: 20px;">
-      <p>Need help? Contact us at perf912@gmail.com</p>
+      <p>Need help? Contact us at contact@perf-club.com</p>
     </div>
   `;
   return baseEmailTemplate(content, title);

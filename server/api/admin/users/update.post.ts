@@ -42,8 +42,13 @@ export default defineEventHandler(async (event) => {
       delete updates.isMaster;
     }
 
-    // Automatically reset registration_denied if requested_plan is updated to something different than current plan
-    if (updates.requested_plan !== undefined && updates.requested_plan !== targetUser.plan) {
+    // Never allow immutable / derived keys to be written back
+    ["_id", "id", "__v", "createdAt", "updatedAt", "customers", "resetPasswordToken", "resetPasswordExpires"].forEach(
+      (key) => delete updates[key]
+    );
+
+    // Automatically reset registration_denied when a NEW plan request is being set
+    if (updates.requested_plan !== undefined && updates.requested_plan !== targetUser.requested_plan) {
       updates.registration_denied = false;
     }
 
@@ -78,8 +83,10 @@ export default defineEventHandler(async (event) => {
       sendUserEmail(updatedUser.email, "Your PERF Account is Active!", accountActivatedEmail(updatedUser));
     }
 
-    return { success: true, user: updatedUser };
+    const obj = updatedUser.toObject();
+    const { password, resetPasswordToken, resetPasswordExpires, ...rest } = obj;
+    return { success: true, user: { ...rest, id: obj._id.toString() } };
   } catch (err: any) {
-    throw createError({ statusCode: 500, statusMessage: err.message });
+    throw createError({ statusCode: err.statusCode || 500, statusMessage: err.statusMessage || err.message });
   }
 });

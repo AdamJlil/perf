@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
       data: {
         users: allUsers.map(u => {
           const obj = u.toObject();
-          const { password, ...rest } = obj;
+          const { password, resetPasswordToken, resetPasswordExpires, ...rest } = obj;
           return {
             ...rest,
             id: obj._id.toString()

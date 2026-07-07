@@ -1,7 +1,7 @@
 import User from '../../models/User';
 import { verifyToken } from '../../utils/auth';
 import { connectToDatabase } from '../../utils/mongodb';
-import { sendAdminNotification, upgradeCancelEmail } from '../../utils/emails';
+import { sendAdminNotification, sendUserEmail, upgradeCancelEmail, genericUserEmail } from '../../utils/emails';
 
 export default defineEventHandler(async (event) => {
   const cookieName = process.env.NUXT_COOKIE_NAME || "__session";
@@ -19,12 +19,14 @@ export default defineEventHandler(async (event) => {
   await connectToDatabase();
 
   try {
+    const userEmail = String(payload.email).toLowerCase();
+
     // Get user first to know what plan they were cancelling
-    const user = await User.findOne({ email: payload.email.toLowerCase() });
+    const user = await User.findOne({ email: userEmail });
     const cancelledPlan = user?.requested_plan || "Unknown Plan";
 
     const updatedUser = await User.findOneAndUpdate(
-      { email: payload.email.toLowerCase() },
+      { email: userEmail },
       { $set: { requested_plan: null } },
       { returnDocument: 'after', runValidators: true }
     );

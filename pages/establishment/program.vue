@@ -63,11 +63,7 @@
         :back-text="caloriesResult"
         :class="{ 'calorie-hump': isCalorieUpdating }"
       />
-      <FlipCardBloc
-        outside-title="infos"
-        style="font-family: Montserrat"
-        :back-text="videoCalorieData[costumerVideo]?.description || 'Loading video information...'"
-      />
+      <FlipCardBloc outside-title="infos" style="font-family: Montserrat" :back-text="videoDescription" />
     </div>
 
     <h1 class="text-black text-xl uppercase font-semibold tracking-2 text-center h-30 mt-10">
@@ -97,6 +93,15 @@
       </div>
 
       <div v-if="!isLoading" class="relative w-full max-w-6xl mx-auto px-4">
+        <!-- Session title (admin-editable) -->
+        <div class="text-center mb-8">
+          <p class="text-[10px] font-black text-[#D05E33] uppercase tracking-[4px] mb-2">
+            Session {{ costumerVideo + 1 }}
+          </p>
+          <h2 class="text-black text-2xl md:text-3xl font-black uppercase tracking-[2px] leading-tight">
+            {{ videoTitle }}
+          </h2>
+        </div>
         <div
           class="relative w-full rounded-[30px] overflow-hidden shadow-2xl border-4 border-white"
           style="padding-top: 56.25%"
@@ -170,6 +175,11 @@ import Bloc1 from "~/components/features/Sections/Nutrition/BlocOne.vue";
 import FlipCardBloc from "~/components/features/Sections/Establishement/FlipCardBloc.vue";
 import { establishmentUserVideos } from "~/services/mock/videos";
 import { videoCalorieData } from "~/services/mock/video-calories";
+
+definePageMeta({
+  middleware: ["auth"],
+});
+
 // Get runtime config
 const config = useRuntimeConfig();
 
@@ -200,6 +210,31 @@ const ageRange = ref("");
 const weightRange = ref("");
 
 const calorieData = ref(videoCalorieData);
+
+// Per-video data now lives in the DB (admin-editable). Falls back to the
+// legacy hardcoded mock (keyed by index) for resilience.
+const calorieSourceForIndex = (index: number) => {
+  const dbVideo = dbVideos.value[index];
+  if (dbVideo?.calories) {
+    return { ageRanges: dbVideo.calories };
+  }
+  return calorieData.value[index] || null;
+};
+
+const videoDescription = computed(() => {
+  const dbVideo = dbVideos.value[costumerVideo.value];
+  return (
+    dbVideo?.description ||
+    calorieData.value[costumerVideo.value]?.description ||
+    "Video information will be available soon."
+  );
+});
+
+// Per-step title (admin-editable), shown to the customer above the session video
+const videoTitle = computed(() => {
+  const dbVideo = dbVideos.value[costumerVideo.value];
+  return dbVideo?.title || `Session ${costumerVideo.value + 1}`;
+});
 
 // Fonction de calcul des calories
 const calculateCalories = (ageRange: string, weight: string, dumbbellWeight: number, calorieData: any) => {
@@ -237,7 +272,7 @@ watch(selectedElement, (newValue) => {
     ageRange.value,
     weightRange.value,
     dumbbellWeight,
-    calorieData.value[costumerVideo.value || 0],
+    calorieSourceForIndex(costumerVideo.value || 0),
   );
 });
 
@@ -262,7 +297,7 @@ const loadData = async () => {
 
     const allCustomers = await $fetch<any[]>("/api/users/customers");
     console.log("[Program] All customers fetched:", allCustomers.length);
-    
+
     const customer = allCustomers.find(
       (c: any) => c.id === customerId || c._id === customerId || c.et_customer_id === customerId,
     );
@@ -271,14 +306,14 @@ const loadData = async () => {
       console.log("[Program] Customer found:", customer.firstName);
       customerName.value = `${customer.firstName} ${customer.lastName}`;
       customerPicture.value = customer.profile_picture || "";
-      
+
       // SYNC: Derive current video from the number of completed logs
       const burnedCalories = customer.burnedCalories || {};
       const completedSessions = Object.keys(burnedCalories).length;
-      
-      const videoList = dbVideos.value.length > 0 ? dbVideos.value.map(v => v.url) : establishmentUserVideos;
+
+      const videoList = dbVideos.value.length > 0 ? dbVideos.value.map((v) => v.url) : establishmentUserVideos;
       costumerVideo.value = completedSessions % videoList.length;
-      
+
       ageRange.value = customer.ageRange || "";
       weightRange.value = customer.weightRange || "";
 
@@ -304,7 +339,7 @@ const loadData = async () => {
         ageRange.value,
         weightRange.value,
         2.5,
-        calorieData.value[costumerVideo.value || 0],
+        calorieSourceForIndex(costumerVideo.value || 0),
       );
     } else {
       console.error("[Program] Customer not found in the establishment list");
@@ -519,13 +554,13 @@ const nextVideo = async () => {
 
     // Update the customer in real MongoDB via API
     // The video index will be derived automatically from the new count on refresh
-    const videoList = dbVideos.value.length > 0 ? dbVideos.value.map(v => v.url) : establishmentUserVideos;
+    const videoList = dbVideos.value.length > 0 ? dbVideos.value.map((v) => v.url) : establishmentUserVideos;
     await $fetch("/api/users/customers/add", {
       method: "POST",
       body: {
         ...customer,
         burnedCalories: updatedBurnedCalories,
-        video: nextDayIndex % videoList.length
+        video: nextDayIndex % videoList.length,
       },
     });
 

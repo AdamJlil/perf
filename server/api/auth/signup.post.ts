@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   // HIERARCHY PROTECTION:
   // 1. Only Master Admin can create other Admins or Masters.
   // 2. Regular Admin can ONLY create Establishments.
-  if (body.isAdmin && !isRequestingMaster) {
+  if ((body.isAdmin || body.isMaster) && !isRequestingMaster) {
     throw createError({ statusCode: 403, statusMessage: "Forbidden: Only Master Admin can create other Admin accounts" });
   }
 
@@ -27,6 +27,18 @@ export default defineEventHandler(async (event) => {
       statusCode: 400,
       statusMessage: "Email and password are required",
     });
+  }
+
+  if (typeof password !== "string" || password.length < 8) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Password must be at least 8 characters long",
+    });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw createError({ statusCode: 400, statusMessage: "A valid email address is required" });
   }
 
   await connectToDatabase();
@@ -52,8 +64,8 @@ export default defineEventHandler(async (event) => {
       name,
       plan,
       paid: isRequestingAdmin ? !!body.paid : false,
-      isAdmin: isRequestingAdmin ? !!body.isAdmin : false,
-      isMaster: isRequestingAdmin ? !!body.isMaster : false,
+      isAdmin: isRequestingMaster ? !!body.isAdmin : false,
+      isMaster: isRequestingMaster ? !!body.isMaster : false,
     });
 
     console.log(`Signup Success: User ${email} stored in MongoDB`);
@@ -65,7 +77,7 @@ export default defineEventHandler(async (event) => {
     sendUserEmail(newUser.email, "Welcome to PERF", welcomeUserEmail(newUser));
 
     const userObject = newUser.toObject();
-    const { password: _, _id, ...rest } = userObject;
+    const { password: _, resetPasswordToken, resetPasswordExpires, _id, ...rest } = userObject;
     const userWithoutPassword = {
       id: _id.toString(),
       ...rest,

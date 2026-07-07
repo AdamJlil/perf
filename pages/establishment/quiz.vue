@@ -151,6 +151,10 @@
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+definePageMeta({
+  middleware: ["auth"],
+});
+
 const route = useRoute();
 const router = useRouter();
 

@@ -15,7 +15,7 @@ const formError = ref(false);
 
 const submitForm = async () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
   if (!formData.name.trim() || formData.name.trim().length < 2) {
     toast.error("Please enter a valid full name");
     return;
@@ -28,7 +28,7 @@ const submitForm = async () => {
     toast.error("Message must be at least 10 characters long");
     return;
   }
-  
+
   isSubmitting.value = true;
 
   try {
@@ -63,7 +63,10 @@ const submitForm = async () => {
 <template>
   <div class="w-full min-h-screen bg-[#EFEFEC] pt-12 pb-20 px-4" style="font-family: Montserrat">
     <!-- Loading Overlay -->
-    <div v-if="isSubmitting" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div
+      v-if="isSubmitting"
+      class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+    >
       <div class="loader"></div>
     </div>
 
@@ -76,17 +79,21 @@ const submitForm = async () => {
         <!-- Contact Info -->
         <div class="space-y-12 px-4">
           <div class="flex items-center gap-8 group">
-            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
+            <div
+              class="w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 group-hover:scale-110 transition-transform"
+            >
               <img src="/images/icon-location.png" alt="Location" class="w-8 h-8 object-contain" />
             </div>
             <div>
               <p class="text-xs font-medium tracking-[2px] uppercase text-gray-500 mb-1">Address</p>
-              <p class="text-xl text-gray-800">Safi, Morocco</p>
+              <p class="text-xl text-gray-800">Marrakech, Morocco</p>
             </div>
           </div>
 
           <div class="flex items-center gap-8 group">
-            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
+            <div
+              class="w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 group-hover:scale-110 transition-transform"
+            >
               <img src="/images/icon-phone.png" alt="Phone" class="w-8 h-8 object-contain" />
             </div>
             <div>
@@ -96,21 +103,21 @@ const submitForm = async () => {
           </div>
 
           <div class="flex items-center gap-8 group">
-            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
+            <div
+              class="w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 group-hover:scale-110 transition-transform"
+            >
               <img src="/images/icon-mail.png" alt="Email" class="w-8 h-8 object-contain" />
             </div>
             <div>
               <p class="text-xs font-medium tracking-[2px] uppercase text-gray-500 mb-1">Email</p>
-              <p class="text-xl text-gray-800">perf912@gmail.com</p>
+              <p class="text-xl text-gray-800">contact@perf-club.com</p>
             </div>
           </div>
         </div>
 
         <!-- Contact Form -->
         <div class="bg-white/40 backdrop-blur-md p-10 rounded-[30px] shadow-sm border border-white/20">
-          <h2 class="text-xl font-normal mb-10 uppercase tracking-[4px] text-gray-700">
-            Send a message
-          </h2>
+          <h2 class="text-xl font-normal mb-10 uppercase tracking-[4px] text-gray-700">Send a message</h2>
 
           <form class="space-y-8" @submit.prevent="submitForm">
             <div class="relative group">
@@ -157,13 +164,19 @@ const submitForm = async () => {
           </form>
 
           <Transition name="fade">
-            <div v-if="formSubmitted" class="mt-8 p-4 bg-green-50 text-green-700 text-sm font-medium tracking-[1px] rounded-md border border-green-100 text-center italic">
+            <div
+              v-if="formSubmitted"
+              class="mt-8 p-4 bg-green-50 text-green-700 text-sm font-medium tracking-[1px] rounded-md border border-green-100 text-center italic"
+            >
               Thank you! Your message has been sent successfully.
             </div>
           </Transition>
 
           <Transition name="fade">
-            <div v-if="formError" class="mt-8 p-4 bg-red-50 text-red-600 text-sm font-medium tracking-[1px] rounded-md border border-red-100 text-center italic">
+            <div
+              v-if="formError"
+              class="mt-8 p-4 bg-red-50 text-red-600 text-sm font-medium tracking-[1px] rounded-md border border-red-100 text-center italic"
+            >
               ** Please fill in all fields correctly.
             </div>
           </Transition>
@@ -171,12 +184,14 @@ const submitForm = async () => {
       </div>
 
       <!-- Map Section -->
-      <div class="mt-32 w-full h-[450px] rounded-[40px] overflow-hidden shadow-sm grayscale hover:grayscale-0 transition-all duration-700">
+      <div
+        class="mt-32 w-full h-[450px] rounded-[40px] overflow-hidden shadow-sm grayscale hover:grayscale-0 transition-all duration-700"
+      >
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13332.31580057437!2d-9.250000000000002!3d32.300000000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb1cd1f7d2e1e6f%3A0x7f7c7c7c7c7c7c7c!2sSafi%2C%20Morocco!5e0!3m2!1sen!2sma!4v1715976000000!5m2!1sen!2sma"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27196.6!2d-7.9811!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafee8d96179e51%3A0x5950b6534f87adb8!2sMarrakech%2C%20Morocco!5e0!3m2!1sen!2sma!4v1715976000000!5m2!1sen!2sma"
           height="100%"
           width="100%"
-          style="border: 0;"
+          style="border: 0"
           allowfullscreen
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
@@ -196,8 +211,12 @@ const submitForm = async () => {
   animation: spin 1s linear infinite;
 }
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .fade-enter-active,

@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   },
 
   modules: ["@unocss/nuxt", "@nuxt/image", "@pinia/nuxt"],
-  plugins: ["~/plugins/swiper.client.js", "~/plugins/mock-api.ts"],
+  plugins: ["~/plugins/swiper.client.js"],
 
   build: {
     transpile: ["swiper", "chart.js", "vue-chartjs"],
@@ -63,8 +63,12 @@ export default defineNuxtConfig({
       ],
       meta: [
         {
-          name: "Content-Security-Policy",
-          content: "default-src 'self' http://localhost:3001 http://host.docker.internal:3001 http://127.0.0.1:3001; script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:;",
+          // Real CSP (the previous `name=` variant was ignored by browsers).
+          // frame-src allows any https embed so admins can register videos from
+          // Google Drive, YouTube, Vimeo, etc.
+          "http-equiv": "Content-Security-Policy",
+          content:
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src 'self' https:; connect-src 'self' https: ws: wss:; media-src 'self' blob: https:; object-src 'none'; base-uri 'self';",
         },
       ],
     },

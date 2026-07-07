@@ -9,6 +9,10 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Token and password are required" });
   }
 
+  if (typeof password !== "string" || password.length < 8) {
+    throw createError({ statusCode: 400, statusMessage: "Password must be at least 8 characters long" });
+  }
+
   await connectToDatabase();
 
   try {

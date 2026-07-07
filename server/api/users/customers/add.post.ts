@@ -39,15 +39,32 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Customer ID required" });
   }
 
+  // Server-side sanity validation (the quiz validates client-side, but the API must not trust it)
+  if (age !== undefined && age !== null && (isNaN(Number(age)) || Number(age) < 5 || Number(age) > 120)) {
+    throw createError({ statusCode: 400, statusMessage: "Age must be between 5 and 120" });
+  }
+  if (weight !== undefined && weight !== null && (isNaN(Number(weight)) || Number(weight) < 20 || Number(weight) > 400)) {
+    throw createError({ statusCode: 400, statusMessage: "Weight must be between 20 and 400 kg" });
+  }
+  if (height !== undefined && height !== null && height !== '' && (isNaN(Number(height)) || Number(height) < 50 || Number(height) > 260)) {
+    throw createError({ statusCode: 400, statusMessage: "Height must be between 50 and 260 cm" });
+  }
+
   await connectToDatabase();
 
   try {
     // Ensure we have a string ID
     const establishmentId = typeof payload.id === 'object' ? payload.id.toString() : payload.id;
 
-    // Build update object dynamically
+    // Ownership protection: an establishment may only update its OWN customers
+    const existing = await Customer.findOne({ et_customer_id });
+    if (existing && existing.establishmentId?.toString() !== establishmentId && !payload.isAdmin) {
+      throw createError({ statusCode: 403, statusMessage: "Forbidden: customer belongs to another establishment" });
+    }
+
+    // Build update object dynamically (keep the original owner when an admin edits)
     const updateData: any = {
-      establishmentId,
+      establishmentId: existing ? existing.establishmentId : establishmentId,
     };
 
     if (firstName !== undefined) updateData.firstName = firstName;
@@ -85,8 +102,8 @@ export default defineEventHandler(async (event) => {
   } catch (err: any) {
     console.error("Add/Update Customer API Error:", err);
     throw createError({
-      statusCode: 500,
-      statusMessage: "Internal Server Error",
+      statusCode: err.statusCode || 500,
+      statusMessage: err.statusMessage || "Internal Server Error",
     });
   }
 });

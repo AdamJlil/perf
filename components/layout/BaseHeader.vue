@@ -84,6 +84,18 @@ async function handleLogout() {
   closeMenu();
 }
 
+// Ends an impersonation session and restores the admin console session
+const returnToAdmin = async () => {
+  try {
+    const res = await $fetch<any>("/api/admin/users/return", { method: "POST" });
+    if (res.success) {
+      window.location.href = res.redirect || "/admin";
+    }
+  } catch (e: any) {
+    useToast().error(e?.data?.statusMessage || "Failed to return to admin session");
+  }
+};
+
 const isActive = (path: string) => {
   if (path === "/" && route.path === "/") return true;
   if (path !== "/" && route.path.startsWith(path)) return true;
@@ -215,9 +227,29 @@ onUnmounted(() => {
           <!-- Hidden File Input -->
           <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="handleFileUpload" />
 
+          <!-- Impersonation banner: jump back to the admin console -->
+          <button
+            v-if="user?.isImpersonated"
+            class="hidden lg:flex items-center gap-2 px-5 py-2 rounded-full bg-[#D05E33] text-white text-[10px] font-bold tracking-[2px] uppercase shadow-md hover:bg-black transition-all animate-pulse"
+            title="You are viewing this account as an admin"
+            @click="returnToAdmin"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            Return to Admin
+          </button>
+
           <!-- Switch Tab for Dashboard, My Plan & Contact - CONSISTENT EVERYWHERE -->
           <div v-if="route.path !== '/establishment/program'" class="hidden lg:flex items-center bg-gray-100/80 p-1 rounded-full border border-gray-200 shadow-inner">
             <NuxtLink
+              v-if="user?.isAdmin"
+              to="/admin"
+              class="px-5 py-2 text-[10px] font-bold tracking-[2px] uppercase transition-all duration-300 rounded-full"
+              :class="[isActive('/admin') ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600']"
+            >
+              Console
+            </NuxtLink>
+            <NuxtLink
+              v-if="!user?.isAdmin"
               to="/establishment/manage-customers"
               class="px-5 py-2 text-[10px] font-bold tracking-[2px] uppercase transition-all duration-300 rounded-full"
               :class="[
@@ -229,7 +261,7 @@ onUnmounted(() => {
               Dashboard
             </NuxtLink>
             <NuxtLink
-              v-if="route.path !== '/establishment/program'"
+              v-if="!user?.isAdmin"
               to="/myPlan"
               class="px-5 py-2 text-[10px] font-bold tracking-[2px] uppercase transition-all duration-300 rounded-full"
               :class="[isActive('/myPlan') ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600']"
@@ -237,7 +269,6 @@ onUnmounted(() => {
               My Plan
             </NuxtLink>
             <NuxtLink
-              v-if="route.path !== '/establishment/program'"
               to="/contact"
               class="px-5 py-2 text-[10px] font-bold tracking-[2px] uppercase transition-all duration-300 rounded-full"
               :class="[isActive('/contact') ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600']"
@@ -328,7 +359,24 @@ onUnmounted(() => {
           <div v-if="isLoggedIn && route.path !== '/establishment/program'" class="w-full flex flex-col items-center gap-8 mt-8 border-t border-gray-100 pt-12">
             <!-- Mobile Switch Tab - CONSISTENT -->
             <div class="flex flex-col w-full max-w-xs gap-4">
+              <button
+                v-if="user?.isImpersonated"
+                class="w-full py-4 rounded-2xl text-center font-bold uppercase tracking-[3px] bg-[#D05E33] text-white shadow-xl transition-all"
+                @click="returnToAdmin"
+              >
+                Return to Admin
+              </button>
               <NuxtLink
+                v-if="user?.isAdmin"
+                to="/admin"
+                class="w-full py-4 rounded-2xl text-center font-bold uppercase tracking-[3px] transition-all"
+                :class="[isActive('/admin') ? 'bg-black text-white shadow-xl' : 'bg-gray-100 text-gray-500']"
+                @click="closeMenu"
+              >
+                Console
+              </NuxtLink>
+              <NuxtLink
+                v-if="!user?.isAdmin"
                 to="/establishment/manage-customers"
                 class="w-full py-4 rounded-2xl text-center font-bold uppercase tracking-[3px] transition-all"
                 :class="[
@@ -341,7 +389,7 @@ onUnmounted(() => {
                 Dashboard
               </NuxtLink>
               <NuxtLink
-                v-if="route.path !== '/establishment/program'"
+                v-if="!user?.isAdmin"
                 to="/myPlan"
                 class="w-full py-4 rounded-2xl text-center font-bold uppercase tracking-[3px] transition-all"
                 :class="[isActive('/myPlan') ? 'bg-black text-white shadow-xl' : 'bg-gray-100 text-gray-500']"
@@ -350,7 +398,6 @@ onUnmounted(() => {
                 My Plan
               </NuxtLink>
               <NuxtLink
-                v-if="route.path !== '/establishment/program'"
                 to="/contact"
                 class="w-full py-4 rounded-2xl text-center font-bold uppercase tracking-[3px] transition-all"
                 :class="[isActive('/contact') ? 'bg-black text-white shadow-xl' : 'bg-gray-100 text-gray-500']"

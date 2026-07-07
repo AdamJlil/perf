@@ -1,7 +1,7 @@
 import User from "../../models/User";
 import { verifyToken } from "../../utils/auth";
 import { connectToDatabase } from "../../utils/mongodb";
-import { sendAdminNotification, upgradeRequestEmail } from "../../utils/emails";
+import { sendAdminNotification, sendUserEmail, upgradeRequestEmail, genericUserEmail } from "../../utils/emails";
 
 export default defineEventHandler(async (event) => {
   const cookieName = process.env.NUXT_COOKIE_NAME || "__session";

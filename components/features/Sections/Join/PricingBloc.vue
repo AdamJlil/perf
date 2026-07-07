@@ -27,7 +27,7 @@
             <li
               v-for="(feature, i) in plan_1.features"
               :key="i"
-              class="flex items-start text-[11px] uppercase tracking-[1px] leading-relaxed"
+              class="flex items-start text-[14px] uppercase tracking-[1px] leading-relaxed"
               :class="{ 'opacity-30': feature.isDisabled }"
             >
               <span class="mr-3 text-[#D05E33] font-bold">•</span> {{ feature.text }}
@@ -105,7 +105,7 @@
             <li
               v-for="(feature, i) in plan_2.features"
               :key="i"
-              class="flex items-start text-[11px] uppercase tracking-[1px] leading-relaxed"
+              class="flex items-start text-[14px] uppercase tracking-[1px] leading-relaxed"
               :class="{ 'opacity-30': feature.isDisabled }"
             >
               <span class="mr-3 text-[#D05E33] font-bold">•</span> {{ feature.text }}
@@ -171,7 +171,7 @@
             <li
               v-for="(feature, i) in plan_3.features"
               :key="i"
-              class="flex items-start text-[11px] uppercase tracking-[1px] leading-relaxed"
+              class="flex items-start text-[14px] uppercase tracking-[1px] leading-relaxed"
               :class="{ 'opacity-30': feature.isDisabled }"
             >
               <span class="mr-3 text-[#D05E33] font-bold">•</span> {{ feature.text }}

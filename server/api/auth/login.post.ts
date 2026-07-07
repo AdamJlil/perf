@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
     sendAdminNotification("User Login Activity", loginEmail(user));
 
     const userObject = user.toObject();
-    const { password: _, _id, ...rest } = userObject;
+    const { password: _, resetPasswordToken, resetPasswordExpires, _id, ...rest } = userObject;
     const userWithoutPassword = {
       id: _id.toString(),
       ...rest,

@@ -16,6 +16,11 @@ export default defineEventHandler(async (event) => {
   const { id, updates } = await readBody(event);
   if (!id || !updates) throw createError({ statusCode: 400, statusMessage: "ID and updates required" });
 
+  // Never allow immutable / identity keys to be overwritten from the client
+  ["_id", "id", "__v", "createdAt", "updatedAt", "establishmentId", "et_customer_id"].forEach(
+    (key) => delete updates[key]
+  );
+
   await connectToDatabase();
 
   try {

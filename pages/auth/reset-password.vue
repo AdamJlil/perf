@@ -25,8 +25,8 @@ const handleResetPassword = async () => {
     return;
   }
 
-  if (password.value.length < 6) {
-    useToast().error("Password must be at least 6 characters");
+  if (password.value.length < 8) {
+    useToast().error("Password must be at least 8 characters");
     return;
   }
 
@@ -76,7 +76,7 @@ const handleResetPassword = async () => {
                 :type="showPassword ? 'text' : 'password'"
                 required
                 class="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-xs font-bold outline-none focus:border-[#D05E33] transition-colors"
-                placeholder="At least 6 characters"
+                placeholder="At least 8 characters"
               />
               <button
                 type="button"
